@@ -1,5 +1,7 @@
 # README
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/8b317823f31c83a4bb3b/maintainability)](https://codeclimate.com/github/portal-solus/backend/maintainability)
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
