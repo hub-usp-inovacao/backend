@@ -6,3 +6,11 @@ development:
         - mongo:27017
       options:
         server_selection_timeout: 1
+test:
+  clients:
+    default:
+      database: backend_test
+      hosts:
+        - mongo:27017
+      options:
+        server_selection_timeout: 1
