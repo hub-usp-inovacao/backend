@@ -3,7 +3,7 @@ name: notify
 on:
   pull_request:
     branches: [ main ]
-    types: [ opened ]
+    types: [ opened, synchronize ]
 
 jobs:
   notify:
