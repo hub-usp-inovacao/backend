@@ -3,7 +3,7 @@ name: notify
 on:
   pull_request:
     branches: [ main ]
-    types: [ opened, synchronize ]
+    types: [ review_requested ]
 
 jobs:
   notify:
@@ -15,4 +15,6 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          args: Um novo PR foi aberto -- veja https://github.com/portal-solus/backend/pulls
+          args: |
+            O PR \#${{ github.event.number }} foi solicitado revisão
+            Veja https://github.com/portal-solus/backend/pulls/${{ github.event.number }}
