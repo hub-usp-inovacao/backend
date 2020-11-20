@@ -1,5 +1,5 @@
 name: Verify
-on: [push, pull_request]
+on: pull_request
 
 jobs:
   linters:
@@ -24,7 +24,7 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Run linters
-        run: bin/rubocop --parallel
+        run: bundle exec rubocop --parallel
 
   tests:
     name: Tests
