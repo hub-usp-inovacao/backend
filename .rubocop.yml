@@ -8,11 +8,14 @@ AllCops:
     - 'db/**/*'
     - 'script/**/*'
     - 'bin/**/*'
+    - 'log/**/*'
+    - 'vendor/bundle/**/*'
 
 Metrics/LineLength:
-  Max: 80
+  Max: 100
 
 Metrics/BlockLength:
+  Max: 35
   Exclude:
     - config/**/*
     - spec/**/*
