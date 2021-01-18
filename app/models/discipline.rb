@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "#{Rails.root}/data/entrepreneurship_levels"
+
 class Discipline
   include Mongoid::Document
 
@@ -25,10 +27,7 @@ class Discipline
   #           uma delas 'true' (business, entrepreneurship, innovation, intellectual_property)
 
   def a_valid_level?
-    valid_levels = ['Preciso testar minha ideia!',
-                    'Quero aprender!',
-                    'Tenho uma ideia, e agora?',
-                    'Tópicos avançados em Empreendedorismo']
-    valid_levels.include?(self.level)
+    valid_levels = EntrepreneurshipLevels.new.call
+    errors.add(:level, 'must be a valid level') unless valid_levels.include?(level)
   end
 end
