@@ -25,7 +25,10 @@ class Discipline
   #           uma delas 'true' (business, entrepreneurship, innovation, intellectual_property)
 
   def a_valid_level?
-    true
-    # level: tem uma lista definida (roadmap de empreendedorismo)
+    valid_levels = ['Preciso testar minha ideia!',
+                    'Quero aprender!',
+                    'Tenho uma ideia, e agora?',
+                    'Tópicos avançados em Empreendedorismo']
+    valid_levels.include?(self.level)
   end
 end
