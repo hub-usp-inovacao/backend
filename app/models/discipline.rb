@@ -41,7 +41,7 @@ class Discipline
     valid_unities = Campi.new.call.reduce([]) do |acc, c|
       acc.concat(c[:unities])
     end
-    errors.add(:campus, 'must be a valid campi') unless valid_unities.include?(unity)
+    errors.add(:unity, 'must be a valid campi') unless valid_unities.include?(unity)
   end
 
   def a_valid_category?
