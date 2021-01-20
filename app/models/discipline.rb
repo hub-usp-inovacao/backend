@@ -15,7 +15,7 @@ class Discipline
   field :keywords, type: Array
 
   validates :name, :campus, :unity, :description, :category, :nature, :level, presence: true
-  validates :name, format: { with: /\A(\w|\d){3}\d{4} (-|–) .+\z/, message: '' }
+  validates :name, format: { with: /\A(\w|\d){3}\d{4} (-|–) .+\z/, message: 'must be a valid name' }
   validates :url, url: true
   validate :a_valid_level?, :a_valid_nature?, :a_valid_campi?, :a_valid_unity?, :a_valid_category?
 
