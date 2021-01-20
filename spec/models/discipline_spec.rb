@@ -31,46 +31,13 @@ RSpec.describe Discipline, type: :model do
     expect(discipline).to be_valid
   end
 
-  it 'is invalid with an invalid name' do
-    attr = valid_att
-    attr[:name] = 'Foo'
-    discipline = described_class.new(attr)
-    expect(discipline).to be_invalid
-  end
-
-  it 'is invalid with an invalid URL' do
-    attr = valid_att
-    attr[:url] = 'Foo'
-    discipline = described_class.new(attr)
-    expect(discipline).to be_invalid
-  end
-
-  it 'is invalid with an invalid level' do
-    attr = valid_att
-    attr[:level] = 'Foo'
-    discipline = described_class.new(attr)
-    expect(discipline).to be_invalid
-  end
-
-  it 'is invalid with an invalid nature' do
-    attr = valid_att
-    attr[:nature] = 'Foo'
-    discipline = described_class.new(attr)
-    expect(discipline).to be_invalid
-  end
-
-  it 'is invalid with an invalid campus' do
-    attr = valid_att
-    attr[:campus] = 'Foo'
-    discipline = described_class.new(attr)
-    expect(discipline).to be_invalid
-  end
-
-  it 'is invalid with an invalid unity' do
-    attr = valid_att
-    attr[:unity] = 'Foo'
-    discipline = described_class.new(attr)
-    expect(discipline).to be_invalid
+  %i[name url level nature campus unity].each do |att_name|
+    it "is invalid with an invalid #{att_name}" do
+      attr = valid_att
+      attr[att_name] = 'Foo'
+      discipline = described_class.new(attr)
+      expect(discipline).to be_invalid
+    end
   end
 
   it 'is invalid without category' do

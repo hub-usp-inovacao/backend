@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require Rails.root.join('data/entrepreneurship_levels')
-require Rails.root.join('data/campi')
-
 class Discipline
   include Mongoid::Document
 
@@ -23,7 +20,7 @@ class Discipline
   validate :a_valid_level?, :a_valid_nature?, :a_valid_campi?, :a_valid_unity?, :a_valid_category?
 
   def a_valid_level?
-    valid_levels = EntrepreneurshipLevels.new.call
+    valid_levels = entrepreneurship_levels
     errors.add(:level, 'must be a valid level') unless valid_levels.include?(level)
   end
 
@@ -33,20 +30,20 @@ class Discipline
   end
 
   def a_valid_campi?
-    valid_campi = Campi.new.call.map { |c| c[:name] }
+    valid_campi = campi.map { |c| c[:name] }
     errors.add(:campus, 'must be a valid campi') unless valid_campi.include?(campus)
   end
 
   def a_valid_unity?
-    valid_unities = Campi.new.call.reduce([]) do |acc, c|
+    valid_unities = campi.reduce([]) do |acc, c|
       acc.concat(c[:unities])
     end
     errors.add(:unity, 'must be a valid campi') unless valid_unities.include?(unity)
   end
 
   def a_valid_category?
-    unless category.any? { |_key, value| value == true }
-      errors.add(:category, 'at least one category must be true')
-    end
+    return if category.any? { |_key, value| value == true }
+
+    errors.add(:category, 'at least one category must be true')
   end
 end
