@@ -26,3 +26,9 @@ Lint/AmbiguousBlockAssociation:
 
 Style/Documentation:
   Enabled: false
+
+Style/GlobalVars:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
