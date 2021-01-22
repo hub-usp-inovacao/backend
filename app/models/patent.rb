@@ -23,8 +23,8 @@ class Patent
   # Sub-Área: "W__ - NOME"
   # Primário obrigatória, segundário opcional
 
-  # IPCS: "X__Y______" EX: "G01R002722" 
-  
+  # IPCS: "X__Y______" EX: "G01R002722"
+
   # Owners, Iventors: Não pode ser vazio
 
   # Status: Lista definida(Concedida, Domínio Público e Em análise)
@@ -32,5 +32,4 @@ class Patent
   # url: Checar se é um link
 
   # photo: ID Flyer
-
 end

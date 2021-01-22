@@ -29,3 +29,6 @@ Style/Documentation:
 
 Style/GlobalVars:
   Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
