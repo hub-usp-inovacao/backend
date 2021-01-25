@@ -24,7 +24,22 @@ class GetDisciplinesService
 
   # Parser (validação de erros)
   def self.parse
-    p 'Not Done'
+    # slice na primeira linha
+    # para cada linha que sobrar,
+    #   nd = nova Disciplina
+    #   unless salvar(nd)
+    #     notificar num log
+    #   end
+
+    @@disciplines = nil
+    raw_disciplines = @@data.slice(1, @@data.size - 1)
+    raw_disciplines.each do |row|
+      @@disciplines = Discipline.create_from row
+    rescue StandardException => e
+      logger.warning e
+    end
+
+    @@disciplines
   end
 
   # Detecção de alarmes (warnings)

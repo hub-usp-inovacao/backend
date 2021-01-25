@@ -7,7 +7,7 @@ RSpec.describe Discipline, type: :model do
     {
       name: 'ACH1575 - Inovação em Serviços de Lazer e Turismo',
       campus: 'USP Leste',
-      unity: 'Escola de Artes, Ciências e Humanidades - EACH',
+      unity: 'Escola deEscola de Artes, Ciências e Humanidades - EACH Artes, Ciências e Humanidades - EACH',
       start_date: '2020',
       nature: 'Graduação',
       level: 'Preciso testar minha ideia!',

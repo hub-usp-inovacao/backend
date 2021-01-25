@@ -46,4 +46,34 @@ class Discipline
 
     errors.add(:category, 'at least one category must be true')
   end
+
+  def self.create_from(row)
+    kws = []
+
+    kws << 'Negócios' if row[10]
+    kws << 'Propriedade Intelectual' if row[13]
+    kws << 'Inovação' if row[12]
+    kws << 'Empreendedorismo' if row[11]
+
+    Discipline.create!(
+      name: row[1],
+      campus: row[2],
+      unity: row[3],
+      start_date: row[8],
+      nature: row[0],
+      level: row[5],
+      url: row[4],
+      description: {
+        short: row[6],
+        long: row[7]
+      },
+      category: {
+        business: row[10].size > 0,
+        entrepreneurship: row[11].size > 0,
+        innovation: row[12].size > 0,
+        intellectual_property: row[13].size > 0
+      },
+      keywords: kws
+    )
+  end
 end
