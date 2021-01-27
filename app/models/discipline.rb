@@ -68,10 +68,10 @@ class Discipline
         long: row[7]
       },
       category: {
-        business: row[10].size > 0,
-        entrepreneurship: row[11].size > 0,
-        innovation: row[12].size > 0,
-        intellectual_property: row[13].size > 0
+        business: row[10].size.positive?,
+        entrepreneurship: row[11].size.positive?,
+        innovation: row[12].size.positive?,
+        intellectual_property: row[13].size.positive?
       },
       keywords: kws
     )
