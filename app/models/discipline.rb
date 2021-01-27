@@ -54,8 +54,7 @@ class Discipline
     kws << 'Propriedade Intelectual' if row[13]
     kws << 'Inovação' if row[12]
     kws << 'Empreendedorismo' if row[11]
-
-    Discipline.create!(
+    abuble = Discipline.create!(
       name: row[1],
       campus: row[2],
       unity: row[3],

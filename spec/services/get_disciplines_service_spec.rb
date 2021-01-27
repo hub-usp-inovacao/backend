@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe GetDisciplinesService, type: :model do
-  describe 'GetDisciplinesService::request' do
+  context 'GetDisciplinesService::request' do
     before do
       mock_response = instance_double(RestClient::Response,
                                       body: {
@@ -21,7 +21,7 @@ RSpec.describe GetDisciplinesService, type: :model do
     end
   end
 
-  describe 'GetDisciplinesService::parse' do
+  context 'GetDisciplinesService::parse' do
     before do
       mocked_data = [
         [],
@@ -29,7 +29,7 @@ RSpec.describe GetDisciplinesService, type: :model do
           'Graduação',
           'ACH1575 - Inovação em Serviços de Lazer e Turismo',
           'USP Leste',
-          'Escola deEscola de Artes, Ciências e Humanidades - EACH Artes, Ciências e Humanidades - EACH',
+          'Escola de Artes, Ciências e Humanidades - EACH',
           'https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=ACH1575',
           'Preciso testar minha ideia!',
           'Foo',
@@ -43,7 +43,12 @@ RSpec.describe GetDisciplinesService, type: :model do
         ]
       ]
       GetDisciplinesService.class_variable_set :@@data, mocked_data
-      # testar que não levanta erro
+    end
+
+    it 'does not raise errors' do
+      # Mocar o comportamento do create e checar se levanta exceções
+      expect { GetDisciplinesService.parse }.not_to raise_error
+      expect (Discipline).to receive(:create!)
     end
   end
 end
