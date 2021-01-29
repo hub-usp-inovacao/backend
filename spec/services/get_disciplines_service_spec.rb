@@ -22,33 +22,17 @@ RSpec.describe GetDisciplinesService, type: :model do
   end
 
   context 'GetDisciplinesService::parse' do
-    before do
-      mocked_data = [
-        [],
-        [
-          'Graduação',
-          'ACH1575 - Inovação em Serviços de Lazer e Turismo',
-          'USP Leste',
-          'Escola de Artes, Ciências e Humanidades - EACH',
-          'https://uspdigital.usp.br/jupiterweb/obterDisciplina?sgldis=ACH1575',
-          'Preciso testar minha ideia!',
-          'Foo',
-          'Bar',
-          '2020',
-          '',
-          'X',
-          '',
-          '',
-          'X'
-        ]
-      ]
-      GetDisciplinesService.class_variable_set :@@data, mocked_data
-    end
-
     it 'does not raise errors' do
       # Mocar o comportamento do create e checar se levanta exceções
+      allow(Discipline).to receive(:create!).and_return(true)
       expect { GetDisciplinesService.parse }.not_to raise_error
-      expect (Discipline).to receive(:create!)
+    end
+
+    it 'does raise errors' do
+      # Erro no mock
+      GetDisciplinesService.class_variable_set :@@data, [[], []]
+      allow(Discipline).to receive(:create_from).with([]).and_raise(Mongoid::Errors::Validations)
+      expect(GetDisciplinesService.parse).to be_nil
     end
   end
 end

@@ -32,7 +32,7 @@ class GetDisciplinesService
     raw_disciplines = @@data.slice(1, @@data.size - 1)
     raw_disciplines.each do |row|
       @@disciplines << Discipline.create_from(row)
-    rescue StandardError => e
+    rescue Mongoid::Errors::Validations => e
       # Notificar num log
       @@errors << e
       @@disciplines = nil

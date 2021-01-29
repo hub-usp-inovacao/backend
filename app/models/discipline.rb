@@ -47,14 +47,14 @@ class Discipline
     errors.add(:category, 'at least one category must be true')
   end
 
-  def self.create_from(row)
+  def self.create_from(row = nil)
     kws = []
 
     kws << 'Negócios' if row[10]
     kws << 'Propriedade Intelectual' if row[13]
     kws << 'Inovação' if row[12]
     kws << 'Empreendedorismo' if row[11]
-    abuble = Discipline.create!(
+    Discipline.create!(
       name: row[1],
       campus: row[2],
       unity: row[3],
