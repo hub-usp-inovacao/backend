@@ -4,7 +4,7 @@ require 'rest-client'
 require 'json'
 
 class GetDisciplinesService
-  @@errors = Array.new
+  @@errors = []
 
   def self.run
     request && parse && detect_warnings
@@ -28,7 +28,7 @@ class GetDisciplinesService
 
   # Parser (validação de erros)
   def self.parse
-    @@disciplines = Array.new
+    @@disciplines = []
     raw_disciplines = @@data.slice(1, @@data.size - 1)
     raw_disciplines.each do |row|
       @@disciplines << Discipline.create_from(row)
