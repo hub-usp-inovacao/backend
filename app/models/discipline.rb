@@ -48,12 +48,6 @@ class Discipline
   end
 
   def self.create_from(row = nil)
-    kws = []
-
-    kws << 'Negócios' if row[10]
-    kws << 'Propriedade Intelectual' if row[13]
-    kws << 'Inovação' if row[12]
-    kws << 'Empreendedorismo' if row[11]
     Discipline.create!(
       name: row[1],
       campus: row[2],
@@ -72,7 +66,18 @@ class Discipline
         innovation: row[12].size.positive?,
         intellectual_property: row[13].size.positive?
       },
-      keywords: kws
+      keywords: create_keywords(row)
     )
+  end
+
+  def self.create_keywords(row)
+    kws = []
+
+    kws << 'Negócios' if row[10]
+    kws << 'Propriedade Intelectual' if row[13]
+    kws << 'Inovação' if row[12]
+    kws << 'Empreendedorismo' if row[11]
+
+    kws
   end
 end
