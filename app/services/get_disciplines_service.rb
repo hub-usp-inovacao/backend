@@ -21,8 +21,7 @@ class GetDisciplinesService
     response = RestClient.get url
     @@data = JSON.parse(response.body)
   rescue RestClient::ExceptionWithResponse => e
-    # Notificar num log
-    @@errors << e
+    services_logger.debug "[GetDisciplinesService::request] #{e}"
     @@data = nil
   end
 
@@ -30,11 +29,10 @@ class GetDisciplinesService
   def self.parse
     @@disciplines = []
     raw_disciplines = @@data.slice(1, @@data.size - 1)
-    raw_disciplines.each do |row|
+    raw_disciplines.each_with_index do |row, index|
       @@disciplines << Discipline.create_from(row)
     rescue Mongoid::Errors::Validations => e
-      # Notificar num log
-      @@errors << e
+      services_logger.debug "[GetDisciplinesService::parse - Linha: #{index + 2}] #{e}"
       @@disciplines = nil
     end
 
