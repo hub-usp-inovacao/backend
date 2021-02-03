@@ -12,9 +12,7 @@ class GetDisciplinesService
     sheets_api_key = Rails.application.credentials.google_sheets_API_key
     sheet_id = '1AsmtnS5kY1mhXhNJH5QsCyg_WDnkGtARYB4nMdhyFLs'
     sheet_name = 'DISCIPLINAS'
-    url =
-      "https://sheets.googleapis.com/v4/spreadsheets/#{sheet_id}/values/
-      '#{sheet_name}'?key=#{sheets_api_key}"
+    url = "#{base_url}/#{sheet_id}/values/'#{sheet_name}'?key=#{sheets_api_key}"
     response = RestClient.get url
     @@data = JSON.parse(response.body)
   rescue RestClient::ExceptionWithResponse => e
@@ -29,5 +27,9 @@ class GetDisciplinesService
     rescue Mongoid::Errors::Validations => e
       services_logger.debug "[GetDisciplinesService::parse - Linha: #{index + 2}] #{e}"
     end
+  end
+
+  def self.base_url
+    'https://sheets.googleapis.com/v4/spreadsheets'
   end
 end
