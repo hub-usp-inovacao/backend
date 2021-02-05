@@ -2,6 +2,7 @@
 
 class Discipline
   include Mongoid::Document
+  include Mongoid::Timestamps::Created
 
   field :name, type: String
   field :campus, type: String
@@ -78,10 +79,10 @@ class Discipline
 
   def self.create_category(row)
     {
-      business: row[10].casecmp('x').zero?,
-      entrepreneurship: row[11].casecmp('x').zero?,
-      innovation: row[12].casecmp('x').zero?,
-      intellectual_property: row[13].casecmp('x').zero?
+      business: row[10]&.casecmp('x')&.zero?,
+      entrepreneurship: row[11]&.casecmp('x')&.zero?,
+      innovation: row[12]&.casecmp('x')&.zero?,
+      intellectual_property: row[13]&.casecmp('x')&.zero?
     }
   end
 end
