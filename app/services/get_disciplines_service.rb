@@ -5,7 +5,7 @@ require 'json'
 
 class GetDisciplinesService
   def self.run
-    request && parse
+    request && parse && cleanup
   end
 
   def self.request
@@ -14,7 +14,7 @@ class GetDisciplinesService
     sheet_name = 'DISCIPLINAS'
     url = "#{base_url}/#{sheet_id}/values/'#{sheet_name}'?key=#{sheets_api_key}"
     response = RestClient.get url
-    @@data = JSON.parse(response.body)["values"]
+    @@data = JSON.parse(response.body)['values']
   rescue RestClient::ExceptionWithResponse => e
     services_logger.debug "[GetDisciplinesService::request] #{e}"
     @@data = nil
@@ -27,6 +27,10 @@ class GetDisciplinesService
     rescue Mongoid::Errors::Validations => e
       services_logger.debug "[GetDisciplinesService::parse - Linha: #{index + 2}] #{e}"
     end
+  end
+
+  def self.cleanup
+    Discipline.where(created_at: Time.zone.at(0)..1.hour.ago).delete_all
   end
 
   def self.base_url
