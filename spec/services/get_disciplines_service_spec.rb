@@ -6,7 +6,8 @@ RSpec.describe GetDisciplinesService, type: :model do
   describe 'GetDisciplinesService::request' do
     successful_response = {
       'isAvailable' => true,
-      'imageAvailable' => false
+      'imageAvailable' => false,
+      'values' => {}
     }.to_json
 
     it 'handle response successfully' do
