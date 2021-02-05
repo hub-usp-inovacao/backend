@@ -14,7 +14,7 @@ class GetDisciplinesService
     sheet_name = 'DISCIPLINAS'
     url = "#{base_url}/#{sheet_id}/values/'#{sheet_name}'?key=#{sheets_api_key}"
     response = RestClient.get url
-    @@data = JSON.parse(response.body)
+    @@data = JSON.parse(response.body)["values"]
   rescue RestClient::ExceptionWithResponse => e
     services_logger.debug "[GetDisciplinesService::request] #{e}"
     @@data = nil
