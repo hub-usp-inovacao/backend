@@ -20,6 +20,9 @@ Metrics/BlockLength:
     - config/**/*
     - spec/**/*
 
+Metrics/MethodLength:
+  Max: 20
+  
 Lint/AmbiguousBlockAssociation:
   Exclude:
     - spec/**/*
@@ -32,3 +35,12 @@ Style/GlobalVars:
 
 Style/AsciiComments:
   Enabled: false
+
+Style/ClassVars:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 9
+
+Metrics/PerceivedComplexity:
+  Max: 9

@@ -2,6 +2,7 @@
 
 class Discipline
   include Mongoid::Document
+  include Mongoid::Timestamps::Created
 
   field :name, type: String
   field :campus, type: String
@@ -45,5 +46,43 @@ class Discipline
     return if category.any? { |_key, value| value == true }
 
     errors.add(:category, 'at least one category must be true')
+  end
+
+  def self.create_from(row)
+    Discipline.create!(
+      name: row[1],
+      campus: row[2],
+      unity: row[3],
+      start_date: row[8],
+      nature: row[0],
+      level: row[5],
+      url: row[4],
+      description: {
+        short: row[6],
+        long: row[7]
+      },
+      category: create_category(row),
+      keywords: create_keywords(row)
+    )
+  end
+
+  def self.create_keywords(row)
+    kws = []
+
+    kws << 'Negócios' if row[10]
+    kws << 'Propriedade Intelectual' if row[13]
+    kws << 'Inovação' if row[12]
+    kws << 'Empreendedorismo' if row[11]
+
+    kws
+  end
+
+  def self.create_category(row)
+    {
+      business: row[10]&.casecmp('x')&.zero?,
+      entrepreneurship: row[11]&.casecmp('x')&.zero?,
+      innovation: row[12]&.casecmp('x')&.zero?,
+      intellectual_property: row[13]&.casecmp('x')&.zero?
+    }
   end
 end
