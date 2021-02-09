@@ -17,4 +17,4 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           args: |
             O PR \#${{ github.event.number }} foi solicitado revisão
-            Veja https://github.com/portal-solus/backend/pulls/${{ github.event.number }}
+            Veja https://github.com/portal-solus/backend/pull/${{ github.event.number }}
