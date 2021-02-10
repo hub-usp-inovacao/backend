@@ -6,7 +6,7 @@ ENV PORT=3000 \
 
 WORKDIR ${APP_PATH}
 
-RUN apk add --update \
+RUN apk add --update && apk add bash \
     build-base git && \
     gem install rails
 

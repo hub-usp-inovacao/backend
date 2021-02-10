@@ -5,7 +5,7 @@ set -e
 rm -f $APP_PATH/tmp/pids/server.pid
 
 # Set up the crontab
-whenever --update-crontab
+bundle exec whenever --update-crontab
 
 # Then exec the container's main process (what's set as CMD in the Dockerfile).
 exec "$@"

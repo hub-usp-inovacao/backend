@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 set :output, 'log/whenever.log'
-set :environment, "development"
+set :environment, :development
 env :PATH, ENV['PATH']
 
 # Use this file to easily define all of your cron jobs.
