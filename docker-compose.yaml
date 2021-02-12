@@ -17,14 +17,6 @@ services:
     image: mongo:4.4.1-bionic
     env_file:
       - .env
-
-  cron_job:
-    build: .
-    command: crond -f
-    volumes:
-      - ./:/usr/src/app
-    depends_on:
-      - mongo
       
 volumes:
   railsdeps:
