@@ -17,7 +17,6 @@ services:
     image: mongo:4.4.1-bionic
     env_file:
       - .env
-      
+
 volumes:
   railsdeps:
-
