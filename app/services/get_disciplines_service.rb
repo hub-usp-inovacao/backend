@@ -24,7 +24,7 @@ class GetDisciplinesService
     raw_disciplines = @@data.slice(1, @@data.size - 1)
     raw_disciplines.each_with_index do |row, index|
       Discipline.create_from(row)
-    rescue Mongoid::Errors::Validations => e
+    rescue StandardError => e
       services_logger.debug "[GetDisciplinesService::parse - Linha: #{index + 2}] #{e}"
     end
   end

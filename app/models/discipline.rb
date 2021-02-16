@@ -49,21 +49,27 @@ class Discipline
   end
 
   def self.create_from(row)
-    Discipline.create!(
-      name: row[1],
-      campus: row[2],
-      unity: row[3],
-      start_date: row[8],
-      nature: row[0],
-      level: row[5],
-      url: row[4],
-      description: {
-        short: row[6],
-        long: row[7]
-      },
-      category: create_category(row),
-      keywords: create_keywords(row)
+    new_discipline = Discipline.new(
+      {
+        name: row[1],
+        campus: row[2],
+        unity: row[3],
+        start_date: row[8],
+        nature: row[0],
+        level: row[5],
+        url: row[4],
+        description: {
+          short: row[6],
+          long: row[7]
+        },
+        category: create_category(row),
+        keywords: create_keywords(row)
+      }
     )
+
+    raise StandardError, new_discipline.errors.full_messages unless new_discipline.save
+
+    new_discipline
   end
 
   def self.create_keywords(row)
