@@ -14,6 +14,7 @@ class Discipline
   field :description, type: Hash
   field :category, type: Hash
   field :keywords, type: Array
+  field :offeringPeriod, type: String
 
   validates :name, :campus, :unity, :description, :category, :nature, :level, presence: true
   validates :name, format: { with: /\A(\w|\d){3}\d{4} (-|–) .+\z/, message: 'must be a valid name' }
@@ -59,9 +60,10 @@ class Discipline
         level: row[5],
         url: row[4],
         description: {
-          short: row[6],
-          long: row[7]
+          short: '',
+          long: row[6]
         },
+        offeringPeriod: row[13],
         category: create_category(row),
         keywords: create_keywords(row)
       }
@@ -75,20 +77,20 @@ class Discipline
   def self.create_keywords(row)
     kws = []
 
-    kws << 'Negócios' if row[10]
-    kws << 'Propriedade Intelectual' if row[13]
-    kws << 'Inovação' if row[12]
-    kws << 'Empreendedorismo' if row[11]
+    kws << 'Negócios' if row[9]
+    kws << 'Empreendedorismo' if row[10]
+    kws << 'Inovação' if row[11]
+    kws << 'Propriedade Intelectual' if row[12]
 
     kws
   end
 
   def self.create_category(row)
     {
-      business: row[10]&.casecmp('x')&.zero?,
-      entrepreneurship: row[11]&.casecmp('x')&.zero?,
-      innovation: row[12]&.casecmp('x')&.zero?,
-      intellectual_property: row[13]&.casecmp('x')&.zero?
+      business: row[9]&.casecmp('x')&.zero?,
+      entrepreneurship: row[10]&.casecmp('x')&.zero?,
+      innovation: row[11]&.casecmp('x')&.zero?,
+      intellectual_property: row[12]&.casecmp('x')&.zero?
     }
   end
 end

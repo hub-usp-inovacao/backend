@@ -16,6 +16,7 @@ RSpec.describe Discipline, type: :model do
         short: 'Foo',
         long: 'Bar'
       },
+      offeringPeriod: 'N/D',
       category: {
         business: false,
         entrepreneurship: false,

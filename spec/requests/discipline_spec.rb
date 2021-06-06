@@ -17,6 +17,7 @@ RSpec.describe 'Disciplines', type: :request do
           short: 'Foo',
           long: 'Bar'
         },
+        offeringPeriod: 'N/D',
         category: {
           business: false,
           entrepreneurship: false,
@@ -30,7 +31,7 @@ RSpec.describe 'Disciplines', type: :request do
 
   def discipline_keys
     %w[_id name campus unity start_date
-       nature level url description
+       nature level url description offeringPeriod
        category keywords created_at]
   end
 
