@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 class CompanyUpdatesController < ApplicationController
   def create
     data = create_params
-    p data
-    @compUpdate = CompanyUpdate.create!(data)
-    render json: { company_update: @compUpdate }
-  rescue StandardError => e
+    @comp_update = CompanyUpdate.create!(data)
+    render json: { company_update: @comp_update }
+  rescue StandardError
     render json: { error: 'invalid parameters' }, status: :bad_request
   end
 
