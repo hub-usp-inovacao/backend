@@ -2,16 +2,17 @@
 
 class CompanyUpdatesController < ApplicationController
   def create
+    ActionController::Parameters.permit_all_parameters = true
     data = create_params
     @comp_update = CompanyUpdate.create!(data)
     render json: { company_update: @comp_update }
-  rescue StandardError
-    render json: { error: 'invalid parameters' }, status: :bad_request
+  rescue StandardError => e
+    render json: { error: e }, status: :bad_request
   end
 
   private
 
   def create_params
-    params.require(:company).permit(:cnpj, :new_fields)
+    params.require(:company)
   end
 end
