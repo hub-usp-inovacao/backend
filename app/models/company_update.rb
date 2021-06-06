@@ -18,4 +18,15 @@ class CompanyUpdate
 
     errors.add(:new_values, :invalid)
   end
+
+  def to_s
+    header = "CNPJ: #{cnpj}"
+    items = new_values.map do |hash|
+      attr = hash.keys[0]
+      val = hash[attr]
+      "\t- #{attr}: #{val}"
+    end
+
+    ([header] + items).join("\n")
+  end
 end
