@@ -12,7 +12,7 @@ RSpec.describe 'CompanyUpdates', type: :request do
 
     it 'returns the just-created object' do
       data = { cnpj: '1234.4321.4232/0001.21', new_values: [{ email: 'foo@example.com' }] }
-      comp_update = data.merge({ id: '1097bd190328aaf98' })
+      comp_update = data.merge({ id: 'hand-made-id' })
 
       allow(CompanyUpdate).to receive(:create!).and_return(comp_update)
       patch '/companies', params: { company: data }
