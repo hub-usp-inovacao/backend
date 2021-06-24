@@ -70,4 +70,20 @@ RSpec.describe Company, type: :model do
       expect(company).to be_invalid
     end
   end
+
+  %i[url logo].each do |url_like|
+    it "is invalid with invalid #{url_like}" do
+      attrs = valid_attr
+      attrs[url_like] = 'foo bar baz'
+      company = described_class.new attrs
+      expect(company).to be_invalid
+    end
+  end
+
+  it 'is invalid with a wrong companySize' do
+    attrs = valid_attr
+    attrs[:companySize] = ['foo bar baz']
+    company = described_class.new attrs
+    expect(company).to be_invalid
+  end
 end
