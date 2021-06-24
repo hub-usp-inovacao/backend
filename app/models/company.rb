@@ -24,7 +24,8 @@ class Company
   field :classification, type: Hash
   field :address, type: Hash
 
-  validates :name, :year, :emails, :description, :incubated, :ecosystems, :services, :address, presence: true
+  validates :name, :year, :emails, :description, :incubated, :ecosystems, :services, :address,
+            presence: true
   validates :name, length: { in: 2..100 }
 
   validate :valid_year?
@@ -33,8 +34,8 @@ class Company
     return if year.nil?
 
     is_valid = year.is_a?(String) &&
-      year.match?(/^\d{4}$/) &&
-      year.to_i <= Time.now.year
+               year.match?(/^\d{4}$/) &&
+               year.to_i <= Time.zone.now.year
     errors.add(:year, 'must be a string representing a non-future year') unless is_valid
   end
 end
