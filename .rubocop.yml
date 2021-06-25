@@ -11,6 +11,9 @@ AllCops:
     - 'log/**/*'
     - 'vendor/bundle/**/*'
 
+Metrics/AbcSize:
+  Max: 30
+
 Metrics/LineLength:
   Max: 100
 

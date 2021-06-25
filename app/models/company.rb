@@ -59,4 +59,53 @@ class Company
 
     errors.add(:classification, 'invalid major and/or minor') unless is_valid
   end
+
+  def self.create_from(row)
+    new_company = Company.new(
+      {
+        name: row[2],
+        year: row[4],
+        emails: row[7].split(';'),
+        description: { long: row[13] },
+        incubated: incubated?(row),
+        ecosystems: row[19].split(';'),
+        services: row[14],
+        address: define_address(row),
+        phone: row[6],
+        url: row[17],
+        technologies: row[15],
+        logo: row[16],
+        classification: classify(row),
+        companySize: 'Microempresa'
+      }
+    )
+
+    raise StandardError, new_company.errors.full_messages unless new_company.save
+
+    new_company
+  end
+
+  def self.incubated?(row)
+    yesses = ['Sim. A empresa está incubada.', 'Sim. A empresa já está graduada']
+    yesses.includes? row[18]
+  end
+
+  def self.define_address(row)
+    {
+      venue: row[8],
+      neightborhood: row[9],
+      city: row[10].split(';'),
+      state: row[11],
+      cep: row[12]
+    }
+  end
+
+  def self.classify(row)
+    code = row[5][0..1]
+    major_minor = cnae_code_to_major_minor[code]
+    {
+      major: major_minor[:major],
+      minor: major_minor[:minor]
+    }
+  end
 end
