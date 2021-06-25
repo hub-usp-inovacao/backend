@@ -80,10 +80,15 @@ RSpec.describe Company, type: :model do
     end
   end
 
-  it 'is invalid with a wrong companySize' do
-    attrs = valid_attr
-    attrs[:companySize] = ['foo bar baz']
-    company = described_class.new attrs
-    expect(company).to be_invalid
+  [
+    { attr: :companySize, value: ['foo bar baz'] },
+    { attr: :classification, value: { value: '13' } }
+  ].each do |ctx|
+    it "is invalid with a wrong #{ctx[:attr]}" do
+      attrs = valid_attr
+      attrs[ctx[:attr]] = ctx[:value]
+      company = described_class.new attrs
+      expect(company).to be_invalid
+    end
   end
 end

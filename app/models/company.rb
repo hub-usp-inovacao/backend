@@ -25,11 +25,12 @@ class Company
   field :address, type: Hash
 
   validates :name, :year, :emails, :description, :incubated, :ecosystems, :services, :address,
+            :classification,
             presence: true
   validates :name, length: { in: 2..100 }
   validates :url, :logo, url: true
 
-  validate :valid_year?, :valid_company_size?
+  validate :valid_year?, :valid_company_size?, :valid_classification?
 
   def valid_year?
     return if year.nil?
@@ -45,5 +46,17 @@ class Company
                companySize.is_a?(Array) &&
                companySize.all? { |size| company_sizes.include?(size) }
     errors.add(:companySize, "must be one of #{company_sizes}") unless is_valid
+  end
+
+  def valid_classification?
+    c = classification
+
+    is_valid = c.is_a?(Hash) &&
+               c.key?(:major) &&
+               c.key?(:minor) &&
+               cnae_majors.include?(c[:major]) &&
+               cnae_major_to_minors[c[:major]].include?(c[:minor])
+
+    errors.add(:classification, 'invalid major and/or minor') unless is_valid
   end
 end
