@@ -36,9 +36,6 @@ group :development, :test do
     # Previously '4-0-dev' or '4-0-maintenance' branch
     gem lib, git: "https://github.com/rspec/#{lib}.git", branch: 'main'
   end
-  gem 'cucumber-rails', require: false
-  # database_cleaner is not mandatory, but highly recommended
-  gem 'database_cleaner-mongoid'
 end
 
 group :development do
