@@ -11,6 +11,9 @@ AllCops:
     - 'log/**/*'
     - 'vendor/bundle/**/*'
 
+Metrics/ClassLength:
+  Max: 200
+
 Metrics/AbcSize:
   Max: 30
 

@@ -76,7 +76,7 @@ class Company
         phones: row[6].split(';'),
         url: format_url(row[17]),
         technologies: row[15].split(';'),
-        logo: format_url(row[16]),
+        logo: create_image_url(row[16]),
         classification: classify(row),
         companySize: ['Microempresa']
       }
@@ -85,6 +85,10 @@ class Company
     raise StandardError, new_company.errors.full_messages unless new_company.save
 
     new_company
+  end
+
+  def self.create_image_url(raw)
+    "https://drive.google.com/uc?export=view&id=#{raw}"
   end
 
   def self.format_url(raw)
