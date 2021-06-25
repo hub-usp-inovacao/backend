@@ -33,7 +33,7 @@ class Company
   validate :valid_year?, :valid_company_size?, :valid_classification?
 
   def valid_year?
-    return if year.nil?
+    return if year.nil? || year == 'N/D'
 
     is_valid = year.is_a?(String) &&
                year.match?(/^\d{4}$/) &&
@@ -49,6 +49,8 @@ class Company
   end
 
   def valid_classification?
+    return if classification.nil?
+
     c = classification
 
     is_valid = c.is_a?(Hash) &&
@@ -71,12 +73,12 @@ class Company
         ecosystems: row[19].split(';'),
         services: row[14],
         address: define_address(row),
-        phone: row[6],
-        url: row[17],
-        technologies: row[15],
-        logo: row[16],
+        phones: row[6].split(';'),
+        url: format_url(row[17]),
+        technologies: row[15].split(';'),
+        logo: format_url(row[16]),
         classification: classify(row),
-        companySize: 'Microempresa'
+        companySize: ['Microempresa']
       }
     )
 
@@ -85,9 +87,17 @@ class Company
     new_company
   end
 
+  def self.format_url(raw)
+    return nil if raw.size.zero?
+
+    return "https://#{raw}" if raw[0..3] != 'http'
+
+    raw
+  end
+
   def self.incubated?(row)
     yesses = ['Sim. A empresa está incubada.', 'Sim. A empresa já está graduada']
-    yesses.includes? row[18]
+    yesses.include? row[18]
   end
 
   def self.define_address(row)
@@ -101,8 +111,15 @@ class Company
   end
 
   def self.classify(row)
+    default = { major: '', minor: '' }
+
+    return default if row.nil? || row[5].size.zero?
+
     code = row[5][0..1]
     major_minor = cnae_code_to_major_minor[code]
+
+    return default unless code && major_minor
+
     {
       major: major_minor[:major],
       minor: major_minor[:minor]

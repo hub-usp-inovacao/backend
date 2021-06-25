@@ -432,7 +432,8 @@ $majorToMinors = {
   'Agricultura, Pecuária, Pesca e Extrativismo' => [
     'Agricultura, Pecuária, Produção Florestal, Pesca e Aquicultura', 'Indústrias Extrativas',
     'Extração de Petróleo e Gás Natural'
-  ]
+  ],
+  '' => ['']
 }
 
 def cnae_code_to_major_minor
