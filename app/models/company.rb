@@ -87,13 +87,44 @@ class Company
         technologies: row[15].split(';'),
         logo: create_image_url(row[16]),
         classification: classify(row),
-        companySize: ['Microempresa']
+        companySize: size(row)
       }
     )
 
     raise StandardError, new_company.errors.full_messages unless new_company.save
 
     new_company
+  end
+
+  def size(row)
+    return row[20] if row[20] == 'Unicórnio'
+
+    employees = row[21].to_i
+
+    return 'Não Informado' unless employees.positive?
+
+    if classification[:major] == 'Indústria de Transformação'
+      case employees
+      when 1...20
+        ['Microempresa']
+      when 20...100
+        ['Pequena Empresa']
+      when 100...500
+        ['Média Empresa']
+      else
+        ['Grande Empresa']
+      end
+    else
+      case employees
+      when 1...10
+        ['Microempresa']
+      when 0...50
+        ['Pequena Empresa']
+      when 50...100
+        ['Média Empresa']
+      else ['Grande Empresa']
+      end
+    end
   end
 
   def self.format_phone(raw)

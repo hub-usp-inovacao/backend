@@ -27,7 +27,7 @@ Metrics/BlockLength:
     - spec/**/*
 
 Metrics/MethodLength:
-  Max: 20
+  Max: 30
   
 Lint/AmbiguousBlockAssociation:
   Exclude:
@@ -46,7 +46,7 @@ Style/ClassVars:
   Enabled: false
 
 Metrics/CyclomaticComplexity:
-  Max: 9
+  Max: 12
 
 Metrics/PerceivedComplexity:
   Max: 9
