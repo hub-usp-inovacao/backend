@@ -27,7 +27,7 @@ class Company
   validates :name, :year, :emails, :description, :incubated, :ecosystems, :services, :address,
             :classification,
             presence: true
-  validates :name, length: { in: 2..100 }
+  validates :name, length: { in: 2..100 }, uniqueness: true
   validates :url, :logo, url: true
   validates :phones, phones: true
 
