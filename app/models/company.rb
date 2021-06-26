@@ -82,7 +82,7 @@ class Company
         ecosystems: row[19].split(';'),
         services: row[14],
         address: define_address(row),
-        phones: row[6].split(';'),
+        phones: format_phone(row[6]),
         url: format_url(row[17]),
         technologies: row[15].split(';'),
         logo: create_image_url(row[16]),
@@ -94,6 +94,35 @@ class Company
     raise StandardError, new_company.errors.full_messages unless new_company.save
 
     new_company
+  end
+
+  def self.format_phone(raw)
+    raw.split(';').map do |phone|
+      numbers = phone.gsub(/\D/, '')
+      case numbers.size
+      when 13
+        # +55 (11) 98765 - 4321
+        "+#{numbers[0..1]} (#{numbers[2..3]}) #{numbers[4..8]} - #{numbers[9..]}"
+      when 12
+        # +55 (11) 8765 - 4321
+        "+#{numbers[0..1]} (#{numbers[2..3]}) #{numbers[4..7]} - #{numbers[8..]}"
+      when 11
+        # (11) 98765 - 4321
+        "(#{numbers[0..1]}) #{numbers[2..6]} - #{numbers[7..]}"
+      when 10
+        # (11) 8765 - 4321
+        "(#{numbers[0..1]}) #{numbers[2..5]} - #{numbers[6..]}"
+      when 9
+        # 98765 - 4321
+        "#{numbers[0..4]} - #{numbers[5..]}"
+      when 8
+        # 8765 - 4321
+        "#{numbers[0..3]} - #{numbers[4..]}"
+      else
+        # no particular format
+        numbers
+      end
+    end
   end
 
   def self.create_image_url(raw)
