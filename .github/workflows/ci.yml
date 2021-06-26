@@ -58,6 +58,4 @@ jobs:
           mongodb-version: 4.2
 
       - name: Run tests
-        run: |
-          bundle exec cucumber
-          bundle exec rspec
+        run: bundle exec rspec
