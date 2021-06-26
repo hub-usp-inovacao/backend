@@ -29,8 +29,17 @@ class Company
             presence: true
   validates :name, length: { in: 2..100 }
   validates :url, :logo, url: true
+  validates :phones, phones: true
 
-  validate :valid_year?, :valid_company_size?, :valid_classification?
+  validate :valid_year?, :valid_company_size?, :valid_classification?, :valid_address?
+
+  def valid_address?
+    is_valid = !address.nil? &&
+               address.is_a?(Hash) &&
+               address.key?(:city)
+
+    errors.add(:address, 'address requires at least the city') unless is_valid
+  end
 
   def valid_year?
     return if year.nil? || year == 'N/D'
