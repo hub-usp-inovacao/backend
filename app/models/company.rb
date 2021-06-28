@@ -97,34 +97,36 @@ class Company
   end
 
   def size(row)
-    return row[20] if row[20] == 'Unicórnio'
+    sizes = row[20] == 'Unicórnio' ? [row[20]] : []
 
     employees = row[21].to_i
 
-    return 'Não Informado' unless employees.positive?
+    return sizes.append('Não Informado') unless employees.positive?
 
     if classification[:major] == 'Indústria de Transformação'
       case employees
       when 1...20
-        ['Microempresa']
+        sizes.append 'Microempresa'
       when 20...100
-        ['Pequena Empresa']
+        sizes.append 'Pequena Empresa'
       when 100...500
-        ['Média Empresa']
+        sizes.append 'Média Empresa'
       else
-        ['Grande Empresa']
+        sizes.append 'Grande Empresa'
       end
     else
       case employees
       when 1...10
-        ['Microempresa']
+        sizes.append 'Microempresa'
       when 0...50
-        ['Pequena Empresa']
+        sizes.append 'Pequena Empresa'
       when 50...100
-        ['Média Empresa']
-      else ['Grande Empresa']
+        sizes.append 'Média Empresa'
+      else sizes.append 'Grande Empresa'
       end
     end
+
+    sizes
   end
 
   def self.format_phone(raw)
