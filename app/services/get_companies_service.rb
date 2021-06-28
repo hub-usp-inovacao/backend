@@ -21,8 +21,8 @@ class GetCompaniesService
   end
 
   def self.parse
-    raw_disciplines = @@data.slice(1, @@data.size - 1)
-    raw_disciplines.each_with_index do |row, index|
+    raw_companies = @@data.slice(1, @@data.size - 1)
+    raw_companies.each_with_index do |row, index|
       Company.create_from(row)
     rescue StandardError => e
       services_logger.debug "[GetCompaniesService::parse - Linha: #{index + 2}] #{e}"
