@@ -3,5 +3,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   get '/disciplines', to: 'discipline#index'
+
+  get   '/companies', to: 'company#index'
   patch '/companies', to: 'company_updates#create'
 end
