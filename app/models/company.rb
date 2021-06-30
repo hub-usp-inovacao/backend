@@ -27,7 +27,7 @@ class Company
   validates :name, :year, :emails, :description, :incubated, :ecosystems, :services, :address,
             :classification,
             presence: true
-  validates :name, length: { in: 2..100 }, uniqueness: true
+  validates :name, length: { in: 2..100 }, uniqueness: { message: "#{name} already taken" }
   validates :url, :logo, url: true
   validates :phones, phones: true
 
@@ -72,6 +72,8 @@ class Company
   end
 
   def self.create_from(row)
+    classification = classify(row)
+
     new_company = Company.new(
       {
         name: row[2],
@@ -86,8 +88,8 @@ class Company
         url: format_url(row[17]),
         technologies: row[15].split(';'),
         logo: create_image_url(row[16]),
-        classification: classify(row),
-        companySize: size(row)
+        classification: classification,
+        companySize: size(row, classification)
       }
     )
 
@@ -96,7 +98,7 @@ class Company
     new_company
   end
 
-  def size(row)
+  def self.size(row, classification)
     sizes = row[20] == 'Unicórnio' ? [row[20]] : []
 
     employees = row[21].to_i
