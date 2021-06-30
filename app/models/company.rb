@@ -27,7 +27,7 @@ class Company
   validates :name, :year, :emails, :description, :incubated, :ecosystems, :services, :address,
             :classification,
             presence: true
-  validates :name, length: { in: 2..100 }, uniqueness: true
+  validates :name, length: { in: 2..100 }, uniqueness: { message: "#{name} already taken" }
   validates :url, :logo, url: true
   validates :phones, phones: true
 
@@ -96,12 +96,14 @@ class Company
     new_company
   end
 
-  def size(row)
+  def self.size(row)
     sizes = row[20] == 'Unicórnio' ? [row[20]] : []
 
     employees = row[21].to_i
 
     return sizes.append('Não Informado') unless employees.positive?
+
+    classification = classify(row)
 
     if classification[:major] == 'Indústria de Transformação'
       case employees
