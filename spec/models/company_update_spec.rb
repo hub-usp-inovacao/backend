@@ -4,7 +4,15 @@ require 'rails_helper'
 
 RSpec.describe CompanyUpdate, type: :model do
   let(:valid_attr) do
-    { cnpj: '14.380.200/0001-21', new_values: [{ Foo: 'Bar' }] }
+    {
+      cnpj: '14.380.200/0001-21',
+      name: 'Fulano',
+      email: 'fulano@mail.com',
+      phone: '3223-1838',
+      new_values: [
+        { Foo: 'Bar' }
+      ]
+    }
   end
 
   it 'is valid with valid attributes' do
@@ -26,6 +34,14 @@ RSpec.describe CompanyUpdate, type: :model do
 
   it 'converts to a readable string' do
     comp_update = described_class.new(valid_attr)
-    expect(comp_update.to_s).to eql("CNPJ: 14.380.200/0001-21\n\t- Foo: Bar")
+    stringified = <<~MULTILINE
+      CNPJ: #{valid_attr[:cnpj]}
+      Nome: #{valid_attr[:name]}
+      Email: #{valid_attr[:email]}
+      Telefone: #{valid_attr[:phone]}
+      \t- Foo: Bar
+
+    MULTILINE
+    expect(comp_update.to_s).to eql(stringified)
   end
 end

@@ -50,3 +50,6 @@ Metrics/CyclomaticComplexity:
 
 Metrics/PerceivedComplexity:
   Max: 9
+
+RSpec/ExampleLength:
+  Max: 10
