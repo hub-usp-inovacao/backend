@@ -44,4 +44,28 @@ class Conexao
     errors.add(:model, :invalid) unless is_valid
     is_valid
   end
+
+  def to_s
+    header = ['Dados Pessoais:']
+    header.push("\tNome: #{personal[:name]}")
+    header.push("\tEmail: #{personal[:email]}")
+    header.push("\tRepresenta uma: #{personal[:represent]}")
+    header.push('Dados da organização:')
+    header.push("\tNome: #{org[:name]}")
+    header.push("\tEmail: #{org[:email]}")
+    header.push("\tCNPJ: #{org[:cnpj]}")
+    header.push("\tOs dados são sigilosos?: #{org[:sensitiveData]}")
+    header.push("\tTamanho da empresa: #{org[:size]}")
+    header.push("\tTelefone: #{org[:phone]}")
+    header.push("\tEndereço: #{org[:address]}")
+    header.push("\tCidade: #{org[:city]}")
+    header.push('Demanda:')
+    header.push("\tÁrea Primária: #{demand[:cnae][:major]}")
+    header.push("\tÁrea Secundária: #{demand[:cnae][:minor]}")
+    header.push("\tDescrição: #{demand[:description]}")
+    header.push("\tExpectativa: #{demand[:expectation]}")
+    header.push("\tPerfil de pesquisador desejado: #{demand[:wantedProfile]}")
+    header.push("\tQual é a sua necessidade em relação a esses pesquisadores?: #{demand[:necessity]}")
+    "#{header.join("\n")}\n\n"
+  end
 end
