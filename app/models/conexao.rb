@@ -8,6 +8,7 @@ class Conexao
 
   validates :personal, :org, :demand, presence: true
   validate :validate_personal, :validate_org, :validate_demand
+
   def validate_personal
     attr = %i[email name represent]
     validate_fields(personal, attr)
