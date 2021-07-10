@@ -33,6 +33,32 @@ RSpec.describe Conexao, type: :model do
     }
   end
 
+  let(:valid_attr_to_s) do
+    <<~MULTILINE
+      Dados Pessoais:
+      \tNome: #{valid_attr[:personal][:name]}
+      \tEmail: #{valid_attr[:personal][:email]}
+      \tRepresenta uma: #{valid_attr[:personal][:represent]}
+      Dados da organização:
+      \tNome: #{valid_attr[:org][:name]}
+      \tEmail: #{valid_attr[:org][:email]}
+      \tCNPJ: #{valid_attr[:org][:cnpj]}
+      \tOs dados são sigilosos?: #{valid_attr[:org][:sensitiveData]}
+      \tTamanho da empresa: #{valid_attr[:org][:size]}
+      \tTelefone: #{valid_attr[:org][:phone]}
+      \tEndereço: #{valid_attr[:org][:address]}
+      \tCidade: #{valid_attr[:org][:city]}
+      Demanda:
+      \tÁrea Primária: #{valid_attr[:demand][:cnae][:major]}
+      \tÁrea Secundária: #{valid_attr[:demand][:cnae][:minor]}
+      \tDescrição: #{valid_attr[:demand][:description]}
+      \tExpectativa: #{valid_attr[:demand][:expectation]}
+      \tPerfil de pesquisador desejado: #{valid_attr[:demand][:wantedProfile]}
+      \tQual é a sua necessidade em relação a esses pesquisadores?: #{valid_attr[:demand][:necessity]}
+
+    MULTILINE
+  end
+
   it 'is valid with valid attributes' do
     conexao = described_class.new(valid_attr)
     expect(conexao).to be_valid
@@ -69,29 +95,6 @@ RSpec.describe Conexao, type: :model do
 
   it 'converts to a readable string' do
     conexao = described_class.new(valid_attr)
-    comparison = <<~MULTILINE
-      Dados Pessoais:
-      \tNome: #{valid_attr[:personal][:name]}
-      \tEmail: #{valid_attr[:personal][:email]}
-      \tRepresenta uma: #{valid_attr[:personal][:represent]}
-      Dados da organização:
-      \tNome: #{valid_attr[:org][:name]}
-      \tEmail: #{valid_attr[:org][:email]}
-      \tCNPJ: #{valid_attr[:org][:cnpj]}
-      \tOs dados são sigilosos?: #{valid_attr[:org][:sensitiveData]}
-      \tTamanho da empresa: #{valid_attr[:org][:size]}
-      \tTelefone: #{valid_attr[:org][:phone]}
-      \tEndereço: #{valid_attr[:org][:address]}
-      \tCidade: #{valid_attr[:org][:city]}
-      Demanda:
-      \tÁrea Primária: #{valid_attr[:demand][:cnae][:major]}
-      \tÁrea Secundária: #{valid_attr[:demand][:cnae][:minor]}
-      \tDescrição: #{valid_attr[:demand][:description]}
-      \tExpectativa: #{valid_attr[:demand][:expectation]}
-      \tPerfil de pesquisador desejado: #{valid_attr[:demand][:wantedProfile]}
-      \tQual é a sua necessidade em relação a esses pesquisadores?: #{valid_attr[:demand][:necessity]}
-
-    MULTILINE
-    expect(conexao.to_s).to eql(comparison)
+    expect(conexao.to_s).to eql(valid_attr_to_s)
   end
 end
