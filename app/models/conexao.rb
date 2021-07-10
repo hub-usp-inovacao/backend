@@ -19,7 +19,7 @@ class Conexao
     return unless validate_fields(org, attr)
 
     errors.add(:org, :invalid) unless %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\z}.match?(org[:cnpj])
-    errors.add(:org, :invalid) unless [true, false].include?(org[:sensitiveData])
+    errors.add(:org, :invalid) unless %w[Sim Não].include?(org[:sensitiveData])
     errors.add(:org, :invalid) unless %w[Pequena Média Grande].include?(org[:size])
   end
 

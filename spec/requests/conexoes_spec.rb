@@ -14,7 +14,7 @@ RSpec.describe 'Conexoes', type: :request do
         name: 'Desempedidos',
         email: 'dsp@gmail.com',
         cnpj: '14.952.400/0002-31',
-        sensitiveData: false,
+        sensitiveData: 'Não',
         size: 'Média',
         phone: '11 961442245',
         address: 'rua do Matão, 1010',
