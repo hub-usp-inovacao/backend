@@ -87,7 +87,7 @@ class Company
         phones: format_phone(row[6]),
         url: format_url(row[17]),
         technologies: row[15].split(';'),
-        logo: create_image_url(row[16]),
+        logo: row[16] == 'N/D' ? nil : create_image_url(row[16]),
         classification: classification,
         companySize: size(row, classification)
       }
