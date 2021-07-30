@@ -173,7 +173,7 @@ class Company
   end
 
   def self.incubated?(row)
-    yesses = ['Sim. A empresa está incubada.', 'Sim. A empresa já está graduada']
+    yesses = ['Sim. A empresa está incubada', 'Sim. A empresa já está graduada']
     yesses.include? row[18]
   end
 
