@@ -10,7 +10,7 @@ class GetDisciplinesService
 
   def self.request
     sheets_api_key = Rails.application.credentials.google_sheets_API_key
-    sheet_id = '1AsmtnS5kY1mhXhNJH5QsCyg_WDnkGtARYB4nMdhyFLs'
+    sheet_id = Rails.application.credentials.discipline_sheet_id
     sheet_name = 'DISCIPLINAS'
     url = "#{base_url}/#{sheet_id}/values/'#{sheet_name}'?key=#{sheets_api_key}"
     response = RestClient.get url
