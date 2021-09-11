@@ -38,6 +38,9 @@ class GetDisciplinesService
   end
 
   def self.report
+    # Sunday
+    return unless DateTime.now.wday.zero?
+
     DisciplineMailer.with(warnings: @@warnings, sheet_id: @@sheet_id).warnings.deliver_now
   end
 
