@@ -9,10 +9,10 @@ class GetDisciplinesService
   end
 
   def self.request
-    sheets_api_key = Rails.application.credentials.google_sheets_API_key
-    sheet_id = '1AsmtnS5kY1mhXhNJH5QsCyg_WDnkGtARYB4nMdhyFLs'
+    sheets_api_key = ENV['google_sheets_API_key']
+    @@sheet_id = '1AsmtnS5kY1mhXhNJH5QsCyg_WDnkGtARYB4nMdhyFLs'
     sheet_name = 'DISCIPLINAS'
-    url = "#{base_url}/#{sheet_id}/values/'#{sheet_name}'?key=#{sheets_api_key}"
+    url = "#{base_url}/#{@@sheet_id}/values/'#{sheet_name}'?key=#{sheets_api_key}"
     response = RestClient.get url
     @@data = JSON.parse(response.body)['values']
   rescue RestClient::ExceptionWithResponse => e
@@ -25,7 +25,8 @@ class GetDisciplinesService
     raw_disciplines = @@data.slice(1, @@data.size - 1)
     raw_disciplines.each_with_index do |row, index|
       Discipline.create_from(row)
-    rescue Mongoid::Errors::Validations => e
+    rescue StandardError => e
+      e = e.message.gsub(/"|\[|\]/, '')
       warning = "Linha: #{index + 2} - #{e}"
       services_logger.debug "[GetDisciplinesService::parse] - #{warning}"
       @@warnings << warning
@@ -37,7 +38,7 @@ class GetDisciplinesService
   end
 
   def self.report
-    DisciplineMailer.with(warnings: @@warnings).warnings.deliver_now
+    DisciplineMailer.with(warnings: @@warnings, sheet_id: @@sheet_id).warnings.deliver_now
   end
 
   def self.base_url

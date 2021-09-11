@@ -37,9 +37,9 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'smtp.gmail.com',
     port: 587,
-    domain: 'solus.netlify.app',
-    user_name: 'jotaf.daniel@gmail.com',
-    password: Rails.application.credentials.mail_password_dev,
+    domain: 'hubusp.inovacao.usp.br',
+    user_name: ENV['mail_username'],
+    password: ENV['mail_password'],
     authentication: 'plain',
     enable_starttls_auto: true
   }

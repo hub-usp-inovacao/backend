@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class DisciplineMailer < ApplicationMailer
-  default from: 'joao.daniel@usp.br',
-          to: 'joao.daniel@usp.br'
+  default from: ENV['mail_username'],
+          to: ENV['mail_username']
 
   def warnings
     @warnings = params[:warnings]
-    @sheet_url = 'https://google.com'
-    mail(subject: 'Hub - Alertas de Disciplinas')
+    @sheet_url = "https://docs.google.com/spreadsheets/d/#{params[:sheet_id]}"
+    mail(subject: 'Hub USP Inovação - Aviso semanal de Disciplinas')
   end
 end

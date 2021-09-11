@@ -9,7 +9,7 @@ class GetCompaniesService
   end
 
   def self.request
-    sheets_api_key = Rails.application.credentials.google_sheets_API_key
+    sheets_api_key = ENV['google_sheets_API_key']
     sheet_id = '14uwSMZee-CoIJyIpcEf4t17z6eYN-ElYgw_O7dtU5Ok'
     sheet_name = 'EMPRESAS'
     url = "#{base_url}/#{sheet_id}/values/'#{sheet_name}'?key=#{sheets_api_key}"

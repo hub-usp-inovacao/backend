@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   web:
@@ -16,7 +16,7 @@ services:
   mongo:
     image: mongo:4.4.1-bionic
     env_file:
-      - .env
+      - .docker_env
     volumes:
       - data:/data/db
 
