@@ -1,2 +1,0 @@
-MONGO_INITDB_DATABASE=backend_development
-CORS_ALLOWED_ORIGIN=

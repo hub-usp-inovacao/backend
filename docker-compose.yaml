@@ -16,7 +16,7 @@ services:
   mongo:
     image: mongo:4.4.1-bionic
     env_file:
-      - .docker_env
+      - .env
     volumes:
       - data:/data/db
 

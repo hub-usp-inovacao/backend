@@ -24,4 +24,3 @@
 /config/master.key
 
 .env
-.docker_env
