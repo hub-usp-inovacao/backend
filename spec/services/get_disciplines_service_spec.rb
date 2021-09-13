@@ -39,4 +39,14 @@ RSpec.describe GetDisciplinesService, type: :model do
       expect { described_class.parse }.not_to raise_error
     end
   end
+
+  describe 'GetDisciplinesService::run' do
+    it 'does not parse if request failed' do
+      allow(described_class).to receive(:request).and_return(nil)
+      allow(described_class).to receive(:parse)
+      described_class.run
+
+      expect(described_class).not_to have_received(:parse)
+    end
+  end
 end
