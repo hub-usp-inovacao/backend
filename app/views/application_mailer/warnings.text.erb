@@ -1,0 +1,9 @@
+Hub USP Inovação: <%= @entity %> - Aviso semanal sobre dados
+
+Alguns dados a respeito de <%= @entity %> podem estar incorretos e causaram os seguintes erros:
+
+<% @warnings.each do |warning| %>
+  - <%= warning %>
+<% end %>
+
+O link para a planilha de correção é: <%= @sheet_url %>

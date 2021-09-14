@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
 </head>
 <body>
-  <h1>Hub USP Inovação: Disciplinas - Aviso semanal sobre dados</h1>
+  <h1>Hub USP Inovação: <%= @entity %> - Aviso semanal sobre dados</h1>
 
-  <p>Alguns dados a respeito de <strong>Disciplinas</strong> podem estar incorretos e causaram os seguintes erros:</p>
+  <p>Alguns dados a respeito de <strong><%= @entity %></strong> podem estar incorretos e causaram os seguintes erros:</p>
 
   <ul>
     <% @warnings.each do |warning| %>

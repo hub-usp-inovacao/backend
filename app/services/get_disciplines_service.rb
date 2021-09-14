@@ -41,7 +41,7 @@ class GetDisciplinesService
     # Sunday
     return unless DateTime.now.wday.zero?
 
-    DisciplineMailer.with(warnings: @@warnings, sheet_id: @@sheet_id).warnings.deliver_now
+    ApplicationMailer.with(warnings: @@warnings, sheet_id: @@sheet_id, entity: "Disciplinas").warnings.deliver_now
   end
 
   def self.base_url
