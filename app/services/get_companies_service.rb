@@ -30,7 +30,7 @@ class GetCompaniesService
   end
 
   def self.cleanup
-    Company.where({ created_at: { '$lt': 1.hour.ago } }).delete_all
+    Company.where(:created_at.lte => 10.minutes.ago).delete_all
   end
 
   def self.base_url
