@@ -41,8 +41,17 @@ RSpec.describe GetDisciplinesService, type: :model do
   end
 
   describe 'GetDisciplinesService::run' do
-    it 'does not parse if request failed' do
+    it 'does not cleanup if request failed' do
       allow(described_class).to receive(:request).and_return(nil)
+      allow(described_class).to receive(:cleanup)
+      described_class.run
+
+      expect(described_class).not_to have_received(:cleanup)
+    end
+
+    it 'does not parse if cleanup failed' do
+      allow(described_class).to receive(:request).and_return(true)
+      allow(described_class).to receive(:cleanup).and_return(nil)
       allow(described_class).to receive(:parse)
       described_class.run
 

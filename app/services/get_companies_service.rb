@@ -5,7 +5,7 @@ require 'json'
 
 class GetCompaniesService
   def self.run
-    request && parse && cleanup
+    request && cleanup && parse
   end
 
   def self.request
