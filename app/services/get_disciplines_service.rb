@@ -5,7 +5,7 @@ require 'json'
 
 class GetDisciplinesService
   def self.run
-    request && parse && cleanup
+    request && cleanup && parse
   end
 
   def self.request
