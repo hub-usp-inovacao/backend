@@ -122,6 +122,10 @@ GEM
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.7.6)
+    dotenv-rails (2.7.6)
+      dotenv (= 2.7.6)
+      railties (>= 3.2)
     erubi (1.10.0)
     ffi (1.15.0)
     globalid (0.4.2)
@@ -275,6 +279,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   coveralls
+  dotenv-rails
   listen (~> 3.2)
   mongoid (~> 7.0.5)
   puma (~> 4.1)

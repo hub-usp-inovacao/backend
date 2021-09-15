@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 class ApplicationMailer < ActionMailer::Base
-  default from: 'from@example.com'
-  layout 'mailer'
+  default from: ENV['mail_username'],
+          to: ENV['mail_username']
+
+  def warnings
+    @warnings = params[:warnings]
+    @entity = params[:entity]
+    @sheet_url = "https://docs.google.com/spreadsheets/d/#{params[:sheet_id]}"
+    mail(subject: "Hub USP Inovação - Aviso semanal de #{@entity}")
+  end
 end
