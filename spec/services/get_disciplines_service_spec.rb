@@ -57,5 +57,14 @@ RSpec.describe GetDisciplinesService, type: :model do
 
       expect(described_class).not_to have_received(:parse)
     end
+
+    it 'parses even if cleanup returns 0' do
+      allow(described_class).to receive(:request).and_return(true)
+      allow(described_class).to receive(:cleanup).and_return(0)
+      allow(described_class).to receive(:parse)
+      described_class.run
+
+      expect(described_class).to have_received(:parse)
+    end
   end
 end
