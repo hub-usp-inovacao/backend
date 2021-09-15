@@ -39,4 +39,32 @@ RSpec.describe GetCompaniesService, type: :model do
       expect { described_class.parse }.not_to raise_error
     end
   end
+
+  describe 'GetCompaniesService::run' do
+    it 'does not cleanup if request failed' do
+      allow(described_class).to receive(:request).and_return(nil)
+      allow(described_class).to receive(:cleanup)
+      described_class.run
+
+      expect(described_class).not_to have_received(:cleanup)
+    end
+
+    it 'does not parse if cleanup failed' do
+      allow(described_class).to receive(:request).and_return(true)
+      allow(described_class).to receive(:cleanup).and_return(nil)
+      allow(described_class).to receive(:parse)
+      described_class.run
+
+      expect(described_class).not_to have_received(:parse)
+    end
+
+    it 'parses even if cleanup returns 0' do
+      allow(described_class).to receive(:request).and_return(true)
+      allow(described_class).to receive(:cleanup).and_return(0)
+      allow(described_class).to receive(:parse)
+      described_class.run
+
+      expect(described_class).to have_received(:parse)
+    end
+  end
 end
