@@ -34,7 +34,7 @@ class GetDisciplinesService
   end
 
   def self.cleanup
-    Discipline.where({ created_at: { '$lt': 1.hour.ago } }).delete_all
+    Discipline.where(:created_at.lte => 10.minutes.ago).delete_all
   end
 
   def self.report
