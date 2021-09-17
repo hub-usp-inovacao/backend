@@ -28,3 +28,8 @@ env :PATH, ENV['PATH']
 every 1.day, at: '11:55 pm' do
   rake 'fetch'
 end
+
+every :monday, at: '9 am' do
+  rake 'mail_reports'
+  rake 'clean_reports'
+end
