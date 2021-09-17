@@ -7,7 +7,7 @@ class Report
   field :entity, type: String
   field :sheet_id, type: String
   field :warnings, type: Array
-  field :delivered, type: Boolean, default: true
+  field :delivered, type: Boolean, default: false
 
   validates :entity, :sheet_id, :warnings, presence: true
 end
