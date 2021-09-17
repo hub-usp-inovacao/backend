@@ -10,8 +10,8 @@ class GetDisciplinesService
 
   def self.request
     sheets_api_key = ENV['google_sheets_API_key']
-    @@sheet_id = '1AsmtnS5kY1mhXhNJH5QsCyg_WDnkGtARYB4nMdhyFLs'
-    sheet_name = 'DISCIPLINAS'
+    @@sheet_id = ENV['DISCIPLINE_SHEET_ID']
+    sheet_name = ENV['DISCIPLINE_TAB_NAME']
     url = "#{base_url}/#{@@sheet_id}/values/'#{sheet_name}'?key=#{sheets_api_key}"
     response = RestClient.get url
     @@data = JSON.parse(response.body)['values']
