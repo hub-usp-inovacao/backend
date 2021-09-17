@@ -39,10 +39,10 @@ class GetDisciplinesService
 
   def self.report
     Report.create({
-      entity: 'Disciplinas',
-      sheet_id: @@sheet_id,
-      warnings: @@warnings
-    })
+                    entity: 'Disciplinas',
+                    sheet_id: @@sheet_id,
+                    warnings: @@warnings
+                  })
   end
 
   def self.base_url
