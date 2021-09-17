@@ -10,8 +10,8 @@ class GetCompaniesService
 
   def self.request
     sheets_api_key = ENV['google_sheets_API_key']
-    @@sheet_id = '14uwSMZee-CoIJyIpcEf4t17z6eYN-ElYgw_O7dtU5Ok'
-    sheet_name = 'EMPRESAS'
+    @@sheet_id = ENV['COMPANY_SHEET_ID']
+    sheet_name = ENV['COMPANY_TAB_NAME']
     url = "#{base_url}/#{@@sheet_id}/values/'#{sheet_name}'?key=#{sheets_api_key}"
     response = RestClient.get url
     @@data = JSON.parse(response.body)['values']
