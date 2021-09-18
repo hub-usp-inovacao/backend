@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  web:
+    build:
+      context: .
+      target: production
+    ports:
+      - 3001:3000
+    volumes:
+      - railsdeps:/usr/src/app/vendor/bundle
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:4.4.1-bionic
+    env_file:
+      - .env
+    volumes:
+      - data:/data/db
+
+volumes:
+  railsdeps:
+  data:
