@@ -38,11 +38,11 @@ class GetDisciplinesService
   end
 
   def self.report
-    # Sunday
-    return unless DateTime.now.wday.zero?
-
-    ApplicationMailer.with(warnings: @@warnings, sheet_id: @@sheet_id,
-                           entity: 'Disciplinas').warnings.deliver_now
+    Report.create({
+                    entity: 'Disciplinas',
+                    sheet_id: @@sheet_id,
+                    warnings: @@warnings
+                  })
   end
 
   def self.base_url
