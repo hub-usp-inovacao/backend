@@ -70,4 +70,11 @@ RSpec.describe Patent, type: :model do
     patent = described_class.new attr
     expect(patent).to be_invalid
   end
+
+  it 'is invalid with malformed IPCs' do
+    attr = valid_attr.clone
+    attr[:ipcs] = ['ABCD000000']
+    patent = described_class.new attr
+    expect(patent).to be_invalid
+  end
 end

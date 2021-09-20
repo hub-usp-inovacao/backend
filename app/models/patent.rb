@@ -15,7 +15,7 @@ class Patent
   field :photo, type: String
 
   validates :name, :classification, :ipcs, :owners, :status, presence: true
-  validate :valid_classification?, :valid_status?
+  validate :valid_classification?, :valid_status?, :valid_ipcs?
 
   def valid_status?
     is_valid = ['Concedida', 'Em análise', 'Domínio Público'].include?(status)
@@ -54,6 +54,15 @@ class Patent
     end
 
     errors.add(:classification, 'invalid classification') unless is_valid
+  end
+
+  def valid_ipcs?
+    is_valid = !ipcs.nil? &&
+               ipcs.all? do |ipc|
+                 ipc =~ /^[A-H][0-9]{2}[A-Z][0-9]{6}$/
+               end
+
+    errors.add(:ipcs, 'invalid IPCs') unless is_valid
   end
 
   def self.create_from(row)
