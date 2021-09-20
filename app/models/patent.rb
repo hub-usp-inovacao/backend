@@ -23,12 +23,35 @@ class Patent
     errors.add(:status, 'invalid status') unless is_valid
   end
 
+  def _cip_and_subarea?(hash)
+    hash.keys.sort.eql?(%i[cip subarea])
+  end
+
+  def _cip_well_formatted(cip)
+    cip =~ /^[A-H] - .+$/
+  end
+
+  def _subarea_well_formatted(subarea)
+    subarea =~ /^[A-H][0-9]{2} - .+$/
+  end
+
+  def cip_and_subarea?(hash)
+    _cip_and_subarea?(hash) &&
+      _cip_well_formatted(hash[:cip]) &&
+      _subarea_well_formatted(hash[:subarea])
+  end
+
   def valid_classification?
-    is_valid = !classification.nil? &&
-               classification.is_a?(Hash) &&
-               classification.keys.sort.eql?(%i[primary secondary]) &&
-               classification[:primary].keys.sort.eql?(%i[cip subarea]) &&
-               classification[:secondary].keys.sort.eql?(%i[cip subarea])
+    clsf = classification
+    is_valid = !clsf.nil? &&
+               clsf.is_a?(Hash) &&
+               clsf.key?(:primary) &&
+               cip_and_subarea?(clsf[:primary])
+
+    if is_valid && clsf.key?(:secondary)
+      secondary_reqs = cip_and_subarea?(clsf[:secondary])
+      is_valid &&= secondary_reqs
+    end
 
     errors.add(:classification, 'invalid classification') unless is_valid
   end
@@ -55,7 +78,7 @@ class Patent
   end
 
   def self.classify(row)
-    {
+    clsf = {
       primary: {
         cip: row[0],
         subarea: row[1]
@@ -65,5 +88,9 @@ class Patent
         subarea: row[3]
       }
     }
+
+    clsf.delete(:secondary) if row[2].eql?('N/D')
+
+    clsf
   end
 end

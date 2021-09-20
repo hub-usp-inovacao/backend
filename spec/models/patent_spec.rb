@@ -60,4 +60,14 @@ RSpec.describe Patent, type: :model do
     patent = described_class.new attr
     expect(patent).to be_invalid
   end
+
+  it 'is invalid with malformed classification' do
+    attr = valid_attr.clone
+    attr[:classification][:primary] = {
+      cip: 'A- Malformed',
+      subarea: 'A01 - Well Formed'
+    }
+    patent = described_class.new attr
+    expect(patent).to be_invalid
+  end
 end
