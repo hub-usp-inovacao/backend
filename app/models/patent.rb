@@ -109,7 +109,7 @@ class Patent
       }
     }
 
-    clsf.delete(:secondary) if row[2].eql?('N/D')
+    clsf.delete(:secondary) if row[2].eql?('N/D') || row[3].eql?('N/D')
 
     clsf
   end
