@@ -25,7 +25,7 @@ env :PATH, ENV['PATH']
 
 # Learn more: http://github.com/javan/whenever
 
-every :monday, at: '9 pm' do
+every :monday, at: '9 am' do
   rake 'fetch'
 end
 
