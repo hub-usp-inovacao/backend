@@ -15,6 +15,7 @@ class Patent
   field :photo, type: String
 
   validates :name, :classification, :ipcs, :owners, :status, presence: true
+  validates :url, :photo, url: true
   validate :valid_classification?, :valid_status?, :valid_ipcs?
 
   def valid_status?
@@ -77,13 +78,23 @@ class Patent
         url: row[14],
         inventors: row[9].split(' | '),
         countries_with_protection: row[11].split(' | '),
-        photo: row[15]
+        photo: url_from_id(row)
       }
     )
 
     raise StandardError, new_patent.errors.full_messages unless new_patent.save
 
     new_patent
+  end
+
+  def self.url_from_id(row)
+    id = row[15]
+
+    if id.eql? 'N/D'
+      nil
+    else
+      "https://drive.google.com/uc?export=view&id=#{id}"
+    end
   end
 
   def self.classify(row)

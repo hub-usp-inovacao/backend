@@ -23,7 +23,7 @@ RSpec.describe Patent, type: :model do
       url: 'https://www.derwentinnovation.com/tip-innovation/externalLink.do?data=eEO7KvKuA%2BZmPC8utuUqQr7lxA0syEOxG1yqA8aIDa%2FHR0Yfnr7aHsH4I3OaAA37ytEXegSSxUP88PZ%2FJk5CQ0F4IIj6EeeZd%2Fly4xNtak9D2Ijuz2cF9Rr1PHQZYuFqg%2FYNe5%2BU%2F6zBxsQ4e9T6wcUaS6C2iUdS1Quy3oxeQInFAX0jXNFh7mzwKSn8aGG4VzpPdJ%2BnHJF%2BMRoOami4RIjq7tjlEE9JGV%2BNkVHomAIZzfHxG4IyIQtFFyh2ZmyyAvka04VEc0mfBtPA5xYZ5A%3D%3D&code=4c2c69ca2e3d1b11af22306222240f03',
       inventors: ['Lelio Favaretto'],
       countries_with_protection: ['Brasil'],
-      photo: 'N/D'
+      photo: 'https://drive.google.com/uc?export=view&id=1cmsUahKZ6fMsat4P9QFWyOM9T9CWA-cw'
     }
   end
 
@@ -74,6 +74,13 @@ RSpec.describe Patent, type: :model do
   it 'is invalid with malformed IPCs' do
     attr = valid_attr.clone
     attr[:ipcs] = ['ABCD000000']
+    patent = described_class.new attr
+    expect(patent).to be_invalid
+  end
+
+  it 'is invalid without a photo id' do
+    attr = valid_attr.clone
+    attr[:photo] = 'N/D'
     patent = described_class.new attr
     expect(patent).to be_invalid
   end
