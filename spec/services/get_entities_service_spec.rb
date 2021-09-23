@@ -2,8 +2,19 @@
 
 require 'rails_helper'
 
-RSpec.describe GetDisciplinesService, type: :model do
-  describe 'GetDisciplinesService::request' do
+RSpec.describe GetEntitiesService, type: :model do
+  mocked_model = Object.new
+  def mocked_model.create_from; end
+
+  def mocked_model.name
+    ''
+  end
+
+  before do
+    described_class.class_variable_set :@@model, mocked_model
+  end
+
+  describe 'GetEntitiesService::request' do
     successful_response = {
       'isAvailable' => true,
       'imageAvailable' => false,
@@ -23,28 +34,28 @@ RSpec.describe GetDisciplinesService, type: :model do
     end
   end
 
-  describe 'GetDisciplinesService::parse' do
+  describe 'GetEntitiesService::parse' do
     before do
       described_class.class_variable_set :@@data, [[], []]
     end
 
     it 'return the record when it is successfully created' do
-      allow(Discipline).to receive(:create_from).and_return(true)
+      allow(mocked_model).to receive(:create_from).and_return(true)
       expect(described_class.parse).to be_truthy
     end
 
     it 'does not raise errors when record creation fails' do
-      allow(Discipline).to receive(:create_from)
-        .and_raise(Mongoid::Errors::Validations, Discipline.new)
+      allow(mocked_model).to receive(:create_from)
+        .and_raise(Mongoid::Errors::Validations, Company.new)
       expect { described_class.parse }.not_to raise_error
     end
   end
 
-  describe 'GetDisciplinesService::run' do
+  describe 'GetEntitiesService::run' do
     it 'does not cleanup if request failed' do
       allow(described_class).to receive(:request).and_return(nil)
       allow(described_class).to receive(:cleanup)
-      described_class.run
+      described_class.run mocked_model
 
       expect(described_class).not_to have_received(:cleanup)
     end
@@ -53,7 +64,7 @@ RSpec.describe GetDisciplinesService, type: :model do
       allow(described_class).to receive(:request).and_return(true)
       allow(described_class).to receive(:cleanup).and_return(nil)
       allow(described_class).to receive(:parse)
-      described_class.run
+      described_class.run mocked_model
 
       expect(described_class).not_to have_received(:parse)
     end
@@ -62,7 +73,7 @@ RSpec.describe GetDisciplinesService, type: :model do
       allow(described_class).to receive(:request).and_return(true)
       allow(described_class).to receive(:cleanup).and_return(0)
       allow(described_class).to receive(:parse)
-      described_class.run
+      described_class.run mocked_model
 
       expect(described_class).to have_received(:parse)
     end
