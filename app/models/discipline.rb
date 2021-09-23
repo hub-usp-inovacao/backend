@@ -28,7 +28,11 @@ class Discipline
 
   def a_valid_nature?
     valid_natures = %w[graduação pós-graduação]
-    errors.add(:nature, 'must be a valid nature') unless valid_natures.include?(nature.downcase)
+
+    is_valid = !nature.nil? &&
+               valid_natures.include?(nature.downcase)
+
+    errors.add(:nature, 'must be a valid nature') unless is_valid
   end
 
   def a_valid_campi?
@@ -44,9 +48,10 @@ class Discipline
   end
 
   def a_valid_category?
-    return if category.any? { |_key, value| value == true }
+    is_valid = !category.nil? &&
+               category.any? { |_key, value| value == true }
 
-    errors.add(:category, 'at least one category must be true')
+    errors.add(:category, 'at least one category must be true') unless is_valid
   end
 
   def self.create_from(row)
