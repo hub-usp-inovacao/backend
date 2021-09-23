@@ -4,8 +4,10 @@ require 'rest-client'
 require 'json'
 
 class GetEntitiesService
-  def self.run(model)
+  def self.run(model, with_report: true)
     @@model = model
+    @@with_report = with_report
+
     request && cleanup && parse && report
   end
 
@@ -41,6 +43,8 @@ class GetEntitiesService
   end
 
   def self.report
+    return unless @@with_report
+
     Report.create({
                     entity: @@model.name,
                     sheet_id: @@sheet_id,
