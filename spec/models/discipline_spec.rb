@@ -41,6 +41,16 @@ RSpec.describe Discipline, type: :model do
     end
   end
 
+  %i[name campus unity description category nature level].each do |field|
+    it "is invalid without #{field}" do
+      attrs = valid_att.clone
+      attrs.delete(field)
+
+      patent = described_class.new attrs
+      expect(patent).to be_invalid
+    end
+  end
+
   it 'is invalid without category' do
     attr = valid_att
     attr[:category][:innovation] = false
