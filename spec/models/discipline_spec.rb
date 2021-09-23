@@ -51,7 +51,7 @@ RSpec.describe Discipline, type: :model do
     end
   end
 
-  it 'is invalid without category' do
+  it 'is invalid without any specific category' do
     attr = valid_att
     attr[:category][:innovation] = false
     discipline = described_class.new(attr)
