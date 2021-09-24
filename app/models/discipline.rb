@@ -17,13 +17,13 @@ class Discipline
   field :offeringPeriod, type: String
 
   validates :name, :campus, :unity, :description, :category, :nature, :level, presence: true
-  validates :name, format: { with: /\A(\w|\d){3}\d{4} (-|–) .+\z/, message: 'must be a valid name' }
+  validates :name, format: { with: /\A(\w|\d){3}\d{4} (-|–) .+\z/, message: 'deve ser um nome válido' }
   validates :url, url: true
   validate :a_valid_level?, :a_valid_nature?, :a_valid_campi?, :a_valid_unity?, :a_valid_category?
 
   def a_valid_level?
     valid_levels = entrepreneurship_levels
-    errors.add(:level, 'must be a valid level') unless valid_levels.include?(level)
+    errors.add(:level, 'deve ser um nível válido') unless valid_levels.include?(level)
   end
 
   def a_valid_nature?
@@ -32,26 +32,26 @@ class Discipline
     is_valid = !nature.nil? &&
                valid_natures.include?(nature.downcase)
 
-    errors.add(:nature, 'must be a valid nature') unless is_valid
+    errors.add(:nature, 'deve ser uma natureza válida') unless is_valid
   end
 
   def a_valid_campi?
     valid_campi = campi.map { |c| c[:name] }
-    errors.add(:campus, 'must be a valid campi') unless valid_campi.include?(campus)
+    errors.add(:campus, 'deve ser um campus válido') unless valid_campi.include?(campus)
   end
 
   def a_valid_unity?
     valid_unities = campi.reduce([]) do |acc, c|
       acc.concat(c[:unities])
     end
-    errors.add(:unity, 'must be a valid campi') unless valid_unities.include?(unity)
+    errors.add(:unity, 'deve ser uma unidade válida') unless valid_unities.include?(unity)
   end
 
   def a_valid_category?
     is_valid = !category.nil? &&
                category.any? { |_key, value| value == true }
 
-    errors.add(:category, 'at least one category must be true') unless is_valid
+    errors.add(:category, 'deve possuir pelo menos uma tipo de categoria') unless is_valid
   end
 
   def self.create_from(row)
