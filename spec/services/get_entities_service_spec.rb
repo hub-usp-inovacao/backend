@@ -52,6 +52,18 @@ RSpec.describe GetEntitiesService, type: :model do
   end
 
   describe 'GetEntitiesService::run' do
+    it 'calls request, cleanup, parse and report methods if used correct args' do
+      symbols = %i[request cleanup parse report]
+      symbols.each do |symbol|
+        allow(described_class).to receive(symbol).and_return(true)
+      end
+
+      described_class.run mocked_model
+      symbols.each do |symbol|
+        expect(described_class).to have_received(symbol)
+      end
+    end
+
     it 'does not cleanup if request failed' do
       allow(described_class).to receive(:request).and_return(nil)
       allow(described_class).to receive(:cleanup)
@@ -76,6 +88,13 @@ RSpec.describe GetEntitiesService, type: :model do
       described_class.run mocked_model
 
       expect(described_class).to have_received(:parse)
+    end
+
+    it 'does not report if with_report argument is false' do
+      allow(described_class).to receive(:report)
+      described_class.run(mocked_model, with_report: false)
+
+      expect(described_class).not_to have_received(:report)
     end
   end
 end
