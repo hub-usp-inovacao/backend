@@ -40,7 +40,7 @@ class GetEntitiesService
   end
 
   def self.cleanup
-    @@model.where(:created_at.lte => 10.minutes.ago).delete_all
+    @@model.delete_all
   end
 
   def self.report
