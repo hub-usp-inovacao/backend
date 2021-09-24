@@ -22,6 +22,6 @@ namespace :fetch do
   end
 end
 
-task :fetch do
-  Rake::Task["fetch:report"].invoke
+task fetch: :environment do
+  Rake::Task['fetch:report'].invoke
 end
