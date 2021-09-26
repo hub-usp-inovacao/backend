@@ -1,13 +1,12 @@
 ##########
-## Development Image
+## Base Image
 ##########
 
-FROM ruby:2.7.1-alpine as development
+FROM ruby:2.7.1-alpine as base
 
 ENV PORT=3000 \
     APP_PATH=/usr/src/app \
-    HOST=0.0.0.0 \
-    RAILS_ENV=development
+    HOST=0.0.0.0
 
 WORKDIR ${APP_PATH}
 
@@ -16,10 +15,6 @@ RUN apk add --update \
     gem install rails
 
 COPY Gemfile Gemfile.lock ./
-
-RUN bundle install
-
-COPY . ./
 
 COPY entrypoint.sh /usr/bin/
 
@@ -33,14 +28,34 @@ CMD rails server -b ${HOST}
 
 
 
+##########
+## Development Image
+##########
+
+FROM base as development
+
+ENV RAILS_ENV=development
+
+RUN bundle install
+
+COPY . ./
+
 
 
 ##########
 ## Production Image
 ##########
 
-FROM development as production
+FROM base as production
 
-ENV RAILS_ENV=production
+ENV RAILS_ENV=production \
+    RAILS_LOG_TO_STDOUT=true
 
-RUN rm -rf spec
+RUN bundle install --without development test
+
+COPY . ./
+
+RUN rm -rf                                      \
+    *compose.yaml Dockerfile Makefile README.md \
+    scripts spec                                \
+    /var/cache/apk/*
