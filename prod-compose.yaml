@@ -5,6 +5,7 @@ services:
     build:
       context: .
       target: production
+    image: hubuspinovacao/backend:${CURR_VERSION:-production}
     ports:
       - 3001:3000
     volumes:
