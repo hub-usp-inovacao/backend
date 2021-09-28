@@ -4,9 +4,12 @@ require 'rest-client'
 require 'json'
 
 class GetEntitiesService
-  def self.run(model)
+  def self.run(model, with_report: true)
     @@model = model
-    request && cleanup && parse && report
+
+    is_valid = request && cleanup && parse
+
+    report if is_valid && with_report
   end
 
   def self.request
@@ -37,7 +40,7 @@ class GetEntitiesService
   end
 
   def self.cleanup
-    @@model.where(:created_at.lte => 10.minutes.ago).delete_all
+    @@model.delete_all
   end
 
   def self.report
