@@ -17,7 +17,7 @@ test:
 production:
   clients:
     default:
-      database: backend_development
+      database: backend_production
       hosts:
         - mongo:27017
       options:
