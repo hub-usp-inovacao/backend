@@ -2,6 +2,7 @@
 
 class CompanyUpdatesController < ApplicationController
   def create
+    ActionController::Parameters.permit_all_parameters = true
     data = create_params
     @comp_update = CompanyUpdate.create!(data)
     render json: { company_update: @comp_update }
@@ -12,6 +13,6 @@ class CompanyUpdatesController < ApplicationController
   private
 
   def create_params
-    params.require(:company).permit(:name, :cnpj, partners_values: {}, company_values: {})
+    params.require(:company)
   end
 end
