@@ -8,6 +8,7 @@ class CompanyUpdate
   field :cnpj, type: String
   field :partners_values, type: Array
   field :company_values, type: Array
+  field :delivered, type: Boolean, default: false
 
   validates :name, :cnpj, :partners_values, :company_values, presence: true
   validates :cnpj,
