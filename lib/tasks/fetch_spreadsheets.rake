@@ -1,24 +1,28 @@
 # frozen_string_literal: true
 
+def log(task_name, message)
+  p "[#{task_name}|#{Time.zone.now}] #{message}"
+end
+
 namespace :fetch do
   desc 'Fetch data from spreadsheets with report generation'
   task report: :environment do
-    p "Fetch task running! - #{Time.zone.now}"
+    log('fetch', 'task running!')
     [Discipline, Company, Patent].each do |model|
       GetEntitiesService.run model
-      p "#{model.name} fetched"
+      log('fetch', "#{model.name} fetched")
     end
-    p "Fetch task ran! - #{Time.zone.now}"
+    log('fetch', 'task ran!')
   end
 
   desc 'Fetch data from spreadsheets without report generation'
   task no_report: :environment do
-    p "Fetch task running! - #{Time.zone.now}"
+    log('fetch:no_report', 'task running!')
     [Discipline, Company, Patent].each do |model|
       GetEntitiesService.run(model, with_report: false)
-      p "#{model.name} fetched"
+      log('fetch:no_report', "#{model.name} fetched")
     end
-    p "Fetch task ran! - #{Time.zone.now}"
+    log('fetch:no_report', 'task ran!')
   end
 end
 

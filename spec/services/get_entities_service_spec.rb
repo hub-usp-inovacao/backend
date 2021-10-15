@@ -57,6 +57,7 @@ RSpec.describe GetEntitiesService, type: :model do
       symbols.each do |symbol|
         allow(described_class).to receive(symbol).and_return(true)
       end
+      described_class.class_variable_set :@@warnings, ['Foo']
 
       described_class.run mocked_model
       symbols.each do |symbol|
@@ -93,6 +94,17 @@ RSpec.describe GetEntitiesService, type: :model do
     it 'does not report if with_report argument is false' do
       allow(described_class).to receive(:report)
       described_class.run(mocked_model, with_report: false)
+
+      expect(described_class).not_to have_received(:report)
+    end
+
+    it 'does not report if there is no warnings' do
+      %i[request cleanup parse].each do |symbol|
+        allow(described_class).to receive(symbol).and_return(true)
+      end
+      described_class.class_variable_set :@@warnings, []
+      allow(described_class).to receive(:report)
+      described_class.run mocked_model
 
       expect(described_class).not_to have_received(:report)
     end
