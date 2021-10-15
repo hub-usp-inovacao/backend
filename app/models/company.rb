@@ -44,9 +44,12 @@ class Company
             :corporate_name,
             presence: true
 
-  validates :name, length: { in: 2..100 }, uniqueness: { message: 'name already taken' }
+  validates :name,
+            length: { in: 2..100,
+                      message: 'possui um número errado de caracteres (Mínimo: 2, Máximo: 100)' },
+            uniqueness: { message: 'já cadastrado (Duplicado)' }
   validates :corporate_name, length: { in: 2..100 },
-                             uniqueness: { message: 'corporate_name already taken' }
+                             uniqueness: { message: 'já cadastrado (Duplicado)' }
   validates :url, :logo, url: true
   validates :phones, phones: true
 
@@ -81,7 +84,7 @@ class Company
                address.is_a?(Hash) &&
                address.key?(:city)
 
-    errors.add(:address, 'address requires at least the city') unless is_valid
+    errors.add(:address, 'deve possuir no mínimo a cidade') unless is_valid
   end
 
   def valid_year?
@@ -90,14 +93,14 @@ class Company
     is_valid = year.is_a?(String) &&
                year.match?(/^\d{4}$/) &&
                year.to_i <= Time.zone.now.year
-    errors.add(:year, 'must be a string representing a non-future year') unless is_valid
+    errors.add(:year, 'deve ser um ano válido') unless is_valid
   end
 
   def valid_company_size?
     is_valid = !companySize.nil? &&
                companySize.is_a?(Array) &&
                companySize.all? { |size| company_sizes.include?(size) }
-    errors.add(:companySize, "must be one of #{company_sizes}") unless is_valid
+    errors.add(:companySize, "deve ser um tamanho válido. Ex: Microempresa") unless is_valid
   end
 
   def valid_classification?
@@ -111,7 +114,7 @@ class Company
                cnae_majors.include?(c[:major]) &&
                cnae_major_to_minors[c[:major]].include?(c[:minor])
 
-    errors.add(:classification, 'invalid major and/or minor') unless is_valid
+    errors.add(:classification, 'Grande área e/ou área específica inválidas') unless is_valid
   end
 
   def self.create_from(row)
@@ -131,7 +134,7 @@ class Company
         phones: format_phone(row[6]),
         url: format_url(row[17]),
         technologies: row[15].split(';'),
-        logo: row[16] == 'N/D' ? nil : create_image_url(row[16]),
+        logo: create_image_url(row[16]),
         classification: classification,
         cnae: row[5],
         companySize: size(row, classification),
@@ -241,6 +244,8 @@ class Company
   end
 
   def self.create_image_url(raw)
+    return nil if raw == 'N/D'
+
     "https://drive.google.com/uc?export=view&id=#{raw}"
   end
 

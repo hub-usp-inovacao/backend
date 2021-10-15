@@ -4,7 +4,7 @@ class PhonesValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return if list_of_phones? value
 
-    record.errors[attribute] << (options[:message] || 'must be a list of valid phones')
+    record.errors[attribute] << (options[:message] || 'devem ser números válidos. Ex: (16) 98209-6445')
   end
 
   def list_of_phones?(value)

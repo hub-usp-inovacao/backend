@@ -2,14 +2,29 @@ pt-br:
   mongoid:
     models:
       discipline: Disciplina
+      company: Empresa
     attributes:
       discipline:
         name: Nome
+        corporate_name: Nome corporativo
         unity: Unidade
         nature: Natureza
         level: Nivel
         description: Descrição
         category: Categoria
+      company:
+        name: Nome
+        year: Ano
+        services: Serviços
+        incubated: Incubado?
+        active: Ativa
+        ecosystems: Ecossistemas
+        technologies: Tecnologias
+        phones: Telefones
+        companySize: Tamanho da empresa
+        description: Descrição
+        classification: Classificação
+        address: Endereço
   errors:
     messages:
       model_invalid: "A validação falhou: %{errors}"
