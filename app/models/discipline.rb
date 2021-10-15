@@ -17,7 +17,9 @@ class Discipline
   field :offeringPeriod, type: String
 
   validates :name, :campus, :unity, :description, :category, :nature, :level, presence: true
-  validates :name, format: { with: /\A(\w|\d){3}\d{4} (-|–) .+\z/, message: 'deve ser um nome válido' }
+  validates :name,
+            format: { with: /\A(\w|\d){3}\d{4} (-|–) .+\z/,
+                      message: 'deve ser um nome válido Ex: ACH2501' }
   validates :url, url: true
   validate :a_valid_level?, :a_valid_nature?, :a_valid_campi?, :a_valid_unity?, :a_valid_category?
 
@@ -32,7 +34,7 @@ class Discipline
     is_valid = !nature.nil? &&
                valid_natures.include?(nature.downcase)
 
-    errors.add(:nature, 'deve ser uma natureza válida') unless is_valid
+    errors.add(:nature, 'deve ser uma natureza válida (Graduação ou Pós-Graduação)') unless is_valid
   end
 
   def a_valid_campi?
@@ -51,7 +53,7 @@ class Discipline
     is_valid = !category.nil? &&
                category.any? { |_key, value| value == true }
 
-    errors.add(:category, 'deve possuir pelo menos uma tipo de categoria') unless is_valid
+    errors.add(:category, 'deve possuir pelo menos um tipo de categoria') unless is_valid
   end
 
   def self.create_from(row)
