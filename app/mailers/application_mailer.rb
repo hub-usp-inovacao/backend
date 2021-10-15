@@ -2,7 +2,8 @@
 
 class ApplicationMailer < ActionMailer::Base
   default from: ENV['mail_username'],
-          to: ENV['mail_username']
+          to: ENV['mail_username'],
+          cc: ENV['mail_dev_username']
 
   def warnings
     @warnings = params[:warnings]

@@ -9,7 +9,7 @@ class GetEntitiesService
 
     is_valid = request && cleanup && parse
 
-    report if is_valid && with_report
+    report if is_valid && with_report && @@warnings.length.positive?
   end
 
   def self.request

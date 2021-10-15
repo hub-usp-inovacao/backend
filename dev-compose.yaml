@@ -2,11 +2,14 @@ version: "3.7"
 
 services:
   web:
-    build: .
+    build:
+      context: .
+      target: development
+    image: hubuspinovacao/backend:${CURR_VERSION:-development}
     ports:
       - 3001:3000
     volumes:
-      - railsdeps:/usr/src/app/vendor/bundle
+      - railsdevdeps:/usr/src/app/vendor/bundle
       - ./:/usr/src/app
     env_file:
       - .env
@@ -21,5 +24,5 @@ services:
       - data:/data/db
 
 volumes:
-  railsdeps:
+  railsdevdeps:
   data:
