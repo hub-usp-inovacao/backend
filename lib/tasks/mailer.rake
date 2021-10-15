@@ -18,6 +18,7 @@ end
 
 desc 'Reports all companies updates not yet reported'
 task report_updates: :environment do
+  log('report_updates', 'mailing updated companies!')
   companies = CompanyUpdate.where(delivered: false)
 
   if companies.length.positive?
@@ -28,4 +29,5 @@ task report_updates: :environment do
       company.save
     end
   end
+  log('report_updates', 'updated companies mailed!')
 end
