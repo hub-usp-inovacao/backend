@@ -10,11 +10,11 @@ class CompanyUpdate
   field :company_values, type: Array
   field :delivered, type: Boolean, default: false
 
-  validates :name, :cnpj, :partners_values, :company_values, presence: true
+  validates :name, :cnpj, presence: true
   validates :cnpj,
             format: { with: %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\z},
                       message: 'must be a valid cnpj' }
-  validate :validate_partners_values, :validate_company_values
+  validate :validate_partners_values, :validate_company_values, :validate_values_presence
 
   def validate_bond(bond)
     ['Aluno ou ex-aluno de graduação',
@@ -33,6 +33,7 @@ class CompanyUpdate
   end
 
   def validate_partners_values
+    return unless partners_values
     return if partners_values.is_a?(Array) && partners_values.all? do |partner|
                 validate_partner(partner)
               end
@@ -41,8 +42,16 @@ class CompanyUpdate
   end
 
   def validate_company_values
+    return unless company_values
     return if company_values.is_a?(Array) && !company_values.detect { |value| !value.is_a?(Hash) }
 
     errors.add(:company_values, :invalid)
+  end
+
+  def validate_values_presence
+    return if company_values || partners_values
+
+    errors.add(:company_values, 'Company_values e Partners_values não podem ser ambos nulos')
+    errors.add(:partners_values, 'Company_values e Partners_values não podem ser ambos nulos')
   end
 end

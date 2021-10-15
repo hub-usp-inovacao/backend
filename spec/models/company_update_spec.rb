@@ -28,6 +28,23 @@ RSpec.describe CompanyUpdate, type: :model do
     expect(company_updated).to be_valid
   end
 
+  %i[company_values partners_values].each do |att|
+    it "is valid if just #{att} does not exist" do
+      attr_copy = valid_attr.clone
+      attr_copy.delete(att)
+      company_updated = described_class.new(attr_copy)
+      expect(company_updated).to be_valid
+    end
+  end
+
+  it 'is invalid if both company_values and partners_values do not exist' do
+    attr_copy = valid_attr.clone
+    attr_copy.delete(:company_values)
+    attr_copy.delete(:partners_values)
+    company_updated = described_class.new(attr_copy)
+    expect(company_updated).to be_invalid
+  end
+
   it 'is invalid with invalid cnpj' do
     invalid_attr = valid_attr.clone
     invalid_attr[:cnpj] = '11275297'
