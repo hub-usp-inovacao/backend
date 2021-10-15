@@ -7,10 +7,18 @@ RSpec.describe 'CompanyUpdates', type: :request do
     {
       cnpj: '1234.4321.4232/0001.21',
       name: 'fulano',
-      email: 'fulano@example.com',
-      phone: '5555-1212',
-      new_values: [
-        { email: 'foo@example.com' }
+      partners_values: [
+        {
+          name: 'Paulo',
+          phone: '11 999999999',
+          email: 'Foo@bar.com',
+          bond: 'Aluno ou ex-aluno de graduação',
+          nusp: '11111111',
+          unity: 'Escola de Comunicação e Artes - ECA'
+        }
+      ],
+      company_values: [
+        { Foo: 'Bar' }
       ]
     }
   end

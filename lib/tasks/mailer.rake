@@ -15,3 +15,17 @@ task mail_reports: :environment do
   end
   log('mail_reports', 'reports mailed!')
 end
+
+desc 'Reports all companies updates not yet reported'
+task report_updates: :environment do
+  companies = CompanyUpdate.where(delivered: false)
+
+  if companies.length.positive?
+    ApplicationMailer.with(companies: companies).update_companies.deliver_now
+
+    companies.each do |company|
+      company.delivered = true
+      company.save
+    end
+  end
+end
