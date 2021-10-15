@@ -1,0 +1,18 @@
+pt-br:
+  mongoid:
+    models:
+      discipline: Disciplina
+    attributes:
+      discipline:
+        name: Nome
+        unity: Unidade
+        nature: Natureza
+        level: Nivel
+        description: Descrição
+        category: Categoria
+  errors:
+    messages:
+      model_invalid: "A validação falhou: %{errors}"
+      invalid: "é inválido"
+      empty: "não pode estar vazio"
+      blank: "não pode estar em branco"

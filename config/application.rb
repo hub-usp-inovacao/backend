@@ -16,5 +16,7 @@ module Backend
     config.load_defaults 6.0
 
     config.api_only = true
+
+    config.i18n.default_locale = :"pt-br"
   end
 end
