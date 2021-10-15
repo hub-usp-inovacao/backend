@@ -100,7 +100,7 @@ class Company
     is_valid = !companySize.nil? &&
                companySize.is_a?(Array) &&
                companySize.all? { |size| company_sizes.include?(size) }
-    errors.add(:companySize, "deve ser um tamanho válido. Ex: Microempresa") unless is_valid
+    errors.add(:companySize, 'deve ser um tamanho válido. Ex: Microempresa') unless is_valid
   end
 
   def valid_classification?
