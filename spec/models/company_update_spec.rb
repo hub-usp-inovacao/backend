@@ -23,24 +23,6 @@ RSpec.describe CompanyUpdate, type: :model do
     }
   end
 
-  let(:valid_to_s) do
-    <<~MULTILINE
-      Nome: #{valid_attr[:name]}
-      CNPJ: #{valid_attr[:cnpj]}
-      Sócios:
-      \tSócio 1:
-      \t\tNome: #{valid_attr[:partners_values][0][:name]}
-      \t\tEmail: #{valid_attr[:partners_values][0][:email]}
-      \t\tVínculo: #{valid_attr[:partners_values][0][:bond]}
-      \t\tTelefone: #{valid_attr[:partners_values][0][:phone]}
-      \t\tNUSP: #{valid_attr[:partners_values][0][:nusp]}
-      \t\tUnidade: #{valid_attr[:partners_values][0][:unity]}
-      Dados da empresa:
-      \t- Foo: Bar
-
-    MULTILINE
-  end
-
   it 'is valid with valid attributes' do
     company_updated = described_class.new(valid_attr)
     expect(company_updated).to be_valid
@@ -79,10 +61,5 @@ RSpec.describe CompanyUpdate, type: :model do
     invalid_attr[:partners_values][0][:bond] = 'Foo'
     company_updated = described_class.new(invalid_attr)
     expect(company_updated).to be_invalid
-  end
-
-  it 'converts to a readable string' do
-    comp_update = described_class.new(valid_attr)
-    expect(comp_update.to_s).to eql(valid_to_s)
   end
 end

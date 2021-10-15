@@ -45,29 +45,4 @@ class CompanyUpdate
 
     errors.add(:company_values, :invalid)
   end
-
-  def to_s
-    header = [
-      "Nome: #{name}",
-      "CNPJ: #{cnpj}"
-    ]
-    partners = partners_values.each_with_index.map do |hash, i|
-      text = "\tSócio #{i + 1}:\n"
-      text += "\t\tNome: #{hash[:name]}\n"
-      text += "\t\tEmail: #{hash[:email]}\n"
-      text += "\t\tVínculo: #{hash[:bond]}\n"
-      text += "\t\tTelefone: #{hash[:phone]}\n" if hash.key?(:phone)
-      text += "\t\tNUSP: #{hash[:nusp]}\n" if hash.key?(:nusp)
-      text += "\t\tUnidade: #{hash[:unity]}" if hash.key?(:unity)
-      text
-    end
-
-    items = company_values.map do |hash|
-      attr = hash.keys[0]
-      val = hash[attr]
-      "\t- #{attr}: #{val}"
-    end
-
-    "#{(header + ['Sócios:'] + partners + ['Dados da empresa:'] + items).join("\n")}\n\n"
-  end
 end
