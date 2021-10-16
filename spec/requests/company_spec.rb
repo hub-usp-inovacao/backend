@@ -65,4 +65,41 @@ RSpec.describe 'Companies', type: :request do
       end
     end
   end
+
+  describe 'GET /companies/:cnpj' do
+    describe 'when a company is found' do
+      before do
+        allow(Company).to receive(:find_by).and_return(companies[0])
+        get '/companies', params: { cnpj: '12.123.123/0001-21' }
+      end
+
+      it 'returns :ok' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns the company' do
+        body = JSON.parse(response.body)
+        expect(body).to be_a(Hash)
+      end
+    end
+
+    describe 'when a company is not found' do
+      before do
+        allow(Company).to receive(:find_by) do
+          raise StandardError
+        end
+
+        get '/companies', params: { cnpj: '12.123.123/0001-21' }
+      end
+
+      it 'returns :not_found' do
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'returns an error' do
+        body = JSON.parse(response.body)
+        expect(body).to eql({ 'error' => 'not_found' })
+      end
+    end
+  end
 end
