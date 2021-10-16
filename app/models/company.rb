@@ -4,6 +4,7 @@ class Company
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
+  field :cnpj, type: String
   field :name, type: String
   field :year, type: String
   field :services, type: String
@@ -24,14 +25,30 @@ class Company
   field :classification, type: Hash
   field :address, type: Hash
 
-  validates :name, :year, :emails, :description, :incubated, :ecosystems, :services, :address,
+  validates :cnpj,
+            :name,
+            :year,
+            :emails,
+            :description,
+            :incubated,
+            :ecosystems,
+            :services,
+            :address,
             :classification,
             presence: true
+
   validates :name, length: { in: 2..100 }, uniqueness: { message: "#{name} already taken" }
   validates :url, :logo, url: true
   validates :phones, phones: true
 
-  validate :valid_year?, :valid_company_size?, :valid_classification?, :valid_address?
+  validate :valid_cnpj?, :valid_year?, :valid_company_size?, :valid_classification?, :valid_address?
+
+  def valid_cnpj?
+    is_valid = !cnpj.nil? &&
+               cnpj =~ %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\Z}
+
+    errors.add(:cnpj, 'cnpj malformed, must be dd.ddd.ddd/dddd-dd') unless is_valid
+  end
 
   def valid_address?
     is_valid = !address.nil? &&
@@ -76,6 +93,7 @@ class Company
 
     new_company = Company.new(
       {
+        cnpj: row[1],
         name: row[2],
         year: row[4],
         emails: row[7].split(';'),

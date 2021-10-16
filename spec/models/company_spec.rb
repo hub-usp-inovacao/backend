@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Company, type: :model do
   let :valid_attr do
     {
+      cnpj: '12.123.123/0001-21',
       name: 'Uber 99',
       year: '2019',
       services: 'foo bar baz',
@@ -45,7 +46,7 @@ RSpec.describe Company, type: :model do
     expect(company).to be_valid
   end
 
-  %i[name year emails description incubated ecosystems services address].each do |required|
+  %i[cnpj name year emails description incubated ecosystems services address].each do |required|
     it "is invalid without #{required}" do
       attrs = valid_attr.except required
       company = described_class.new attrs
@@ -82,7 +83,8 @@ RSpec.describe Company, type: :model do
 
   [
     { attr: :companySize, value: ['foo bar baz'] },
-    { attr: :classification, value: { value: '13' } }
+    { attr: :classification, value: { value: '13' } },
+    { attr: :cnpj, value: '123.123.123-12' }
   ].each do |ctx|
     it "is invalid with a wrong #{ctx[:attr]}" do
       attrs = valid_attr
