@@ -110,3 +110,9 @@ $campi = [
 def campi
   $campi
 end
+
+def unities
+  $campi.inject([]) do |unities, campus|
+    unities.concat(campus[:unities])
+  end
+end

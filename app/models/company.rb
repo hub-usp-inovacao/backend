@@ -53,7 +53,22 @@ class Company
   validates :url, :logo, url: true
   validates :phones, phones: true
 
-  validate :valid_cnpj?, :valid_year?, :valid_company_size?, :valid_classification?, :valid_address?
+  validate :valid_partners?, :valid_cnpj?, :valid_year?, :valid_company_size?,
+           :valid_classification?, :valid_address?
+
+  def valid_partner?(partner)
+    !partner.nil? &&
+      partner.is_a?(Hash) &&
+      partner.keys.eql?(%i[name nusp bond unity email phone]) &&
+      company_partner_bonds.include?(partner[:bond]) &&
+      unities.include?(partner[:unity])
+  end
+
+  def valid_partners?
+    is_valid = partners.all? { |partner| valid_partner?(partner) }
+
+    errors.add(:partners, 'invalid parteners') unless is_valid
+  end
 
   def valid_cnpj?
     is_valid = !cnpj.nil? &&

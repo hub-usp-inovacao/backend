@@ -43,7 +43,7 @@ RSpec.describe Company, type: :model do
           name: 'Fulano de Tal',
           nusp: '1234567',
           bond: 'Pesquisador',
-          unity: '',
+          unity: 'Faculdade de Odontologia de Bauru - FOB',
           email: 'fulano@detal.com',
           phone: '(11) 99999-9999'
         }
