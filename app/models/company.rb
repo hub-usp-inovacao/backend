@@ -4,26 +4,35 @@ class Company
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
+  field :number_of_clt_employees, type: Integer
+  field :number_of_pj_colaborators, type: Integer
+  field :number_of_interns, type: Integer
+
   field :cnpj, type: String
   field :name, type: String
   field :year, type: String
   field :services, type: String
   field :url, type: String
   field :logo, type: String
+  field :corporate_name, type: String
 
   field :incubated, type: Boolean
   field :allowed, type: Boolean
   field :active, type: Boolean
+  field :received_investments, type: Boolean
 
   field :emails, type: Array
   field :ecosystems, type: Array
   field :technologies, type: Array
   field :phones, type: Array
   field :companySize, type: Array
+  field :partners, type: Array
+  field :investiments, type: Array
 
   field :description, type: Hash
   field :classification, type: Hash
   field :address, type: Hash
+  field :investiments_values, type: Hash
 
   validates :cnpj,
             :name,
@@ -35,9 +44,12 @@ class Company
             :services,
             :address,
             :classification,
+            :corporate_name,
             presence: true
 
-  validates :name, length: { in: 2..100 }, uniqueness: { message: "#{name} already taken" }
+  validates :name, length: { in: 2..100 }, uniqueness: { message: 'name already taken' }
+  validates :corporate_name, length: { in: 2..100 },
+                             uniqueness: { message: 'corporate_name already taken' }
   validates :url, :logo, url: true
   validates :phones, phones: true
 
@@ -107,13 +119,54 @@ class Company
         technologies: row[15].split(';'),
         logo: row[16] == 'N/D' ? nil : create_image_url(row[16]),
         classification: classification,
-        companySize: size(row, classification)
+        companySize: size(row, classification),
+        partners: partners(row),
+        corporate_name: row[3],
+        number_of_clt_employees: row[58],
+        number_of_pj_colaborators: row[59],
+        number_of_interns: row[60],
+        received_investments: row[61] == 'Sim',
+        investiments: row[62].split(','),
+        investiments_values: investiments_values(row)
       }
     )
 
     raise StandardError, new_company.errors.full_messages unless new_company.save
 
     new_company
+  end
+
+  def self.partner(subrow)
+    {
+      name: subrow[0],
+      nusp: subrow[1],
+      bond: subrow[2],
+      unity: subrow[3],
+      email: subrow[5] || '',
+      phone: subrow[6] || ''
+    }
+  end
+
+  def self.partners(row)
+    ps = []
+
+    subrows = [29..35, 39..42, 44..47, 49..52, 54..57]
+    subrows.each do |subrow|
+      ps << partner(row[subrow])
+    end
+
+    ps
+  end
+
+  def self.investiments_values(row)
+    {
+      own: row[63],
+      angel: row[64],
+      venture_capital: row[65],
+      private_equity: row[66],
+      pipe_fapesp: row[67],
+      other: row[68]
+    }
   end
 
   def self.size(row, classification)

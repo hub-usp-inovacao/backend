@@ -37,6 +37,30 @@ RSpec.describe Company, type: :model do
       classification: {
         major: 'Comércio e Serviços',
         minor: 'Informação e Comunicação'
+      },
+      partners: [
+        {
+          name: 'Fulano de Tal',
+          nusp: '1234567',
+          bond: 'Pesquisador',
+          unity: '',
+          email: 'fulano@detal.com',
+          phone: '(11) 99999-9999'
+        }
+      ],
+      corporate_name: 'razão social',
+      number_of_clt_employees: 1,
+      number_of_pj_colaborators: 1,
+      number_of_interns: 1,
+      received_investments: false,
+      investiments: [],
+      investiments_values: {
+        own: '',
+        angel: '',
+        venture_capital: '',
+        private_equity: '',
+        pipe_fapesp: '',
+        other: ''
       }
     }
   end
@@ -46,7 +70,8 @@ RSpec.describe Company, type: :model do
     expect(company).to be_valid
   end
 
-  %i[cnpj name year emails description incubated ecosystems services address].each do |required|
+  %i[cnpj name year emails description incubated ecosystems services address
+     corporate_name].each do |required|
     it "is invalid without #{required}" do
       attrs = valid_attr.except required
       company = described_class.new attrs
