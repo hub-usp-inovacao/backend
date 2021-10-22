@@ -173,7 +173,8 @@ class Company
 
     subrows = [29..35, 39..42, 44..47, 49..52, 54..57]
     subrows.each do |subrow|
-      ps << partner(row[subrow])
+      not_empty = row[subrow].any? { |e| e.size.positive? }
+      ps << partner(row[subrow]) if not_empty
     end
 
     ps
