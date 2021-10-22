@@ -93,14 +93,7 @@ class Company
     is_valid = year.is_a?(String) &&
                year.match?(/^\d{4}$/) &&
                year.to_i <= Time.zone.now.year
-    errors.add(:year, 'deve ser um ano válido') unless is_valid
-  end
-
-  def valid_company_size?
-    is_valid = !companySize.nil? &&
-               companySize.is_a?(Array) &&
-               companySize.all? { |size| company_sizes.include?(size) }
-    errors.add(:companySize, 'deve ser um tamanho válido. Ex: Microempresa') unless is_valid
+    errors.add(:year, 'não deve ser um ano futuro') unless is_valid
   end
 
   def valid_classification?
@@ -137,7 +130,7 @@ class Company
         logo: create_image_url(row[16]),
         classification: classification,
         cnae: row[5],
-        companySize: size(row, classification),
+        companySize: size(row[21], row[20], classification),
         partners: partners(row),
         corporate_name: row[3],
         collaborators_last_updated_at: last_collaborators(row),
@@ -181,10 +174,10 @@ class Company
     parsed_partners
   end
 
-  def self.size(row, classification)
-    sizes = row[20] == 'Unicórnio' ? [row[20]] : []
+  def self.size(employees_row, unicorn_row, classification)
+    sizes = unicorn_row == 'Unicórnio' ? [unicorn_row] : []
 
-    employees = row[21].to_i
+    employees = employees_row.to_i
 
     return sizes.append('Não Informado') unless employees.positive?
 
