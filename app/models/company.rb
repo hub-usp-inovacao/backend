@@ -111,7 +111,7 @@ class Company
   end
 
   def self.create_from(row)
-    classification = classify(row)
+    classification = classify(row[5])
 
     new_company = Company.new(
       {
@@ -120,7 +120,7 @@ class Company
         year: row[4],
         emails: row[7].split(';'),
         description: { long: row[13] },
-        incubated: incubated?(row),
+        incubated: incubated?(row[18]),
         ecosystems: row[19].split(';'),
         services: row[14].split(';'),
         address: define_address(row),
@@ -174,10 +174,10 @@ class Company
     parsed_partners
   end
 
-  def self.size(employees_row, unicorn_row, classification)
-    sizes = unicorn_row == 'Unicórnio' ? [unicorn_row] : []
+  def self.size(employees, unicorn, classification)
+    sizes = unicorn == 'Unicórnio' ? [unicorn] : []
 
-    employees = employees_row.to_i
+    employees = employees.to_i
 
     return sizes.append('Não Informado') unless employees.positive?
 
@@ -250,10 +250,10 @@ class Company
     raw
   end
 
-  def self.incubated?(row)
-    return 'Não' unless /\ASim.+\Z/.match?(row[18])
+  def self.incubated?(incubated)
+    return 'Não' unless /\ASim.+\Z/.match?(incubated)
 
-    row[18]
+    incubated
   end
 
   def self.define_address(row)
@@ -266,12 +266,12 @@ class Company
     }
   end
 
-  def self.classify(row)
+  def self.classify(cnae)
     default = { major: '', minor: '' }
 
-    return default if row.nil? || row[5].size.zero?
+    return default if cnae.size.zero?
 
-    code = row[5][0..1]
+    code = cnae[0..1]
     major_minor = cnae_code_to_major_minor[code]
 
     return default unless code && major_minor
