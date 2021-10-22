@@ -15,6 +15,7 @@ class Company
   field :url, type: String
   field :logo, type: String
   field :corporate_name, type: String
+  field :cnae, type: String
 
   field :incubated, type: Boolean
   field :allowed, type: Boolean
@@ -121,6 +122,7 @@ class Company
     errors.add(:classification, 'invalid major and/or minor') unless is_valid
   end
 
+  # rubocop:disable Metrics/MethodLength
   def self.create_from(row)
     classification = classify(row)
 
@@ -140,6 +142,7 @@ class Company
         technologies: row[15].split(';'),
         logo: row[16] == 'N/D' ? nil : create_image_url(row[16]),
         classification: classification,
+        cnae: row[5],
         companySize: size(row, classification),
         partners: partners(row),
         corporate_name: row[3],
@@ -156,6 +159,7 @@ class Company
 
     new_company
   end
+  # rubocop:enable Metrics/MethodLength
 
   def self.partner(subrow)
     {

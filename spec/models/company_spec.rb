@@ -34,6 +34,7 @@ RSpec.describe Company, type: :model do
       phones: ['(11) 987288877'],
       logo: 'https://drive.google.com/...',
       companySize: ['Média Empresa'],
+      cnae: '66.13-4-00',
       classification: {
         major: 'Comércio e Serviços',
         minor: 'Informação e Comunicação'
