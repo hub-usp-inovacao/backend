@@ -250,7 +250,7 @@ class Company
   end
 
   def self.format_url(raw)
-    return nil if raw.size.zero?
+    return nil if raw == 'N/D'
 
     return "https://#{raw}" if raw[0..3] != 'http'
 
