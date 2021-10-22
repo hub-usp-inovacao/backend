@@ -57,15 +57,21 @@ class Company
            :valid_classification?, :valid_address?
 
   def valid_partner?(partner)
-    !partner.nil? &&
-      partner.is_a?(Hash) &&
-      partner.keys.eql?(%i[name nusp bond unity email phone]) &&
-      company_partner_bonds.include?(partner[:bond]) &&
-      unities.include?(partner[:unity])
+    basic_valid = !partner.nil? &&
+                  partner.is_a?(Hash) &&
+                  partner.keys.eql?(%i[name nusp bond unity email phone])
+
+    bond_valid = partner[:bond].size.zero? ||
+                 company_partner_bonds.include?(partner[:bond])
+
+    unity_valid = partner[:unity].size.zero? ||
+                  unities.include?(partner[:unity])
+
+    basic_valid && bond_valid && unity_valid
   end
 
   def valid_partners?
-    is_valid = partners.all? { |partner| valid_partner?(partner) }
+    is_valid = partners.any? { |partner| valid_partner?(partner) }
 
     errors.add(:partners, 'invalid parteners') unless is_valid
   end

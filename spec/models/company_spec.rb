@@ -46,6 +46,38 @@ RSpec.describe Company, type: :model do
           unity: 'Faculdade de Odontologia de Bauru - FOB',
           email: 'fulano@detal.com',
           phone: '(11) 99999-9999'
+        },
+        {
+          name: '',
+          nusp: '',
+          bond: '',
+          unity: '',
+          email: '',
+          phone: ''
+        },
+        {
+          name: '',
+          nusp: '',
+          bond: '',
+          unity: '',
+          email: '',
+          phone: ''
+        },
+        {
+          name: '',
+          nusp: '',
+          bond: '',
+          unity: '',
+          email: '',
+          phone: ''
+        },
+        {
+          name: '',
+          nusp: '',
+          bond: '',
+          unity: '',
+          email: '',
+          phone: ''
         }
       ],
       corporate_name: 'razão social',
