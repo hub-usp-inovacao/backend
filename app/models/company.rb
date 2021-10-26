@@ -173,15 +173,15 @@ class Company
   end
 
   def self.partners(row)
-    ps = []
+    parsed_partners = []
 
-    subrows = [29..35, 39..42, 44..47, 49..52, 54..57]
-    subrows.each do |subrow|
-      not_empty = row[subrow].any? { |e| e.size.positive? }
-      ps << partner(row[subrow]) if not_empty
+    subrows_indices = [29..35, 39..42, 44..47, 49..52, 54..57]
+    subrows_indices.each do |subrow_indices|
+      not_empty = row[subrow_indices].any? { |entry| entry.size.positive? }
+      parsed_partners << partner(row[subrow_indices]) if not_empty
     end
 
-    ps
+    parsed_partners
   end
 
   def self.investiments_values(row)
