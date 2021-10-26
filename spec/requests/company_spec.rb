@@ -3,9 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Companies', type: :request do
+  cnpj = '12.123.123/0001-21'
+
   let(:companies) do
     [
       {
+        cnpj: cnpj,
         name: 'Uber 99',
         year: '2019',
         services: 'foo bar baz',
@@ -34,9 +37,66 @@ RSpec.describe 'Companies', type: :request do
         phones: ['(11) 987288877'],
         logo: 'https://drive.google.com/...',
         companySize: ['Média Empresa'],
+        cnae: '66.13-4-00',
         classification: {
           major: 'Comércio e Serviços',
           minor: 'Informação e Comunicação'
+        },
+        partners: [
+          {
+            name: 'Fulano de Tal',
+            nusp: '1234567',
+            bond: 'Pesquisador',
+            unity: 'Faculdade de Odontologia de Bauru - FOB',
+            email: 'fulano@detal.com',
+            phone: '(11) 99999-9999'
+          },
+          {
+            name: '',
+            nusp: '',
+            bond: '',
+            unity: '',
+            email: '',
+            phone: ''
+          },
+          {
+            name: '',
+            nusp: '',
+            bond: '',
+            unity: '',
+            email: '',
+            phone: ''
+          },
+          {
+            name: '',
+            nusp: '',
+            bond: '',
+            unity: '',
+            email: '',
+            phone: ''
+          },
+          {
+            name: '',
+            nusp: '',
+            bond: '',
+            unity: '',
+            email: '',
+            phone: ''
+          }
+        ],
+        corporate_name: 'razão social',
+        number_of_clt_employees: 1,
+        number_of_pj_colaborators: 1,
+        number_of_interns: 1,
+        received_investments: false,
+        investiments: [],
+        investiments_values: {
+          own: '',
+          angel: '',
+          venture_capital: '',
+          private_equity: '',
+          pipe_fapesp: '',
+          other: ''
         }
       }
     ]
@@ -45,15 +105,22 @@ RSpec.describe 'Companies', type: :request do
   def company_keys
     %w[_id name year services incubated emails ecosystems
        description allowed address active url technologies
-       phones logo companySize classification created_at]
+       phones logo companySize classification created_at
+       partners corporate_name number_of_interns investiments
+       received_investments investiments_values cnae cnpj
+       number_of_clt_employees number_of_pj_colaborators]
+  end
+
+  before do
+    Company.create!(companies)
+    get '/companies'
+  end
+
+  after do
+    Company.delete_all
   end
 
   describe 'GET /companies' do
-    before do
-      allow(Company).to receive(:all).and_return(companies)
-      get '/companies'
-    end
-
     it 'returns a response with success http status' do
       expect(response).to have_http_status(:success)
     end
@@ -66,11 +133,10 @@ RSpec.describe 'Companies', type: :request do
     end
   end
 
-  describe 'GET /companies/:cnpj' do
+  describe 'GET /companies?cnpj=' do
     describe 'when a company is found' do
       before do
-        allow(Company).to receive(:find_by).and_return(companies[0])
-        get '/companies', params: { cnpj: '12.123.123/0001-21' }
+        get '/companies', params: { cnpj: cnpj }
       end
 
       it 'returns :ok' do
@@ -79,17 +145,13 @@ RSpec.describe 'Companies', type: :request do
 
       it 'returns the company' do
         body = JSON.parse(response.body)
-        expect(body).to be_a(Hash)
+        expect(body['cnpj']).to eql(cnpj)
       end
     end
 
     describe 'when a company is not found' do
       before do
-        allow(Company).to receive(:find_by) do
-          raise StandardError
-        end
-
-        get '/companies', params: { cnpj: '12.123.123/0001-21' }
+        get '/companies', params: { cnpj: '12.123.000/0001-21' }
       end
 
       it 'returns :not_found' do
