@@ -151,4 +151,43 @@ RSpec.describe Company, type: :model do
       expect(company).to be_invalid
     end
   end
+
+  describe 'partners validation' do
+    it 'fails when the list is empty' do
+      attrs = valid_attr.clone
+      attrs[:partners] = []
+      company = described_class.new attrs
+      expect(company).to be_invalid
+    end
+
+    describe 'partner with wrong attributes' do
+      let :partners_overwrite_attrs do
+        attrs = valid_attr.clone
+        attrs[:partners] = [{
+          name: 'Fulano de Tal',
+          nusp: '1234567',
+          bond: 'Pesquisador',
+          unity: 'Faculdade de Odontologia de Bauru - FOB',
+          email: 'fulano@detal.com',
+          phone: '(11) 99999-9999'
+        }]
+
+        attrs
+      end
+
+      it 'fails when the only partner has wrong unity' do
+        attrs = partners_overwrite_attrs.clone
+        attrs[:partners][0][:unity] = 'IME'
+        company = described_class.new attrs
+        expect(company).to be_invalid
+      end
+
+      it 'fails when the only partner has wrong bond' do
+        attrs = partners_overwrite_attrs.clone
+        attrs[:partners][0][:bond] = 'prof'
+        company = described_class.new attrs
+        expect(company).to be_invalid
+      end
+    end
+  end
 end
