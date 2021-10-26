@@ -89,8 +89,8 @@ RSpec.describe 'Companies', type: :request do
         number_of_pj_colaborators: 1,
         number_of_interns: 1,
         received_investments: false,
-        investiments: [],
-        investiments_values: {
+        investments: [],
+        investments_values: {
           own: '',
           angel: '',
           venture_capital: '',
@@ -106,8 +106,8 @@ RSpec.describe 'Companies', type: :request do
     %w[_id name year services incubated emails ecosystems
        description allowed address active url technologies
        phones logo companySize classification created_at
-       partners corporate_name number_of_interns investiments
-       received_investments investiments_values cnae cnpj
+       partners corporate_name number_of_interns investments
+       received_investments investments_values cnae cnpj
        number_of_clt_employees number_of_pj_colaborators]
   end
 

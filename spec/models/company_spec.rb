@@ -86,8 +86,8 @@ RSpec.describe Company, type: :model do
       number_of_pj_colaborators: 1,
       number_of_interns: 1,
       received_investments: false,
-      investiments: [],
-      investiments_values: {
+      investments: [],
+      investments_values: {
         own: '',
         angel: '',
         venture_capital: '',

@@ -28,12 +28,12 @@ class Company
   field :phones, type: Array
   field :companySize, type: Array
   field :partners, type: Array
-  field :investiments, type: Array
+  field :investments, type: Array
 
   field :description, type: Hash
   field :classification, type: Hash
   field :address, type: Hash
-  field :investiments_values, type: Hash
+  field :investments_values, type: Hash
 
   validates :cnpj,
             :name,
@@ -146,8 +146,8 @@ class Company
         number_of_pj_colaborators: row[59],
         number_of_interns: row[60],
         received_investments: row[61] == 'Sim',
-        investiments: row[62].split(','),
-        investiments_values: investiments_values(row)
+        investments: row[62].split(','),
+        investments_values: investments_values(row)
       }
     )
 
@@ -180,7 +180,7 @@ class Company
     parsed_partners
   end
 
-  def self.investiments_values(row)
+  def self.investments_values(row)
     {
       own: row[63],
       angel: row[64],
