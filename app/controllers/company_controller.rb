@@ -18,7 +18,7 @@ class CompanyController < ApplicationController
 
   def find_one
     cnpj = params[:cnpj]
-    @company = Company.find_by cnpj: cnpj
+    @company = Company.find_by! cnpj: cnpj
     render json: @company, status: :ok
   rescue StandardError
     render json: { error: :not_found }, status: :not_found
