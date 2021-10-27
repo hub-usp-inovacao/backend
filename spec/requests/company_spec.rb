@@ -27,7 +27,7 @@ RSpec.describe 'Companies', type: :request do
         address: {
           cep: '13414-157',
           city: ['Piracicaba'],
-          neightborhood: 'Loteamento Santa Rosa',
+          neighborhood: 'Loteamento Santa Rosa',
           state: 'São Paulo',
           venue: 'Rua Cezira Giovanni'
         },

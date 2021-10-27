@@ -273,7 +273,7 @@ class Company
   def self.define_address(row)
     {
       venue: row[8],
-      neightborhood: row[9],
+      neighborhood: row[9],
       city: row[10].split(';'),
       state: row[11],
       cep: row[12]
