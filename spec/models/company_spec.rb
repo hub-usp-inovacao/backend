@@ -5,10 +5,11 @@ require 'rails_helper'
 RSpec.describe Company, type: :model do
   let :valid_attr do
     {
+      cnpj: '12.123.123/0001-21',
       name: 'Uber 99',
       year: '2019',
-      services: 'foo bar baz',
-      incubated: false,
+      services: %w[foo bar baz],
+      incubated: 'Não',
       emails: [
         'foo@exmaple.com',
         'bar@exmaple.com'
@@ -23,7 +24,7 @@ RSpec.describe Company, type: :model do
       address: {
         cep: '13414-157',
         city: ['Piracicaba'],
-        neightborhood: 'Loteamento Santa Rosa',
+        neighborhood: 'Loteamento Santa Rosa',
         state: 'São Paulo',
         venue: 'Rua Cezira Giovanni'
       },
@@ -33,10 +34,54 @@ RSpec.describe Company, type: :model do
       phones: ['(11) 987288877'],
       logo: 'https://drive.google.com/...',
       companySize: ['Média Empresa'],
+      cnae: '66.13-4-00',
       classification: {
         major: 'Comércio e Serviços',
         minor: 'Informação e Comunicação'
-      }
+      },
+      partners: [
+        {
+          name: 'Fulano de Tal',
+          nusp: '1234567',
+          bond: 'Pesquisador',
+          unity: 'Faculdade de Odontologia de Bauru - FOB',
+          email: 'fulano@detal.com',
+          phone: '(11) 99999-9999'
+        },
+        {
+          name: '',
+          nusp: '',
+          bond: '',
+          unity: '',
+          email: '',
+          phone: ''
+        },
+        {
+          name: '',
+          nusp: '',
+          bond: '',
+          unity: '',
+          email: '',
+          phone: ''
+        },
+        {
+          name: '',
+          nusp: '',
+          bond: '',
+          unity: '',
+          email: '',
+          phone: ''
+        },
+        {
+          name: '',
+          nusp: '',
+          bond: '',
+          unity: '',
+          email: '',
+          phone: ''
+        }
+      ],
+      corporate_name: 'razão social'
     }
   end
 
@@ -45,7 +90,8 @@ RSpec.describe Company, type: :model do
     expect(company).to be_valid
   end
 
-  %i[name year emails description incubated ecosystems services address].each do |required|
+  %i[cnpj name year emails description incubated ecosystems services address
+     corporate_name].each do |required|
     it "is invalid without #{required}" do
       attrs = valid_attr.except required
       company = described_class.new attrs
@@ -82,13 +128,53 @@ RSpec.describe Company, type: :model do
 
   [
     { attr: :companySize, value: ['foo bar baz'] },
-    { attr: :classification, value: { value: '13' } }
+    { attr: :classification, value: { value: '13' } },
+    { attr: :cnpj, value: '123.123.123-12' }
   ].each do |ctx|
     it "is invalid with a wrong #{ctx[:attr]}" do
       attrs = valid_attr
       attrs[ctx[:attr]] = ctx[:value]
       company = described_class.new attrs
       expect(company).to be_invalid
+    end
+  end
+
+  describe 'partners validation' do
+    it 'fails when the list is empty' do
+      attrs = valid_attr.clone
+      attrs[:partners] = []
+      company = described_class.new attrs
+      expect(company).to be_invalid
+    end
+
+    describe 'partner with wrong attributes' do
+      let :partners_overwrite_attrs do
+        attrs = valid_attr.clone
+        attrs[:partners] = [{
+          name: 'Fulano de Tal',
+          nusp: '1234567',
+          bond: 'Pesquisador',
+          unity: 'Faculdade de Odontologia de Bauru - FOB',
+          email: 'fulano@detal.com',
+          phone: '(11) 99999-9999'
+        }]
+
+        attrs
+      end
+
+      it 'fails when the only partner has wrong unity' do
+        attrs = partners_overwrite_attrs.clone
+        attrs[:partners][0][:unity] = 'IME'
+        company = described_class.new attrs
+        expect(company).to be_invalid
+      end
+
+      it 'fails when the only partner has wrong bond' do
+        attrs = partners_overwrite_attrs.clone
+        attrs[:partners][0][:bond] = 'james'
+        company = described_class.new attrs
+        expect(company).to be_invalid
+      end
     end
   end
 end

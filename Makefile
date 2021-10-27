@@ -8,6 +8,7 @@ BG_FLAG = -d
 BUILD_SUBCMD = build
 BUILD_NO_CACHE_SUBCMD = build --no-cache
 RUN_SUBCMD = up
+ATTACH_SUBCMD = run --rm web sh
 STOP_SUBCMD = down
 
 DCPROD = docker-compose -f prod-compose.yaml
@@ -24,6 +25,9 @@ rebuild_dev:
 
 dev:
 	$(DC) -f $(DEVFILE) $(RUN_SUBCMD)
+
+attach:
+	$(DC) -f $(DEVFILE) $(ATTACH_SUBCMD)
 
 stop_dev:
 	$(DC) -f $(DEVFILE) $(STOP_SUBCMD)

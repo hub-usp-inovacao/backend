@@ -4,13 +4,15 @@ class Company
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
+  field :cnpj, type: String
   field :name, type: String
   field :year, type: String
-  field :services, type: String
   field :url, type: String
   field :logo, type: String
+  field :corporate_name, type: String
+  field :cnae, type: String
+  field :incubated, type: String
 
-  field :incubated, type: Boolean
   field :allowed, type: Boolean
   field :active, type: Boolean
 
@@ -19,19 +21,60 @@ class Company
   field :technologies, type: Array
   field :phones, type: Array
   field :companySize, type: Array
+  field :partners, type: Array
+  field :services, type: Array
 
   field :description, type: Hash
   field :classification, type: Hash
   field :address, type: Hash
 
-  validates :name, :year, :emails, :description, :incubated, :ecosystems, :services, :address,
+  field :collaborators_last_updated_at, type: DateTime
+  field :investments_last_updated_at, type: DateTime
+
+  validates :cnpj,
+            :name,
+            :year,
+            :emails,
+            :description,
+            :incubated,
+            :ecosystems,
+            :services,
+            :address,
             :classification,
+            :corporate_name,
             presence: true
-  validates :name, length: { in: 2..100 }, uniqueness: { message: "#{name} already taken" }
+
+  validates :name, length: { in: 2..100 }, uniqueness: { message: 'name already taken' }
+  validates :corporate_name, length: { in: 2..100 },
+                             uniqueness: { message: 'corporate_name already taken' }
   validates :url, :logo, url: true
   validates :phones, phones: true
 
-  validate :valid_year?, :valid_company_size?, :valid_classification?, :valid_address?
+  validate :valid_partners?, :valid_cnpj?, :valid_year?, :valid_company_size?,
+           :valid_classification?, :valid_address?
+
+  def valid_partner?(partner)
+    bond_valid = partner[:bond].size.zero? ||
+                 company_partner_bonds.include?(partner[:bond])
+
+    unity_valid = partner[:unity].size.zero? ||
+                  unities.include?(partner[:unity])
+
+    bond_valid && unity_valid
+  end
+
+  def valid_partners?
+    is_valid = partners.any? { |partner| valid_partner?(partner) }
+
+    errors.add(:partners, 'invalid parteners') unless is_valid
+  end
+
+  def valid_cnpj?
+    is_valid = !cnpj.nil? &&
+               cnpj =~ %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\Z}
+
+    errors.add(:cnpj, 'cnpj malformed, must be dd.ddd.ddd/dddd-dd') unless is_valid
+  end
 
   def valid_address?
     is_valid = !address.nil? &&
@@ -76,26 +119,63 @@ class Company
 
     new_company = Company.new(
       {
+        cnpj: row[1],
         name: row[2],
         year: row[4],
         emails: row[7].split(';'),
         description: { long: row[13] },
         incubated: incubated?(row),
         ecosystems: row[19].split(';'),
-        services: row[14],
+        services: row[14].split(';'),
         address: define_address(row),
         phones: format_phone(row[6]),
         url: format_url(row[17]),
         technologies: row[15].split(';'),
         logo: row[16] == 'N/D' ? nil : create_image_url(row[16]),
         classification: classification,
-        companySize: size(row, classification)
+        cnae: row[5],
+        companySize: size(row, classification),
+        partners: partners(row),
+        corporate_name: row[3],
+        collaborators_last_updated_at: last_collaborators(row),
+        investments_last_updated_at: last_investments(row)
       }
     )
 
     raise StandardError, new_company.errors.full_messages unless new_company.save
 
     new_company
+  end
+
+  def self.last_collaborators(_row)
+    DateTime.now
+  end
+
+  def self.last_investments(_row)
+    DateTime.now
+  end
+
+  def self.partner(subrow)
+    {
+      name: subrow[0],
+      nusp: subrow[1],
+      bond: subrow[2],
+      unity: subrow[3],
+      email: subrow[5] || '',
+      phone: subrow[6] || ''
+    }
+  end
+
+  def self.partners(row)
+    parsed_partners = []
+
+    subrows_indices = [29..35, 39..42, 44..47, 49..52, 54..57]
+    subrows_indices.each do |subrow_indices|
+      not_empty = row[subrow_indices].any? { |entry| entry.size.positive? }
+      parsed_partners << partner(row[subrow_indices]) if not_empty
+    end
+
+    parsed_partners
   end
 
   def self.size(row, classification)
@@ -173,14 +253,15 @@ class Company
   end
 
   def self.incubated?(row)
-    yesses = ['Sim. A empresa está incubada', 'Sim. A empresa já está graduada']
-    yesses.include? row[18]
+    return 'Não' unless /\ASim.+\Z/.match?(row[18])
+
+    row[18]
   end
 
   def self.define_address(row)
     {
       venue: row[8],
-      neightborhood: row[9],
+      neighborhood: row[9],
       city: row[10].split(';'),
       state: row[11],
       cep: row[12]
