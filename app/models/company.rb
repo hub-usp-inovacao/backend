@@ -147,12 +147,12 @@ class Company
     new_company
   end
 
-  def self.collaborators_last_updated_at(_row)
-    Date.now
+  def self.last_collaborators(_row)
+    DateTime.now
   end
 
-  def self.investments_last_updated_at(_row)
-    Date.now
+  def self.last_investments(_row)
+    DateTime.now
   end
 
   def self.partner(subrow)
