@@ -11,8 +11,8 @@ RSpec.describe 'Companies', type: :request do
         cnpj: cnpj,
         name: 'Uber 99',
         year: '2019',
-        services: 'foo bar baz',
-        incubated: false,
+        services: %w[foo bar baz],
+        incubated: 'Não',
         emails: [
           'foo@exmaple.com',
           'bar@exmaple.com'

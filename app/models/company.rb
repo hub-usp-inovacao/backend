@@ -11,13 +11,12 @@ class Company
   field :cnpj, type: String
   field :name, type: String
   field :year, type: String
-  field :services, type: String
   field :url, type: String
   field :logo, type: String
   field :corporate_name, type: String
   field :cnae, type: String
+  field :incubated, type: String
 
-  field :incubated, type: Boolean
   field :allowed, type: Boolean
   field :active, type: Boolean
   field :received_investments, type: Boolean
@@ -29,6 +28,7 @@ class Company
   field :companySize, type: Array
   field :partners, type: Array
   field :investments, type: Array
+  field :services, type: Array
 
   field :description, type: Hash
   field :classification, type: Hash

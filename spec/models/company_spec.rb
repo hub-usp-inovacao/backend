@@ -8,8 +8,8 @@ RSpec.describe Company, type: :model do
       cnpj: '12.123.123/0001-21',
       name: 'Uber 99',
       year: '2019',
-      services: 'foo bar baz',
-      incubated: false,
+      services: %w[foo bar baz],
+      incubated: 'Não',
       emails: [
         'foo@exmaple.com',
         'bar@exmaple.com'
