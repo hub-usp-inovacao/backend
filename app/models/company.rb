@@ -131,7 +131,7 @@ class Company
         description: { long: row[13] },
         incubated: incubated?(row),
         ecosystems: row[19].split(';'),
-        services: row[14],
+        services: row[14].split(';'),
         address: define_address(row),
         phones: format_phone(row[6]),
         url: format_url(row[17]),
@@ -266,8 +266,7 @@ class Company
   end
 
   def self.incubated?(row)
-    yesses = ['Sim. A empresa está incubada', 'Sim. A empresa já está graduada']
-    yesses.include? row[18]
+    row[18]
   end
 
   def self.define_address(row)
