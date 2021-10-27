@@ -84,20 +84,7 @@ RSpec.describe 'Companies', type: :request do
             phone: ''
           }
         ],
-        corporate_name: 'razão social',
-        number_of_clt_employees: 1,
-        number_of_pj_colaborators: 1,
-        number_of_interns: 1,
-        received_investments: false,
-        investments: [],
-        investments_values: {
-          own: '',
-          angel: '',
-          venture_capital: '',
-          private_equity: '',
-          pipe_fapesp: '',
-          other: ''
-        }
+        corporate_name: 'razão social'
       }
     ]
   end
@@ -106,9 +93,8 @@ RSpec.describe 'Companies', type: :request do
     %w[_id name year services incubated emails ecosystems
        description allowed address active url technologies
        phones logo companySize classification created_at
-       partners corporate_name number_of_interns investments
-       received_investments investments_values cnae cnpj
-       number_of_clt_employees number_of_pj_colaborators]
+       partners corporate_name cnae cnpj
+       investments_last_updated_at collaborators_last_updated_at]
   end
 
   before do

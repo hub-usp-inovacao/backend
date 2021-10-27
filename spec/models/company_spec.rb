@@ -81,20 +81,7 @@ RSpec.describe Company, type: :model do
           phone: ''
         }
       ],
-      corporate_name: 'razão social',
-      number_of_clt_employees: 1,
-      number_of_pj_colaborators: 1,
-      number_of_interns: 1,
-      received_investments: false,
-      investments: [],
-      investments_values: {
-        own: '',
-        angel: '',
-        venture_capital: '',
-        private_equity: '',
-        pipe_fapesp: '',
-        other: ''
-      }
+      corporate_name: 'razão social'
     }
   end
 

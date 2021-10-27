@@ -4,10 +4,6 @@ class Company
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
-  field :number_of_clt_employees, type: Integer
-  field :number_of_pj_colaborators, type: Integer
-  field :number_of_interns, type: Integer
-
   field :cnpj, type: String
   field :name, type: String
   field :year, type: String
@@ -19,7 +15,6 @@ class Company
 
   field :allowed, type: Boolean
   field :active, type: Boolean
-  field :received_investments, type: Boolean
 
   field :emails, type: Array
   field :ecosystems, type: Array
@@ -27,13 +22,14 @@ class Company
   field :phones, type: Array
   field :companySize, type: Array
   field :partners, type: Array
-  field :investments, type: Array
   field :services, type: Array
 
   field :description, type: Hash
   field :classification, type: Hash
   field :address, type: Hash
-  field :investments_values, type: Hash
+
+  field :collaborators_last_updated_at, type: DateTime
+  field :investments_last_updated_at, type: DateTime
 
   validates :cnpj,
             :name,
@@ -118,7 +114,6 @@ class Company
     errors.add(:classification, 'invalid major and/or minor') unless is_valid
   end
 
-  # rubocop:disable Metrics/MethodLength
   def self.create_from(row)
     classification = classify(row)
 
@@ -142,12 +137,8 @@ class Company
         companySize: size(row, classification),
         partners: partners(row),
         corporate_name: row[3],
-        number_of_clt_employees: row[58],
-        number_of_pj_colaborators: row[59],
-        number_of_interns: row[60],
-        received_investments: row[61] == 'Sim',
-        investments: row[62].split(','),
-        investments_values: investments_values(row)
+        collaborators_last_updated_at: last_collaborators(row),
+        investments_last_updated_at: last_investments(row)
       }
     )
 
@@ -155,7 +146,14 @@ class Company
 
     new_company
   end
-  # rubocop:enable Metrics/MethodLength
+
+  def self.collaborators_last_updated_at(_row)
+    Date.now
+  end
+
+  def self.investments_last_updated_at(_row)
+    Date.now
+  end
 
   def self.partner(subrow)
     {
@@ -178,17 +176,6 @@ class Company
     end
 
     parsed_partners
-  end
-
-  def self.investments_values(row)
-    {
-      own: row[63],
-      angel: row[64],
-      venture_capital: row[65],
-      private_equity: row[66],
-      pipe_fapesp: row[67],
-      other: row[68]
-    }
   end
 
   def self.size(row, classification)
@@ -266,6 +253,8 @@ class Company
   end
 
   def self.incubated?(row)
+    return 'Não' unless /\ASim.+\Z/.match?(row[18])
+
     row[18]
   end
 
