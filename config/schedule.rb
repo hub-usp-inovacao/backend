@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 set :output, 'log/whenever.log'
-set :environment, :development
+set :environment, ENV['RAILS_ENV']
 env :PATH, ENV['PATH']
 
 every :monday, at: '9 am' do

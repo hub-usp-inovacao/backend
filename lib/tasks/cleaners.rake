@@ -15,5 +15,5 @@ desc 'Cleans already reported companies updates'
 task clean_updates: :environment do
   log('clean_updates', 'cleaning CompanyUpdate!')
   deleteds = CompanyUpdate.where(delivered: true).delete_all
-  log('clean_reports', "#{deleteds} registros deletados!")
+  log('clean_reports', "#{deleteds} deleted records!")
 end
