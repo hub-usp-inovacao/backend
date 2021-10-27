@@ -171,7 +171,7 @@ RSpec.describe Company, type: :model do
 
       it 'fails when the only partner has wrong bond' do
         attrs = partners_overwrite_attrs.clone
-        attrs[:partners][0][:bond] = 'prof'
+        attrs[:partners][0][:bond] = 'james'
         company = described_class.new attrs
         expect(company).to be_invalid
       end
