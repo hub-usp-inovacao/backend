@@ -48,8 +48,7 @@ COPY . ./
 
 FROM base as production
 
-ENV RAILS_ENV=production \
-    RAILS_LOG_TO_STDOUT=true
+ENV RAILS_ENV=production
 
 RUN bundle install --without development test
 
