@@ -15,8 +15,18 @@ class Patent
   field :photo, type: String
 
   validates :name, :classification, :ipcs, :owners, :status, presence: true
-  validates :url, :photo, url: true
-  validate :valid_classification?, :valid_status?, :valid_ipcs?
+  validates :url, url: true
+  validate :valid_classification?, :valid_status?, :valid_ipcs?, :valid_photo?
+
+  def valid_photo?
+    return if photo.nil?
+
+    url = URI.parse(photo)
+
+    is_valid = url.is_a?(URI::HTTP)
+
+    errors.add(:photo, 'invalid photo, must be N/D or a proper URL') unless is_valid
+  end
 
   def valid_status?
     is_valid = ['Concedida', 'Em análise', 'Domínio Público'].include?(status)
