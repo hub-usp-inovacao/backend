@@ -188,18 +188,33 @@ RSpec.describe Company, type: :model do
   end
 
   describe 'Creation methods' do
-    [{
-      major: 'Comércio e Serviços',
-      minor: 'Informação e Comunicação'
-    }, {
-      major: 'Indústria de Transformação',
-      minor: 'Produtos Diversos'
-    }].each do |classification|
-      %w[0 5 50 5000].each do |employees|
-        it 'creates a correct company size' do
-          sizes = described_class.size(employees, '', classification)
-          expect(sizes).to be_all { |size| company_sizes.include?(size) }
-        end
+    [{ employees: 0, expect: ['Não Informado'] },
+     { employees: 5, expect: ['Microempresa'] },
+     { employees: 10, expect: ['Pequena Empresa'] },
+     { employees: 50, expect: ['Média Empresa'] },
+     { employees: 100, expect: ['Grande Empresa'] }].each do |hash|
+      it 'creates a correct company size when this is not an industrial business' do
+        classification = {
+          major: 'Comércio e Serviços',
+          minor: 'Informação e Comunicação'
+        }
+        sizes = described_class.size(hash[:employees], '', classification)
+        expect(sizes).to be_all { |size| hash[:expect].include?(size) }
+      end
+    end
+
+    [{ employees: 0, expect: ['Não Informado'] },
+     { employees: 5, expect: ['Microempresa'] },
+     { employees: 20, expect: ['Pequena Empresa'] },
+     { employees: 100, expect: ['Média Empresa'] },
+     { employees: 500, expect: ['Grande Empresa'] }].each do |hash|
+      it 'creates a correct company size when this is an industrial business' do
+        classification = {
+          major: 'Indústria de Transformação',
+          minor: 'Produtos Diversos'
+        }
+        sizes = described_class.size(hash[:employees], '', classification)
+        expect(sizes).to be_all { |size| hash[:expect].include?(size) }
       end
     end
 
@@ -207,7 +222,21 @@ RSpec.describe Company, type: :model do
       classification = valid_attr[:classification]
       employees = '0'
       sizes = described_class.size(employees, 'Unicórnio', classification)
-      expect(sizes).to be_all { |size| company_sizes.include?(size) }
+      expect(sizes).to be_all { |size| ['Unicórnio', 'Não Informado'].include?(size) }
+    end
+  end
+
+  [{ cnae: '46.00-0-00', expect: {
+    major: 'Comércio e Serviços',
+    minor: 'Comércio por Atacado, exceto Veículos Automotores e Motocicletas'
+  } },
+   { cnae: '01.00-0-00', expect: {
+     major: 'Agricultura, Pecuária, Pesca e Extrativismo',
+     minor: 'Agricultura, Pecuária, Produção Florestal, Pesca e Aquicultura'
+   } }].each do |hash|
+    it 'creates a correct classification' do
+      classification = described_class.classify(hash[:cnae])
+      expect(classification).to include(hash[:expect])
     end
   end
 end

@@ -196,7 +196,7 @@ class Company
       case employees
       when 1...10
         sizes.append 'Microempresa'
-      when 0...50
+      when 10...50
         sizes.append 'Pequena Empresa'
       when 50...100
         sizes.append 'Média Empresa'
