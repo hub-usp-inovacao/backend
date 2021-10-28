@@ -97,17 +97,11 @@ class Company
   end
 
   def valid_classification?
-    return if classification.nil?
-
     c = classification
-
-    is_valid = c.is_a?(Hash) &&
-               c.key?(:major) &&
-               c.key?(:minor) &&
-               cnae_majors.include?(c[:major]) &&
+    is_valid = cnae_majors.include?(c[:major]) &&
                cnae_major_to_minors[c[:major]].include?(c[:minor])
 
-    errors.add(:classification, 'Grande área e/ou área específica inválidas') unless is_valid
+    errors.add(:classification, 'inválida devido a inválido cnae') unless is_valid
   end
 
   def self.create_from(row)
