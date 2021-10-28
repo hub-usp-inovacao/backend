@@ -224,19 +224,30 @@ RSpec.describe Company, type: :model do
       sizes = described_class.size(employees, 'Unicórnio', classification)
       expect(sizes).to be_all { |size| ['Unicórnio', 'Não Informado'].include?(size) }
     end
-  end
 
-  [{ cnae: '46.00-0-00', expect: {
-    major: 'Comércio e Serviços',
-    minor: 'Comércio por Atacado, exceto Veículos Automotores e Motocicletas'
-  } },
-   { cnae: '01.00-0-00', expect: {
-     major: 'Agricultura, Pecuária, Pesca e Extrativismo',
-     minor: 'Agricultura, Pecuária, Produção Florestal, Pesca e Aquicultura'
-   } }].each do |hash|
-    it 'creates a correct classification' do
-      classification = described_class.classify(hash[:cnae])
-      expect(classification).to include(hash[:expect])
+    [{ cnae: '46.00-0-00', expect: {
+      major: 'Comércio e Serviços',
+      minor: 'Comércio por Atacado, exceto Veículos Automotores e Motocicletas'
+    } },
+     { cnae: '01.00-0-00', expect: {
+       major: 'Agricultura, Pecuária, Pesca e Extrativismo',
+       minor: 'Agricultura, Pecuária, Produção Florestal, Pesca e Aquicultura'
+     } }].each do |hash|
+      it 'creates a correct classification' do
+        classification = described_class.classify(hash[:cnae])
+        expect(classification).to include(hash[:expect])
+      end
+    end
+
+    ['', '89.00-0-00', '371.00-0-00'].each do |cnae|
+      it 'creates an empty classification when used an invalid cnae' do
+        expect = {
+          major: '',
+          minor: ''
+        }
+        classification = described_class.classify(cnae)
+        expect(classification).to include(expect)
+      end
     end
   end
 end
