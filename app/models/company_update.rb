@@ -9,12 +9,39 @@ class CompanyUpdate
   field :partners_values, type: Array
   field :company_values, type: Array
   field :delivered, type: Boolean, default: false
+  field :dna_values, type: Hash
 
   validates :name, :cnpj, presence: true
   validates :cnpj,
             format: { with: %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\z},
                       message: 'must be a valid cnpj' }
-  validate :validate_partners_values, :validate_company_values, :validate_values_presence
+  validate :validate_partners_values, :validate_company_values, :validate_values_presence,
+           :validate_dna
+
+  def valid_name(name)
+    !name.nil? &&
+      name.is_a?(String) &&
+      name.size.positive?
+  end
+
+  def valid_email(email)
+    rgx = /\A[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?\Z/
+
+    !email.nil? &&
+      rgx.match?(email)
+  end
+
+  def consistent(dna)
+    !dna[:wants_dna] || (valid_name(dna[:name]) && valid_email(dna[:email]))
+  end
+
+  def validate_dna
+    is_valid = !dna_values.nil? &&
+               dna_values.is_a?(Hash) &&
+               consistent(dna_values)
+
+    errors.add(:dna_values, 'invalid') unless is_valid
+  end
 
   def validate_partner(partner)
     return false unless partner.is_a? Hash

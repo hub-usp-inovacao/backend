@@ -19,7 +19,12 @@ RSpec.describe CompanyUpdate, type: :model do
       ],
       company_values: [
         { Foo: 'Bar' }
-      ]
+      ],
+      dna_values: {
+        wants_dna: true,
+        name: 'Fulano',
+        email: 'fulano@mail.com'
+      }
     }
   end
 
@@ -71,5 +76,11 @@ RSpec.describe CompanyUpdate, type: :model do
     invalid_attr[:partners_values][0][:bond] = 'Foo'
     company_updated = described_class.new(invalid_attr)
     expect(company_updated).to be_invalid
+  end
+
+  it 'is invalid with inconsistent dna_values' do
+    invalid_attr = valid_attr.clone
+    invalid_attr[:dna_values] = { wants_dna: true }
+    expect(described_class.new(invalid_attr)).to be_invalid
   end
 end
