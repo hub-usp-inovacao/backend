@@ -9,27 +9,50 @@ class CompanyUpdate
   field :partners_values, type: Array
   field :company_values, type: Array
   field :delivered, type: Boolean, default: false
+  field :dna_values, type: Hash
 
   validates :name, :cnpj, presence: true
   validates :cnpj,
             format: { with: %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\z},
                       message: 'must be a valid cnpj' }
-  validate :validate_partners_values, :validate_company_values, :validate_values_presence
+  validate :validate_partners_values, :validate_company_values, :validate_values_presence,
+           :validate_dna
 
-  def validate_bond(bond)
-    ['Aluno ou ex-aluno de graduação',
-     'Aluno ou ex-aluno de pós-graduação (mestrado ou doutorado)',
-     'Aluno ou ex-aluno de pós-graduação do IPEN (Instituto de Pesquisas Energéticas e Nucleares)',
-     'Docente', 'Docente aposentado / Licenciado', 'Pós-doutorando', 'Pesquisador',
-     'Empresa incubada ou graduada em incubadora associada à USP'].include?(bond)
+  def valid_name(name)
+    !name.nil? &&
+      name.is_a?(String) &&
+      name.size.positive?
+  end
+
+  def valid_email(email)
+    rgx = /\A[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?\Z/
+
+    !email.nil? &&
+      rgx.match?(email)
+  end
+
+  def consistent(dna)
+    !dna[:wants_dna] || (valid_name(dna[:name]) && valid_email(dna[:email]))
+  end
+
+  def validate_dna
+    is_valid = !dna_values.nil? &&
+               dna_values.is_a?(Hash) &&
+               consistent(dna_values)
+
+    errors.add(:dna_values, 'invalid') unless is_valid
   end
 
   def validate_partner(partner)
-    base_attr = %i[name email bond]
+    return false unless partner.is_a? Hash
 
-    partner.is_a?(Hash) && base_attr.all? do |attr|
-      partner.key?(attr)
-    end && validate_bond(partner[:bond])
+    bond_valid = partner[:bond].size.zero? ||
+                 company_partner_bonds.include?(partner[:bond])
+
+    unity_valid = partner[:unity].size.zero? ||
+                  unities.include?(partner[:unity])
+
+    bond_valid && unity_valid
   end
 
   def validate_partners_values

@@ -12,14 +12,19 @@ RSpec.describe CompanyUpdate, type: :model do
           name: 'Paulo',
           phone: '11 999999999',
           email: 'Foo@bar.com',
-          bond: 'Aluno ou ex-aluno de graduação',
+          bond: 'Docente',
           nusp: '11111111',
-          unity: 'Escola de Comunicação e Artes - ECA'
+          unity: 'Museu Paulista - MP'
         }
       ],
       company_values: [
         { Foo: 'Bar' }
-      ]
+      ],
+      dna_values: {
+        wants_dna: true,
+        name: 'Fulano',
+        email: 'fulano@mail.com'
+      }
     }
   end
 
@@ -66,17 +71,16 @@ RSpec.describe CompanyUpdate, type: :model do
     expect(company_updated).to be_invalid
   end
 
-  it 'is invalid when the partner does not have the basic attributes' do
-    invalid_attr = valid_attr.clone
-    invalid_attr[:partners_values][0].delete(:name)
-    company_updated = described_class.new(invalid_attr)
-    expect(company_updated).to be_invalid
-  end
-
   it 'is invalid if a partner has a invalid bond' do
     invalid_attr = valid_attr.clone
     invalid_attr[:partners_values][0][:bond] = 'Foo'
     company_updated = described_class.new(invalid_attr)
     expect(company_updated).to be_invalid
+  end
+
+  it 'is invalid with inconsistent dna_values' do
+    invalid_attr = valid_attr.clone
+    invalid_attr[:dna_values] = { wants_dna: true }
+    expect(described_class.new(invalid_attr)).to be_invalid
   end
 end
