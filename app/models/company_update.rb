@@ -16,20 +16,16 @@ class CompanyUpdate
                       message: 'must be a valid cnpj' }
   validate :validate_partners_values, :validate_company_values, :validate_values_presence
 
-  def validate_bond(bond)
-    ['Aluno ou ex-aluno de graduação',
-     'Aluno ou ex-aluno de pós-graduação (mestrado ou doutorado)',
-     'Aluno ou ex-aluno de pós-graduação do IPEN (Instituto de Pesquisas Energéticas e Nucleares)',
-     'Docente', 'Docente aposentado / Licenciado', 'Pós-doutorando', 'Pesquisador',
-     'Empresa incubada ou graduada em incubadora associada à USP'].include?(bond)
-  end
-
   def validate_partner(partner)
-    base_attr = %i[name email bond]
+    return false unless partner.is_a? Hash
 
-    partner.is_a?(Hash) && base_attr.all? do |attr|
-      partner.key?(attr)
-    end && validate_bond(partner[:bond])
+    bond_valid = partner[:bond].size.zero? ||
+                 company_partner_bonds.include?(partner[:bond])
+
+    unity_valid = partner[:unity].size.zero? ||
+                  unities.include?(partner[:unity])
+
+    bond_valid && unity_valid
   end
 
   def validate_partners_values

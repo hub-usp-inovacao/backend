@@ -12,9 +12,9 @@ RSpec.describe CompanyUpdate, type: :model do
           name: 'Paulo',
           phone: '11 999999999',
           email: 'Foo@bar.com',
-          bond: 'Aluno ou ex-aluno de graduação',
+          bond: 'Docente',
           nusp: '11111111',
-          unity: 'Escola de Comunicação e Artes - ECA'
+          unity: 'Museu Paulista - MP'
         }
       ],
       company_values: [
@@ -62,13 +62,6 @@ RSpec.describe CompanyUpdate, type: :model do
   it "is invalid when the elements in partners_values aren't Hash type" do
     invalid_attr = valid_attr.clone
     invalid_attr[:partners_values] = [123]
-    company_updated = described_class.new(invalid_attr)
-    expect(company_updated).to be_invalid
-  end
-
-  it 'is invalid when the partner does not have the basic attributes' do
-    invalid_attr = valid_attr.clone
-    invalid_attr[:partners_values][0].delete(:name)
     company_updated = described_class.new(invalid_attr)
     expect(company_updated).to be_invalid
   end
