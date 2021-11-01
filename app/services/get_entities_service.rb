@@ -45,7 +45,7 @@ class GetEntitiesService
 
   def self.report
     Report.create({
-                    entity: @@model.name,
+                    entity: @@model.model_name.human.plualize,
                     sheet_id: @@sheet_id,
                     warnings: @@warnings
                   })
