@@ -94,31 +94,47 @@ class CompanyUpdate
     value.nil? ? '' : value
   end
 
+  def self.fetch_attributes_data_from(attributes, from)
+    attributes.map do |attr|
+      value = if from.is_a?(Hash)
+                from[attr]
+              else
+                from.send(attr)
+              end
+      get_value(value)
+    end
+  end
+
+  def self.fetch_partners_data_from(max_partners, attributes, from)
+    result = []
+    partners = get_value(from)
+    (0..max_partners - 1).each do |i|
+      if i < partners.length
+        partner = partners[i]
+        result.concat(fetch_attributes_data_from(attributes, partner))
+      else
+        result.concat([''] * 5)
+      end
+    end
+    result
+  end
+
   def self.to_csv
-    max_partners = 5
+    max_partners = ENV['CSV_MAX_PARTNERS'] || 5
     attributes = csv_columns(max_partners)
     CSV.generate(headers: true) do |csv|
       csv << attributes
 
       all.each do |company|
         row = []
-        row.concat(%w[cnpj name].map { |attr| company.send(attr) })
-        row.concat(attributes[2..29].map { |attr| get_value(company.send('company_values')[attr]) })
-        row.concat(%w[wants_dna name email].map do |attr|
-                     get_value(company.send('dna_values')[attr])
-                   end)
 
-        partners = get_value(company.send('partners_values'))
-        (0..max_partners - 1).each do |i|
-          if i < partners.length
-            partner = partners[i]
-            row.concat(%w[name email bond unity nusp].map do |attr|
-                         get_value(partner[attr])
-                       end)
-          else
-            row.concat([''] * 5)
-          end
-        end
+        row.concat(fetch_attributes_data_from(%w[cnpj name], company))
+        company_attrs = attributes[2..29]
+        row.concat(fetch_attributes_data_from(company_attrs, company.send('company_values')))
+        row.concat(fetch_attributes_data_from(%w[wants_dna name email], company.send('dna_values')))
+        row.concat(fetch_partners_data_from(max_partners, %w[name email bond unity nusp],
+                                            company.send('partners_values')))
+
         csv << row
       end
     end
