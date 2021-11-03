@@ -17,9 +17,9 @@ RSpec.describe CompanyUpdate, type: :model do
           unity: 'Museu Paulista - MP'
         }
       ],
-      company_values: [
-        { Foo: 'Bar' }
-      ],
+      company_values: {
+        Foo: 'Bar'
+      },
       dna_values: {
         wants_dna: true,
         name: 'Fulano',
@@ -53,13 +53,6 @@ RSpec.describe CompanyUpdate, type: :model do
   it 'is invalid with invalid cnpj' do
     invalid_attr = valid_attr.clone
     invalid_attr[:cnpj] = '11275297'
-    company_updated = described_class.new(invalid_attr)
-    expect(company_updated).to be_invalid
-  end
-
-  it "is invalid when the elements in company_values aren't Hash type" do
-    invalid_attr = valid_attr.clone
-    invalid_attr[:company_values] = [123]
     company_updated = described_class.new(invalid_attr)
     expect(company_updated).to be_invalid
   end
