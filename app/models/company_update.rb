@@ -10,7 +10,6 @@ class CompanyUpdate
   field :cnpj, type: String
   field :partners_values, type: Array
   field :company_values, type: Hash
-  field :delivered, type: Boolean, default: false
   field :dna_values, type: Hash
 
   validates :name, :cnpj, presence: true
