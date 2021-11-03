@@ -14,6 +14,8 @@ class ApplicationMailer < ActionMailer::Base
 
   def update_companies
     @companies = params[:companies]
+    attachments["updated-companies-#{Time.zone.today}.csv"] =
+      { mime_type: 'text/csv', content: @companies.to_csv }
     mail(subject: 'Hub USP Inovação - Novas empresas solicitaram atualização dos dados')
   end
 end
