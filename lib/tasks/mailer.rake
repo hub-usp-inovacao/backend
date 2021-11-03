@@ -19,6 +19,15 @@ end
 desc 'Reports all updated companies'
 task mail_updates: :environment do
   log('report_updates', 'mailing updated companies!')
-  ApplicationMailer.update_companies.deliver_now
+  new_updates = CompanyUpdate.where(delivered: false)
+
+  if new_updates.length.positive?
+    ApplicationMailer.update_companies.deliver_now
+
+    new_updates.each do |company|
+      company.delivered = true
+      company.save
+    end
+  end
   log('report_updates', 'updated companies mailed!')
 end

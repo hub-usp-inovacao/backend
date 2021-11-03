@@ -11,6 +11,7 @@ class CompanyUpdate
   field :partners_values, type: Array
   field :company_values, type: Hash
   field :dna_values, type: Hash
+  field :delivered, type: Boolean, default: false
 
   validates :name, :cnpj, presence: true
   validates :cnpj,
