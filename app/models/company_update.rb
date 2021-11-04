@@ -84,34 +84,34 @@ class CompanyUpdate
                   'A empresa recebeu investimento?', 'Investimentos',
                   'Valor do investimento próprio (R$)', 'Valor do investimento-anjo (R$)',
                   'Valor do Venture Capital (R$)', 'Valor do Private Equity (R$)',
-                  'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$), Financiamento',
-                  'Deseja a marca DNAUSP?', 'Nome', 'Email']
+                  'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
+                  'Financiamento', 'Deseja a marca DNAUSP?', 'Nome', 'Email']
 
     attributes.concat(['Nome do sócio', 'Email', 'Vínculo', 'Unidade', 'NUSP'] * max_partners)
   end
 
-  def self.get_value(value)
+  def self.sanitize_value(value)
     value.nil? ? '' : value
   end
 
-  def self.fetch_attributes_data_from(attributes, from)
+  def self.get_data_from(attributes, from)
     attributes.map do |attr|
       value = if from.is_a?(Hash)
-                from[attr]
+                from[attr.to_sym]
               else
                 from.send(attr)
               end
-      get_value(value)
+      sanitize_value(value)
     end
   end
 
-  def self.fetch_partners_data_from(max_partners, attributes, from)
+  def self.get_partners_data_from(max_partners, attributes, from)
     result = []
-    partners = get_value(from)
-    (0..max_partners - 1).each do |i|
+    partners = sanitize_value(from)
+    (0...max_partners).each do |i|
       if i < partners.length
         partner = partners[i]
-        result.concat(fetch_attributes_data_from(attributes, partner))
+        result.concat(get_data_from(attributes, partner))
       else
         result.concat([''] * 5)
       end
@@ -128,12 +128,12 @@ class CompanyUpdate
       all.each do |company|
         row = []
 
-        row.concat(fetch_attributes_data_from(%w[cnpj name], company))
+        row.concat(get_data_from(%w[cnpj name], company))
         company_attrs = attributes[2..29]
-        row.concat(fetch_attributes_data_from(company_attrs, company.send('company_values')))
-        row.concat(fetch_attributes_data_from(%w[wants_dna name email], company.send('dna_values')))
-        row.concat(fetch_partners_data_from(max_partners, %w[name email bond unity nusp],
-                                            company.send('partners_values')))
+        row.concat(get_data_from(company_attrs, company.send('company_values')))
+        row.concat(get_data_from(%w[wants_dna name email], company.send('dna_values')))
+        row.concat(get_partners_data_from(max_partners, %w[name email bond unity nusp],
+                                          company.send('partners_values')))
 
         csv << row
       end
