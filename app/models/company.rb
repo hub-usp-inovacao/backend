@@ -263,11 +263,11 @@ class Company
   def self.classify(cnae)
     default = { major: '', minor: '' }
 
-    end_index = cnae.index(/\./)
+    matches = cnae.match(/(\d+)\.+/)
+    code = matches && matches.captures[0]
 
-    return default if end_index.nil? || end_index > 2
+    return default if code.nil? || code.length > 2
 
-    code = cnae[0..end_index - 1]
     major_minor = cnae_code_to_major_minor[code]
 
     return default unless code && major_minor

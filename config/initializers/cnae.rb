@@ -37,7 +37,7 @@ $codeToMajorMinor = {
     major: 'Agricultura, Pecuária, Pesca e Extrativismo',
     minor: 'Indústrias Extrativas'
   },
-  '  10' => {
+  '10' => {
     major: 'Indústria de Transformação',
     minor: 'Alimentos'
   },
