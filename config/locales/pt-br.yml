@@ -6,7 +6,6 @@ pt-br:
     attributes:
       discipline:
         name: Nome
-        corporate_name: Nome corporativo
         unity: Unidade
         nature: Natureza
         level: Nivel
@@ -14,6 +13,7 @@ pt-br:
         category: Categoria
       company:
         name: Nome
+        corporate_name: Nome corporativo
         year: Ano
         services: Serviços
         incubated: Incubado?
@@ -21,6 +21,8 @@ pt-br:
         ecosystems: Ecossistemas
         technologies: Tecnologias
         phones: Telefones
+        partners: Sócios
+        services: Serviços
         companySize: Tamanho da empresa
         description: Descrição
         classification: Classificação
