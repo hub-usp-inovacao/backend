@@ -17,9 +17,9 @@ RSpec.describe 'CompanyUpdates', type: :request do
           unity: 'Escola de Comunicação e Artes - ECA'
         }
       ],
-      company_values: [
-        { Foo: 'Bar' }
-      ]
+      company_values: {
+        Foo: 'Bar'
+      }
     }
   end
 

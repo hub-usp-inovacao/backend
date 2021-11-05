@@ -9,27 +9,8 @@
   </h1>
 
   <p>
-    As seguintes empresas solicitaram alterações nos seus dados:
+    Novas empresas solicitaram alterações nos seus dados.
+    As mudanças foram anexadas na nova versão da planilha que está em anexo.
   </p>
-
-  <% @companies.each do |company| %>
-    <strong>Nome da empresa:</strong> <%= company.name %> <br />
-    <strong>CNPJ:</strong> <%= company.cnpj %> <br />
-    <strong>Sócios:</strong> <br />
-    <% company.partners_values.each_with_index do |partner, i| %>
-      <strong>&emsp;Sócio <%= (i + 1) %>:</strong> <br />
-      &emsp;&emsp;<strong>Nome:</strong> <%= partner[:name] %> <br />
-      &emsp;&emsp;<strong>Email:</strong> <%= partner[:email] %> <br />
-      &emsp;&emsp;<strong>Vínculo:</strong> <%= partner[:bond] %> <br />
-      &emsp;&emsp;<strong>Telefone:</strong> <%= partner[:phone] unless !partner.key?(:phone) %> <br />
-      &emsp;&emsp;<strong>NUSP:</strong> <%= partner[:nusp] unless !partner.key?(:nusp) %> <br />
-      &emsp;&emsp;<strong>Unidade:</strong> <%= partner[:unity] unless !partner.key?(:unity) %> <br />
-    <% end %>
-    <strong>Dados da empresa para atualizar:</strong> <br />
-    <% company.company_values.each do |hash| %>
-      &emsp;<strong><%= "#{hash.keys[0]}:" %></strong> <%= "#{hash[hash.keys[0]]}" %> <br />
-    <% end %>
-    <br />
-  <% end %>
 </body>
 </html>

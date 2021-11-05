@@ -17,15 +17,38 @@ RSpec.describe CompanyUpdate, type: :model do
           unity: 'Museu Paulista - MP'
         }
       ],
-      company_values: [
-        { Foo: 'Bar' }
-      ],
+      company_values: {
+        Foo: 'Bar',
+        'Razão social da empresa': 'Fulano inc.'
+      },
       dna_values: {
         wants_dna: true,
         name: 'Fulano',
         email: 'fulano@mail.com'
       }
     }
+  end
+
+  let(:valid_csv) do
+    <<~MULTILINE
+      CNPJ,Nome,Razão social da empresa,Ano de fundação,CNAE,Emails,Endereço,Bairro,Cidade sede,\
+      Estado,CEP,Breve descrição,Site,Tecnologias,Produtos e serviços,\
+      Objetivos de Desenvolvimento Sustentável,Redes sociais,Número de funcionários contratados como CLT,\
+      Número de colaboradores contratados como Pessoa Jurídica (PJ),Número de estagiários/bolsistas contratados,\
+      A empresa está ou esteve em alguma incubadora ou Parque tecnológico,A empresa recebeu investimento?,\
+      Investimentos,Valor do investimento próprio (R$),Valor do investimento-anjo (R$),\
+      Valor do Venture Capital (R$),Valor do Private Equity (R$),Valor do PIPE-FAPESP (R$),\
+      Valor de outros investimentos (R$),Financiamento,Deseja a marca DNAUSP?,Nome,Email,\
+      Nome do sócio,Email,Vínculo,Unidade,NUSP,Nome do sócio,Email,Vínculo,Unidade,NUSP,\
+      Nome do sócio,Email,Vínculo,Unidade,NUSP,Nome do sócio,Email,Vínculo,Unidade,NUSP,\
+      Nome do sócio,Email,Vínculo,Unidade,NUSP
+      #{valid_attr[:cnpj]},#{valid_attr[:name]},#{valid_attr[:company_values]['Razão social da empresa'.to_sym]},\
+      "","","","","","","","","","","","","","","","","","","","","","","","","","","",\
+      #{valid_attr[:dna_values][:wants_dna]},#{valid_attr[:dna_values][:name]},#{valid_attr[:dna_values][:email]},\
+      #{valid_attr[:partners_values][0][:name]},#{valid_attr[:partners_values][0][:email]},\
+      #{valid_attr[:partners_values][0][:bond]},#{valid_attr[:partners_values][0][:unity]},\
+      #{valid_attr[:partners_values][0][:nusp]},"","","","","","","","","","","","","","","","","","","",""
+    MULTILINE
   end
 
   it 'is valid with valid attributes' do
@@ -57,13 +80,6 @@ RSpec.describe CompanyUpdate, type: :model do
     expect(company_updated).to be_invalid
   end
 
-  it "is invalid when the elements in company_values aren't Hash type" do
-    invalid_attr = valid_attr.clone
-    invalid_attr[:company_values] = [123]
-    company_updated = described_class.new(invalid_attr)
-    expect(company_updated).to be_invalid
-  end
-
   it "is invalid when the elements in partners_values aren't Hash type" do
     invalid_attr = valid_attr.clone
     invalid_attr[:partners_values] = [123]
@@ -82,5 +98,13 @@ RSpec.describe CompanyUpdate, type: :model do
     invalid_attr = valid_attr.clone
     invalid_attr[:dna_values] = { wants_dna: true }
     expect(described_class.new(invalid_attr)).to be_invalid
+  end
+
+  it 'generates a correct csv file' do
+    company_updated = described_class.new(valid_attr)
+    p company_updated.send('cnpj')
+    p company_updated.send('company_values')
+    allow(described_class).to receive(:all).and_return([company_updated])
+    expect(described_class.to_csv).to eql(valid_csv)
   end
 end
