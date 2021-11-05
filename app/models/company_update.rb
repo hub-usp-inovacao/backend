@@ -85,7 +85,7 @@ class CompanyUpdate
                   'Valor do investimento próprio (R$)', 'Valor do investimento-anjo (R$)',
                   'Valor do Venture Capital (R$)', 'Valor do Private Equity (R$)',
                   'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
-                  'Financiamento', 'Deseja a marca DNAUSP?', 'Nome', 'Email']
+                  'Faturamento', 'Deseja a marca DNAUSP?', 'Nome', 'Email']
 
     attributes.concat(['Nome do sócio', 'Email', 'Vínculo', 'Unidade', 'NUSP'] * max_partners)
   end
