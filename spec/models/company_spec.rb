@@ -85,69 +85,68 @@ RSpec.describe Company, type: :model do
     }
   end
 
-  it 'is valid with valid attributes' do
-    company = described_class.new valid_attr
-    expect(company).to be_valid
-  end
-
-  %i[cnpj name year emails description incubated ecosystems services address
-     corporate_name].each do |required|
-    it "is invalid without #{required}" do
-      attrs = valid_attr.except required
-      company = described_class.new attrs
-      expect(company).to be_invalid
+  describe 'Validations' do
+    it 'is valid with valid attributes' do
+      company = described_class.new valid_attr
+      expect(company).to be_valid
     end
-  end
 
-  ['', 'a', 'a' * 101].each do |wrong_sized_name|
-    it 'is invalid with wrong sized name' do
+    %i[cnpj name year emails description incubated ecosystems services address
+       corporate_name].each do |required|
+      it "is invalid without #{required}" do
+        attrs = valid_attr.except required
+        company = described_class.new attrs
+        expect(company).to be_invalid
+      end
+    end
+
+    ['', 'a', 'a' * 101].each do |wrong_sized_name|
+      it 'is invalid with wrong sized name' do
+        attrs = valid_attr
+        attrs[:name] = wrong_sized_name
+        company = described_class.new attrs
+        expect(company).to be_invalid
+      end
+    end
+
+    ['dois mil', '124', '2022'].each do |invalid_year|
+      it 'is invalid with invalid years' do
+        attrs = valid_attr
+        attrs[:year] = invalid_year
+        company = described_class.new attrs
+        expect(company).to be_invalid
+      end
+    end
+
+    %i[url logo].each do |url_like|
+      it "is invalid with invalid #{url_like}" do
+        attrs = valid_attr
+        attrs[url_like] = 'foo bar baz'
+        company = described_class.new attrs
+        expect(company).to be_invalid
+      end
+    end
+
+    it 'is invalid with a wrong classification' do
       attrs = valid_attr
-      attrs[:name] = wrong_sized_name
-      company = described_class.new attrs
-      expect(company).to be_invalid
-    end
-  end
-
-  ['dois mil', '124', '2022'].each do |invalid_year|
-    it 'is invalid with invalid years' do
-      attrs = valid_attr
-      attrs[:year] = invalid_year
-      company = described_class.new attrs
-      expect(company).to be_invalid
-    end
-  end
-
-  %i[url logo].each do |url_like|
-    it "is invalid with invalid #{url_like}" do
-      attrs = valid_attr
-      attrs[url_like] = 'foo bar baz'
-      company = described_class.new attrs
-      expect(company).to be_invalid
-    end
-  end
-
-  [
-    { attr: :companySize, value: ['foo bar baz'] },
-    { attr: :classification, value: { value: '13' } },
-    { attr: :cnpj, value: '123.123.123-12' }
-  ].each do |ctx|
-    it "is invalid with a wrong #{ctx[:attr]}" do
-      attrs = valid_attr
-      attrs[ctx[:attr]] = ctx[:value]
-      company = described_class.new attrs
-      expect(company).to be_invalid
-    end
-  end
-
-  describe 'partners validation' do
-    it 'fails when the list is empty' do
-      attrs = valid_attr.clone
-      attrs[:partners] = []
+      attrs[:classification] = { value: '13' }
       company = described_class.new attrs
       expect(company).to be_invalid
     end
 
-    describe 'partner with wrong attributes' do
+    [
+      { attr: :classification, value: { value: '13' } },
+      { attr: :cnpj, value: '123.123.123-12' }
+    ].each do |ctx|
+      it "is invalid with a wrong #{ctx[:attr]}" do
+        attrs = valid_attr
+        attrs[ctx[:attr]] = ctx[:value]
+        company = described_class.new attrs
+        expect(company).to be_invalid
+      end
+    end
+
+    describe 'partners validation' do
       let :partners_overwrite_attrs do
         attrs = valid_attr.clone
         attrs[:partners] = [{
@@ -162,6 +161,13 @@ RSpec.describe Company, type: :model do
         attrs
       end
 
+      it 'fails when the list is empty' do
+        attrs = valid_attr.clone
+        attrs[:partners] = []
+        company = described_class.new attrs
+        expect(company).to be_invalid
+      end
+
       it 'fails when the only partner has wrong unity' do
         attrs = partners_overwrite_attrs.clone
         attrs[:partners][0][:unity] = 'IME'
@@ -174,6 +180,70 @@ RSpec.describe Company, type: :model do
         attrs[:partners][0][:bond] = 'james'
         company = described_class.new attrs
         expect(company).to be_invalid
+      end
+    end
+  end
+
+  describe 'Creation methods' do
+    [{ employees: 0, expect: ['Não Informado'] },
+     { employees: 5, expect: ['Microempresa'] },
+     { employees: 10, expect: ['Pequena Empresa'] },
+     { employees: 50, expect: ['Média Empresa'] },
+     { employees: 100, expect: ['Grande Empresa'] }].each do |hash|
+      it 'creates a correct company size when this is not an industrial business' do
+        classification = {
+          major: 'Comércio e Serviços',
+          minor: 'Informação e Comunicação'
+        }
+        sizes = described_class.size(hash[:employees], '', classification)
+        expect(sizes).to be_all { |size| hash[:expect].include?(size) }
+      end
+    end
+
+    [{ employees: 0, expect: ['Não Informado'] },
+     { employees: 5, expect: ['Microempresa'] },
+     { employees: 20, expect: ['Pequena Empresa'] },
+     { employees: 100, expect: ['Média Empresa'] },
+     { employees: 500, expect: ['Grande Empresa'] }].each do |hash|
+      it 'creates a correct company size when this is an industrial business' do
+        classification = {
+          major: 'Indústria de Transformação',
+          minor: 'Produtos Diversos'
+        }
+        sizes = described_class.size(hash[:employees], '', classification)
+        expect(sizes).to be_all { |size| hash[:expect].include?(size) }
+      end
+    end
+
+    it 'creates a correct unicorn company size' do
+      classification = valid_attr[:classification]
+      employees = '0'
+      sizes = described_class.size(employees, 'Unicórnio', classification)
+      expect(sizes).to be_all { |size| ['Unicórnio', 'Não Informado'].include?(size) }
+    end
+
+    [{ cnae: '46.00-0-00', expect: {
+      major: 'Comércio e Serviços',
+      minor: 'Comércio por Atacado, exceto Veículos Automotores e Motocicletas'
+    } },
+     { cnae: '01.00-0-00', expect: {
+       major: 'Agricultura, Pecuária, Pesca e Extrativismo',
+       minor: 'Agricultura, Pecuária, Produção Florestal, Pesca e Aquicultura'
+     } }].each do |hash|
+      it 'creates a correct classification' do
+        classification = described_class.classify(hash[:cnae])
+        expect(classification).to include(hash[:expect])
+      end
+    end
+
+    ['', '89.00-0-00', '371.00-0-00'].each do |cnae|
+      it 'creates an empty classification when used an invalid cnae' do
+        expect = {
+          major: '',
+          minor: ''
+        }
+        classification = described_class.classify(cnae)
+        expect(classification).to include(expect)
       end
     end
   end

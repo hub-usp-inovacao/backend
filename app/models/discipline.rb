@@ -19,7 +19,7 @@ class Discipline
   validates :name, :campus, :unity, :description, :category, :nature, :level, presence: true
   validates :name,
             format: { with: /\A(\w|\d){3}\d{4} (-|–) .+\z/,
-                      message: 'deve ser um nome válido Ex: ACH2501' }
+                      message: 'deve ser um nome válido. Ex: ACH2501' }
   validates :url, url: true
   validate :a_valid_level?, :a_valid_nature?, :a_valid_campi?, :a_valid_unity?, :a_valid_category?
 

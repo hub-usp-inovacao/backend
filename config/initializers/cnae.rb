@@ -37,347 +37,347 @@ $codeToMajorMinor = {
     major: 'Agricultura, Pecuária, Pesca e Extrativismo',
     minor: 'Indústrias Extrativas'
   },
-  10 => {
+  '10' => {
     major: 'Indústria de Transformação',
     minor: 'Alimentos'
   },
-  11 => {
+  '11' => {
     major: 'Indústria de Transformação',
     minor: 'Bebidas'
   },
-  12 => {
+  '12' => {
     major: 'Indústria de Transformação',
     minor: 'Produtos do Fumo'
   },
-  13 => {
+  '13' => {
     major: 'Indústria de Transformação',
     minor: 'Produtos Têxteis'
   },
-  14 => {
+  '14' => {
     major: 'Indústria de Transformação',
     minor: 'Vestuário e Acessórios'
   },
-  15 => {
+  '15' => {
     major: 'Indústria de Transformação',
     minor: 'Artefatos de Couro, Artigos para Viagem e Calçados'
   },
-  16 => {
+  '16' => {
     major: 'Indústria de Transformação',
     minor: 'Produtos de Madeira'
   },
-  17 => {
+  '17' => {
     major: 'Indústria de Transformação',
     minor: 'Celulose e Papel'
   },
-  18 => {
+  '18' => {
     major: 'Indústria de Transformação',
     minor: 'Impressão e Reprodução de Gravações'
   },
-  19 => {
+  '19' => {
     major: 'Indústria de Transformação',
     minor: 'Coque, Derivados de Petróleo e de Biocombustíveis'
   },
-  20 => {
+  '20' => {
     major: 'Indústria de Transformação',
     minor: 'Produtos Químicos'
   },
-  21 => {
+  '21' => {
     major: 'Indústria de Transformação',
     minor: 'Produtos Farmaquímicos e Farmacêuticos'
   },
-  22 => {
+  '22' => {
     major: 'Indústria de Transformação',
     minor: 'Produtos de Borracha e de Material Plástico'
   },
-  23 => {
+  '23' => {
     major: 'Indústria de Transformação',
     minor: 'Produtos de Minerais Não-Metálicos'
   },
-  24 => {
+  '24' => {
     major: 'Indústria de Transformação',
     minor: 'Metalurgia'
   },
-  25 => {
+  '25' => {
     major: 'Indústria de Transformação',
     minor: 'Produtos de Metal, exceto Máquinas e Equipamentos'
   },
-  26 => {
+  '26' => {
     major: 'Indústria de Transformação',
     minor: 'Equipamentos de Informática, Produtos Eletrônicos e Ópticos'
   },
-  27 => {
+  '27' => {
     major: 'Indústria de Transformação',
     minor: 'Máquinas, Aparelhos e Materiais Elétricos'
   },
-  28 => {
+  '28' => {
     major: 'Indústria de Transformação',
     minor: 'Máquinas e Equipamentos'
   },
-  29 => {
+  '29' => {
     major: 'Indústria de Transformação',
     minor: 'Automóveis, Reboques e Carrocerias'
   },
-  30 => {
+  '30' => {
     major: 'Indústria de Transformação',
     minor: 'Equipamentos de Transporte, exceto Veículos Automotores'
   },
-  31 => {
+  '31' => {
     major: 'Indústria de Transformação',
     minor: 'Móveis'
   },
-  32 => {
+  '32' => {
     major: 'Indústria de Transformação',
     minor: 'Produtos Diversos'
   },
-  33 => {
+  '33' => {
     major: 'Indústria de Transformação',
     minor: 'Manutenção, Reparação e Instalação de Máquinas e Equipamentos'
   },
-  35 => {
+  '35' => {
     major: 'Infraestrutura e Construção',
     minor: 'Eletricidade e Gás'
   },
-  36 => {
+  '36' => {
     major: 'Infraestrutura e Construção',
     minor: 'Água, Esgoto, Atividades de Gestão de Resíduos e Descontaminação'
   },
-  37 => {
+  '37' => {
     major: 'Infraestrutura e Construção',
     minor: 'Água, Esgoto, Atividades de Gestão de Resíduos e Descontaminação'
   },
-  38 => {
+  '38' => {
     major: 'Infraestrutura e Construção',
     minor: 'Água, Esgoto, Atividades de Gestão de Resíduos e Descontaminação'
   },
-  39 => {
+  '39' => {
     major: 'Infraestrutura e Construção',
     minor: 'Água, Esgoto, Atividades de Gestão de Resíduos e Descontaminação'
   },
-  40 => {
+  '40' => {
     major: 'Infraestrutura e Construção',
     minor: 'Água, Esgoto, Atividades de Gestão de Resíduos e Descontaminação'
   },
-  41 => {
+  '41' => {
     major: 'Infraestrutura e Construção',
     minor: 'Construção'
   },
-  42 => {
+  '42' => {
     major: 'Infraestrutura e Construção',
     minor: 'Construção'
   },
-  43 => {
+  '43' => {
     major: 'Infraestrutura e Construção',
     minor: 'Construção'
   },
-  45 => {
+  '45' => {
     major: 'Comércio e Serviços',
     minor: 'Comércio e Reparação de Veículos Automotores e Motocicletas'
   },
-  46 => {
+  '46' => {
     major: 'Comércio e Serviços',
     minor: 'Comércio por Atacado, exceto Veículos Automotores e Motocicletas'
   },
-  47 => {
+  '47' => {
     major: 'Comércio e Serviços',
     minor: 'Comércio Varejista'
   },
-  48 => {
+  '48' => {
     major: 'Comércio e Serviços',
     minor: 'Comércio Varejista'
   },
-  49 => {
+  '49' => {
     major: 'Comércio e Serviços',
     minor: 'Comércio Varejista'
   },
-  50 => {
+  '50' => {
     major: 'Comércio e Serviços',
     minor: 'Comércio Varejista'
   },
-  51 => {
+  '51' => {
     major: 'Comércio e Serviços',
     minor: 'Comércio Varejista'
   },
-  52 => {
+  '52' => {
     major: 'Comércio e Serviços',
     minor: 'Comércio Varejista'
   },
-  53 => {
+  '53' => {
     major: 'Comércio e Serviços',
     minor: 'Comércio Varejista'
   },
-  54 => {
+  '54' => {
     major: 'Comércio e Serviços',
     minor: 'Comércio Varejista'
   },
-  55 => {
+  '55' => {
     major: 'Comércio e Serviços',
     minor: 'Alojamento e Alimentação'
   },
-  56 => {
+  '56' => {
     major: 'Comércio e Serviços',
     minor: 'Alojamento e Alimentação'
   },
-  57 => {
+  '57' => {
     major: 'Comércio e Serviços',
     minor: 'Alojamento e Alimentação'
   },
-  58 => {
+  '58' => {
     major: 'Comércio e Serviços',
     minor: 'Informação e Comunicação'
   },
-  59 => {
+  '59' => {
     major: 'Comércio e Serviços',
     minor: 'Informação e Comunicação'
   },
-  60 => {
+  '60' => {
     major: 'Comércio e Serviços',
     minor: 'Informação e Comunicação'
   },
-  61 => {
+  '61' => {
     major: 'Comércio e Serviços',
     minor: 'Informação e Comunicação'
   },
-  62 => {
+  '62' => {
     major: 'Comércio e Serviços',
     minor: 'Informação e Comunicação'
   },
-  63 => {
+  '63' => {
     major: 'Comércio e Serviços',
     minor: 'Informação e Comunicação'
   },
-  64 => {
+  '64' => {
     major: 'Comércio e Serviços',
     minor: 'Atividades Financeiras, de Seguros e Serviços Relacionados'
   },
-  65 => {
+  '65' => {
     major: 'Comércio e Serviços',
     minor: 'Atividades Financeiras, de Seguros e Serviços Relacionados'
   },
-  66 => {
+  '66' => {
     major: 'Comércio e Serviços',
     minor: 'Atividades Financeiras, de Seguros e Serviços Relacionados'
   },
-  67 => {
+  '67' => {
     major: 'Comércio e Serviços',
     minor: 'Atividades Financeiras, de Seguros e Serviços Relacionados'
   },
-  68 => {
+  '68' => {
     major: 'Comércio e Serviços',
     minor: 'Atividades Imobiliárias'
   },
-  94 => {
+  '94' => {
     major: 'Comércio e Serviços',
     minor: 'Outras Atividades de Serviços'
   },
-  95 => {
+  '95' => {
     major: 'Comércio e Serviços',
     minor: 'Outras Atividades de Serviços'
   },
-  96 => {
+  '96' => {
     major: 'Comércio e Serviços',
     minor: 'Outras Atividades de Serviços'
   },
-  97 => {
+  '97' => {
     major: 'Comércio e Serviços',
     minor: 'Serviços Domésticos'
   },
-  69 => {
+  '69' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Profissionais, Científicas e Técnicas'
   },
-  70 => {
+  '70' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Profissionais, Científicas e Técnicas'
   },
-  71 => {
+  '71' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Profissionais, Científicas e Técnicas'
   },
-  72 => {
+  '72' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Profissionais, Científicas e Técnicas'
   },
-  73 => {
+  '73' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Profissionais, Científicas e Técnicas'
   },
-  74 => {
+  '74' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Profissionais, Científicas e Técnicas'
   },
-  75 => {
+  '75' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Profissionais, Científicas e Técnicas'
   },
-  76 => {
+  '76' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Profissionais, Científicas e Técnicas'
   },
-  77 => {
+  '77' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Administrativas e Serviços Complementares'
   },
-  78 => {
+  '78' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Administrativas e Serviços Complementares'
   },
-  79 => {
+  '79' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Administrativas e Serviços Complementares'
   },
-  80 => {
+  '80' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Administrativas e Serviços Complementares'
   },
-  81 => {
+  '81' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Administrativas e Serviços Complementares'
   },
-  82 => {
+  '82' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Administrativas e Serviços Complementares'
   },
-  83 => {
+  '83' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Atividades Administrativas e Serviços Complementares'
   },
-  84 => {
+  '84' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Administração Pública, Defesa e Seguridade Social'
   },
-  99 => {
+  '99' => {
     major: 'Atividades Profissionais, Científicas e Técnicas',
     minor: 'Organismos Internacionais e outras Instituições Extraterritoriais'
   },
-  85 => {
+  '85' => {
     major: 'Educação, Artes e Esportes',
     minor: 'Educação'
   },
-  90 => {
+  '90' => {
     major: 'Educação, Artes e Esportes',
     minor: 'Artes, Cultura, Esporte e Recreação'
   },
-  91 => {
+  '91' => {
     major: 'Educação, Artes e Esportes',
     minor: 'Artes, Cultura, Esporte e Recreação'
   },
-  92 => {
+  '92' => {
     major: 'Educação, Artes e Esportes',
     minor: 'Artes, Cultura, Esporte e Recreação'
   },
-  93 => {
+  '93' => {
     major: 'Educação, Artes e Esportes',
     minor: 'Artes, Cultura, Esporte e Recreação'
   },
-  86 => {
+  '86' => {
     major: 'Saúde e Serviços Sociais',
     minor: 'Saúde Humana e Serviços Sociais'
   },
-  87 => {
+  '87' => {
     major: 'Saúde e Serviços Sociais',
     minor: 'Saúde Humana e Serviços Sociais'
   },
-  88 => {
+  '88' => {
     major: 'Saúde e Serviços Sociais',
     minor: 'Saúde Humana e Serviços Sociais'
   }

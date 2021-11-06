@@ -44,14 +44,16 @@ class Company
             :corporate_name,
             presence: true
 
-  validates :name, length: { in: 2..100 }, uniqueness: { message: 'name already taken' }
+  validates :name,
+            length: { in: 2..100,
+                      message: 'possui um número errado de caracteres (Mínimo: 2, Máximo: 100)' },
+            uniqueness: { message: 'já cadastrado (Duplicado)' }
   validates :corporate_name, length: { in: 2..100 },
-                             uniqueness: { message: 'corporate_name already taken' }
+                             uniqueness: { message: 'já cadastrado (Duplicado)' }
   validates :url, :logo, url: true
   validates :phones, phones: true
 
-  validate :valid_partners?, :valid_cnpj?, :valid_year?, :valid_company_size?,
-           :valid_classification?, :valid_address?
+  validate :valid_partners?, :valid_cnpj?, :valid_year?, :valid_classification?, :valid_address?
 
   def valid_partner?(partner)
     bond_valid = partner[:bond].size.zero? ||
@@ -64,16 +66,18 @@ class Company
   end
 
   def valid_partners?
+    error_message = 'inválidos. Os sócios possuem um vínculo inválido e/ou unidade inválida'
+
     is_valid = partners.any? { |partner| valid_partner?(partner) }
 
-    errors.add(:partners, 'invalid parteners') unless is_valid
+    errors.add(:partners, error_message) unless is_valid
   end
 
   def valid_cnpj?
     is_valid = !cnpj.nil? &&
                cnpj =~ %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\Z}
 
-    errors.add(:cnpj, 'cnpj malformed, must be dd.ddd.ddd/dddd-dd') unless is_valid
+    errors.add(:cnpj, 'mal formatado. Exemplo: dd.ddd.ddd/dddd-dd') unless is_valid
   end
 
   def valid_address?
@@ -81,7 +85,7 @@ class Company
                address.is_a?(Hash) &&
                address.key?(:city)
 
-    errors.add(:address, 'address requires at least the city') unless is_valid
+    errors.add(:address, 'deve possuir no mínimo a cidade') unless is_valid
   end
 
   def valid_year?
@@ -90,32 +94,19 @@ class Company
     is_valid = year.is_a?(String) &&
                year.match?(/^\d{4}$/) &&
                year.to_i <= Time.zone.now.year
-    errors.add(:year, 'must be a string representing a non-future year') unless is_valid
-  end
-
-  def valid_company_size?
-    is_valid = !companySize.nil? &&
-               companySize.is_a?(Array) &&
-               companySize.all? { |size| company_sizes.include?(size) }
-    errors.add(:companySize, "must be one of #{company_sizes}") unless is_valid
+    errors.add(:year, 'não deve ser um ano futuro') unless is_valid
   end
 
   def valid_classification?
-    return if classification.nil?
-
     c = classification
-
-    is_valid = c.is_a?(Hash) &&
-               c.key?(:major) &&
-               c.key?(:minor) &&
-               cnae_majors.include?(c[:major]) &&
+    is_valid = cnae_majors.include?(c[:major]) &&
                cnae_major_to_minors[c[:major]].include?(c[:minor])
 
-    errors.add(:classification, 'invalid major and/or minor') unless is_valid
+    errors.add(:classification, 'inválida devido a inválido cnae') unless is_valid
   end
 
   def self.create_from(row)
-    classification = classify(row)
+    classification = classify(row[5])
 
     new_company = Company.new(
       {
@@ -124,21 +115,21 @@ class Company
         year: row[4],
         emails: row[7].split(';'),
         description: { long: row[13] },
-        incubated: incubated?(row),
+        incubated: incubated?(row[18]),
         ecosystems: row[19].split(';'),
         services: row[14].split(';'),
         address: define_address(row),
         phones: format_phone(row[6]),
         url: format_url(row[17]),
         technologies: row[15].split(';'),
-        logo: row[16] == 'N/D' ? nil : create_image_url(row[16]),
+        logo: create_image_url(row[16]),
         classification: classification,
         cnae: row[5],
-        companySize: size(row, classification),
+        companySize: size(row[21], row[20], classification),
         partners: partners(row),
         corporate_name: row[3],
-        collaborators_last_updated_at: last_collaborators(row),
-        investments_last_updated_at: last_investments(row)
+        collaborators_last_updated_at: last_collaborators,
+        investments_last_updated_at: last_investments
       }
     )
 
@@ -147,11 +138,11 @@ class Company
     new_company
   end
 
-  def self.last_collaborators(_row)
+  def self.last_collaborators
     DateTime.now
   end
 
-  def self.last_investments(_row)
+  def self.last_investments
     DateTime.now
   end
 
@@ -178,10 +169,10 @@ class Company
     parsed_partners
   end
 
-  def self.size(row, classification)
-    sizes = row[20] == 'Unicórnio' ? [row[20]] : []
+  def self.size(employees, unicorn, classification)
+    sizes = unicorn == 'Unicórnio' ? [unicorn] : []
 
-    employees = row[21].to_i
+    employees = employees.to_i
 
     return sizes.append('Não Informado') unless employees.positive?
 
@@ -200,7 +191,7 @@ class Company
       case employees
       when 1...10
         sizes.append 'Microempresa'
-      when 0...50
+      when 10...50
         sizes.append 'Pequena Empresa'
       when 50...100
         sizes.append 'Média Empresa'
@@ -241,21 +232,23 @@ class Company
   end
 
   def self.create_image_url(raw)
+    return nil if raw == 'N/D'
+
     "https://drive.google.com/uc?export=view&id=#{raw}"
   end
 
   def self.format_url(raw)
-    return nil if raw.size.zero?
+    return nil if raw == 'N/D'
 
     return "https://#{raw}" if raw[0..3] != 'http'
 
     raw
   end
 
-  def self.incubated?(row)
-    return 'Não' unless /\ASim.+\Z/.match?(row[18])
+  def self.incubated?(incubated)
+    return 'Não' unless /\ASim.+\Z/.match?(incubated)
 
-    row[18]
+    incubated
   end
 
   def self.define_address(row)
@@ -268,12 +261,14 @@ class Company
     }
   end
 
-  def self.classify(row)
+  def self.classify(cnae)
     default = { major: '', minor: '' }
 
-    return default if row.nil? || row[5].size.zero?
+    matches = cnae.match(/(\d+)\.+/)
+    code = matches && matches.captures[0]
 
-    code = row[5][0..1]
+    return default if code.nil? || code.length > 2
+
     major_minor = cnae_code_to_major_minor[code]
 
     return default unless code && major_minor
