@@ -9,14 +9,14 @@ require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'action_view/railtie'
 
-require "i18n/backend/fallbacks"
-I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
+require 'i18n/backend/fallbacks'
+I18n::Backend::Simple.include I18n::Backend::Fallbacks
 
 Bundler.require(*Rails.groups)
 
 module Backend
   class Application < Rails::Application
-    config.i18n.fallbacks = {'pt-br' => 'en'}
+    config.i18n.fallbacks = { 'pt-br' => 'en' }
     config.load_defaults 6.0
 
     config.api_only = true
