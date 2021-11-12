@@ -25,7 +25,10 @@ RSpec.describe CompanyUpdate, type: :model do
         wants_dna: true,
         name: 'Fulano',
         email: 'fulano@mail.com'
-      }
+      },
+      truthful_informations: true,
+      permission: "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades \
+relevantes à empresa"
     }
   end
 
@@ -41,13 +44,14 @@ RSpec.describe CompanyUpdate, type: :model do
       Valor de outros investimentos (R$),Faturamento,Deseja a marca DNAUSP?,Nome,Email,\
       Nome do sócio,Email,Vínculo,Unidade,NUSP,Nome do sócio,Email,Vínculo,Unidade,NUSP,\
       Nome do sócio,Email,Vínculo,Unidade,NUSP,Nome do sócio,Email,Vínculo,Unidade,NUSP,\
-      Nome do sócio,Email,Vínculo,Unidade,NUSP
+      Nome do sócio,Email,Vínculo,Unidade,NUSP,Permissão,Confirmação
       #{valid_attr[:cnpj]},#{valid_attr[:name]},#{valid_attr[:company_values]['Razão social da empresa'.to_sym]},\
       "","","","","","","","","","","","","","","","","","","","","","","","","","","",\
       #{valid_attr[:dna_values][:wants_dna]},#{valid_attr[:dna_values][:name]},#{valid_attr[:dna_values][:email]},\
       #{valid_attr[:partners_values][0][:name]},#{valid_attr[:partners_values][0][:email]},\
       #{valid_attr[:partners_values][0][:bond]},#{valid_attr[:partners_values][0][:unity]},\
-      #{valid_attr[:partners_values][0][:nusp]},"","","","","","","","","","","","","","","","","","","",""
+      #{valid_attr[:partners_values][0][:nusp]},"","","","","","","","","","","","","","","","","","","","",\
+      Permito o envio de e-mails para ser avisado sobre eventos e oportunidades relevantes à empresa,true
     MULTILINE
   end
 
