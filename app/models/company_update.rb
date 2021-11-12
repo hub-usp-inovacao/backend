@@ -15,7 +15,7 @@ class CompanyUpdate
   field :permission, type: String
   field :truthful_informations, type: Boolean
 
-  validates :name, :cnpj, presence: true
+  validates :name, :cnpj, :permission, :truthful_informations, presence: true
   validates :cnpj,
             format: { with: %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\z},
                       message: 'must be a valid cnpj' }
