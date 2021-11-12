@@ -102,8 +102,6 @@ RSpec.describe CompanyUpdate, type: :model do
 
   it 'generates a correct csv file' do
     company_updated = described_class.new(valid_attr)
-    p company_updated.send('cnpj')
-    p company_updated.send('company_values')
     allow(described_class).to receive(:all).and_return([company_updated])
     expect(described_class.to_csv).to eql(valid_csv)
   end
