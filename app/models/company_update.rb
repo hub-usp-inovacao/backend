@@ -152,8 +152,8 @@ para unidades da USP"
         row.concat(get_data_from(%w[wants_dna name email], company.send('dna_values')))
         row.concat(get_partners_data_from(max_partners, %w[name email bond unity nusp],
                                           company.send('partners_values')))
-        row.concat([company.permission])
-        row.concat([company.truthful_informations])
+        row << company.permission
+        row << company.truthful_informations
 
         csv << row
       end
