@@ -12,12 +12,29 @@ class CompanyUpdate
   field :company_values, type: Hash
   field :dna_values, type: Hash
   field :delivered, type: Boolean, default: false
+  field :permission, type: Array
+  field :truthful_informations, type: Boolean
 
-  validates :name, :cnpj, presence: true
+  validates :name, :cnpj, :permission, :truthful_informations, presence: true
   validates :cnpj,
             format: { with: %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\z},
                       message: 'must be a valid cnpj' }
-  validate :validate_partners_values, :validate_values_presence, :validate_dna
+  validate :validate_partners_values, :validate_values_presence, :validate_dna, :validate_permission
+
+  def validate_permission
+    valids = [
+      'Permito a divulgação das informações públicas na plataforma Hub USPInovação',
+      "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades relevantes \
+à empresa",
+      "Permito a divulgação das informações públicas na plataforma Hub USPInovação e também \
+para unidades da USP"
+    ]
+
+    is_valid = !permission.nil? &&
+               permission.all? { |p| valids.include? p }
+
+    errors.add(:permission, :invalid) unless is_valid
+  end
 
   def valid_name(name)
     !name.nil? &&
@@ -88,6 +105,7 @@ class CompanyUpdate
                   'Faturamento', 'Deseja a marca DNAUSP?', 'Nome', 'Email']
 
     attributes.concat(['Nome do sócio', 'Email', 'Vínculo', 'Unidade', 'NUSP'] * max_partners)
+    attributes.concat(%w[Permissão Confirmação])
   end
 
   def self.sanitize_value(value)
@@ -134,6 +152,8 @@ class CompanyUpdate
         row.concat(get_data_from(%w[wants_dna name email], company.send('dna_values')))
         row.concat(get_partners_data_from(max_partners, %w[name email bond unity nusp],
                                           company.send('partners_values')))
+        row << company.permission.join(';')
+        row << company.truthful_informations
 
         csv << row
       end

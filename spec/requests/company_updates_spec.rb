@@ -32,7 +32,12 @@ RSpec.describe 'CompanyUpdates', type: :request do
         wants_dna: true,
         name: 'Paulo',
         email: 'paulo@example.com'
-      }
+      },
+      truthful_informations: true,
+      permission: [
+        "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades \
+relevantes à empresa"
+      ]
     }
   end
 
