@@ -27,8 +27,10 @@ RSpec.describe CompanyUpdate, type: :model do
         email: 'fulano@mail.com'
       },
       truthful_informations: true,
-      permission: "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades \
+      permission: [
+        "Permito o envio de e-mails para ser avisado sobre eventos e oportunidades \
 relevantes à empresa"
+      ]
     }
   end
 

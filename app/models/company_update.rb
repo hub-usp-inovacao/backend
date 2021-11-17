@@ -12,7 +12,7 @@ class CompanyUpdate
   field :company_values, type: Hash
   field :dna_values, type: Hash
   field :delivered, type: Boolean, default: false
-  field :permission, type: String
+  field :permission, type: Array
   field :truthful_informations, type: Boolean
 
   validates :name, :cnpj, :permission, :truthful_informations, presence: true
@@ -31,7 +31,7 @@ para unidades da USP"
     ]
 
     is_valid = !permission.nil? &&
-               valids.include?(permission)
+               permission.all? { |p| valids.include? p }
 
     errors.add(:permission, :invalid) unless is_valid
   end
@@ -152,7 +152,7 @@ para unidades da USP"
         row.concat(get_data_from(%w[wants_dna name email], company.send('dna_values')))
         row.concat(get_partners_data_from(max_partners, %w[name email bond unity nusp],
                                           company.send('partners_values')))
-        row << company.permission
+        row << company.permission.join(';')
         row << company.truthful_informations
 
         csv << row
