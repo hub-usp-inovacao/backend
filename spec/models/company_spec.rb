@@ -81,7 +81,10 @@ RSpec.describe Company, type: :model do
           phone: ''
         }
       ],
-      corporate_name: 'razão social'
+      corporate_name: 'razão social',
+      collaborators_last_updated_at: DateTime.now,
+      investments_last_updated_at: DateTime.now,
+      revenues_last_updated_at: DateTime.now
     }
   end
 
