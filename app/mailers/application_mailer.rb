@@ -25,11 +25,17 @@ class ApplicationMailer < ActionMailer::Base
   def conexao
     @entities = params[:entities]
 
-    @personalLabels = ['Nome', 'Email', 'Representa uma']
-    @orgLabels = ['Nome', 'Email', 'CNPJ', 'Os dados são sigilosos?', 'Tamanho da empresa',
-                  'Telefone', 'Endereço', 'Cidade']
-    @demandLabels = ['Descrição', 'Expectativa', 'Perfil de pesquisador desejado',
-                     'Qual é a sua necessidade em relação a esses pesquisadores?']
+    @personal_labels = ['Nome', 'Email', 'Representa uma']
+    @org_labels = ['Nome', 'Email', 'CNPJ', 'Os dados são sigilosos?', 'Tamanho da empresa',
+                   'Telefone', 'Endereço', 'Cidade']
+    @demand_labels = ['Descrição', 'Expectativa', 'Perfil de pesquisador desejado',
+                      'Qual é a sua necessidade em relação a esses pesquisadores?']
+
+    @entities.each do |entity|
+      entity.images.each_with_index do |image, index|
+        attachments["image-#{index}-#{entity.org['name']}.jpeg"] = File.read(image.content.path)
+      end
+    end
 
     mail(subject: subject('Novas demandas foram solicitadas no Conexão USP'))
   end

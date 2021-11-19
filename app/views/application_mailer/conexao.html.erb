@@ -21,13 +21,13 @@
           <li>
             <strong>Dados Pessoais</strong>
             <% %i[name email represent].each_with_index do |attr, i| %>
-              <p><%= "#{@personalLabels[i]}: #{entity.personal[attr]}" %></p>
+              <p><%= "#{@personal_labels[i]}: #{entity.personal[attr]}" %></p>
             <% end %>
           </li>
           <li>
             <strong>Dados da organização</strong>
             <% %i[name email cnpj sensitiveData size phone address city].each_with_index do |attr, i| %>
-              <p><%= "#{@orgLabels[i]}: #{entity.org[attr]}" %></p>
+              <p><%= "#{@org_labels[i]}: #{entity.org[attr]}" %></p>
             <% end %>
           </li>
           <li>
@@ -35,7 +35,7 @@
             <p><%= "Área Primária: #{entity.demand[:cnae][:major]}" %></p>
             <p><%= "Área Secundária: #{entity.demand[:cnae][:minor]}" %></p>
             <% %i[description expectation wantedProfile necessity].each_with_index do |attr, i| %>
-              <p><%= "#{@demandLabels[i]}: #{entity.demand[attr]}" %></p>
+              <p><%= "#{@demand_labels[i]}: #{entity.demand[attr]}" %></p>
             <% end %>
           </li>
         </ul>
