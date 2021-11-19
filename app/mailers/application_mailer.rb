@@ -33,7 +33,7 @@ class ApplicationMailer < ActionMailer::Base
 
     @entities.each do |entity|
       entity.images.each_with_index do |image, index|
-        attachments["image-#{index+1}-#{entity.org['name']}.jpeg"] = File.read(image.content.path)
+        attachments["image-#{index + 1}-#{entity.org['name']}.jpeg"] = File.read(image.content.path)
       end
     end
 
