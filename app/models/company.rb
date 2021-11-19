@@ -30,6 +30,7 @@ class Company
 
   field :collaborators_last_updated_at, type: DateTime
   field :investments_last_updated_at, type: DateTime
+  field :revenues_last_updated_at, type: DateTime
 
   validates :cnpj,
             :name,
@@ -129,7 +130,8 @@ class Company
         partners: partners(row),
         corporate_name: row[3],
         collaborators_last_updated_at: last_collaborators,
-        investments_last_updated_at: last_investments
+        investments_last_updated_at: last_investments,
+        revenues_last_updated_at: last_revenues
       }
     )
 
@@ -143,6 +145,10 @@ class Company
   end
 
   def self.last_investments
+    DateTime.now
+  end
+
+  def self.last_revenues
     DateTime.now
   end
 
