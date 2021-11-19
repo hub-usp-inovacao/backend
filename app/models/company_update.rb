@@ -68,7 +68,7 @@ para unidades da USP"
                  company_partner_bonds.include?(partner[:bond])
 
     unity_valid = partner[:unity].size.zero? ||
-                  unities.include?(partner[:unity])
+                  all_unities.include?(partner[:unity])
 
     bond_valid && unity_valid
   end

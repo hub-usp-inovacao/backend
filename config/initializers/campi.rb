@@ -111,7 +111,7 @@ def campi
   $campi
 end
 
-def unities
+def all_unities
   $campi.inject([]) do |unities, campus|
     unities.concat(campus[:unities])
   end
