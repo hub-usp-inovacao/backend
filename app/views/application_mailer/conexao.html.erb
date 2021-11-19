@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <h1>
+    Hub USP Inovação: Aviso sobre novas demandas cadastradas no Conexão USP
+  </h1>
+  <%if @entities.count == 1 %>
+    <p>1 nova demanda foi cadastrada:</p>
+  <%else%>
+  <p><%= @entities.count %> novas demandas foram cadastradas:</p>
+  <%end%>
+
+  <ol>
+    <% @entities.each do |entity| %>
+      <li>
+        <p><%= entity.org[:name] %></p>
+        <ul>
+          <li>
+            <strong>Dados Pessoais</strong>
+            <% %i[name email represent].each_with_index do |attr, i| %>
+              <p><%= "#{@personalLabels[i]}: #{entity.personal[attr]}" %></p>
+            <% end %>
+          </li>
+          <li>
+            <strong>Dados da organização</strong>
+            <% %i[name email cnpj sensitiveData size phone address city].each_with_index do |attr, i| %>
+              <p><%= "#{@orgLabels[i]}: #{entity.org[attr]}" %></p>
+            <% end %>
+          </li>
+          <li>
+            <strong>Demanda</strong>
+            <p><%= "Área Primária: #{entity.demand[:cnae][:major]}" %></p>
+            <p><%= "Área Secundária: #{entity.demand[:cnae][:minor]}" %></p>
+            <% %i[description expectation wantedProfile necessity].each_with_index do |attr, i| %>
+              <p><%= "#{@demandLabels[i]}: #{entity.demand[attr]}" %></p>
+            <% end %>
+          </li>
+        </ul>
+      </li>
+    <% end %>
+  </ol>
+</body>
+</html>

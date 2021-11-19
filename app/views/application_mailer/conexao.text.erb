@@ -1,0 +1,25 @@
+Hub USP Inovação: Aviso sobre novas demandas cadastradas no Conexão USP
+
+<%if @entities.count == 1 %>
+  1 nova demanda foi cadastrada:
+<%else%>
+  <%= @entities.count %> novas demandas foram cadastradas:
+<%end%>
+
+<% @entities.each do |entity| %>
+  *<%= entity.org[:name] %>
+    *  Dados Pessoais:
+    <% %i[name email represent].each_with_index do |attr, i| %>
+      - <%= "#{@personalLabels[i]}: #{entity.personal[attr]}" %>
+    <% end %>
+    * Dados da organização:
+    <% %i[name email cnpj sensitiveData size phone address city].each_with_index do |attr, i| %>
+      - <%= "#{@orgLabels[i]}: #{entity.org[attr]}" %>
+    <% end %>
+    * Demanda:
+      - <%= "Área Primária: #{entity.demand[:cnae][:major]}" %>
+      - <%= "Área Secundária: #{entity.demand[:cnae][:minor]}" %>
+    <% %i[description expectation wantedProfile necessity].each_with_index do |attr, i| %>
+      - <%= "#{@demandLabels[i]}: #{entity.demand[attr]}" %>
+    <% end %>
+<% end %>
