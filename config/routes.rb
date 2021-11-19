@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   get '/patents', to: 'patent#index'
   patch '/companies', to: 'company_updates#create'
   post '/conexao', to: 'conexoes#create'
+  post '/conexao/image', to: 'conexoes#create_image'
 end

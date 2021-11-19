@@ -11,6 +11,7 @@ gem 'rails', '~> 6.0.3', '>= 6.0.3.4'
 gem 'puma', '~> 4.1'
 
 gem 'mongoid', '~> 7.0.5'
+gem 'mongoid-paperclip'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'

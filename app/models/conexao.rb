@@ -2,11 +2,14 @@
 
 class Conexao
   include Mongoid::Document
+  field :requestId, type: String
   field :personal, type: Hash
   field :org, type: Hash
   field :demand, type: Hash
 
-  validates :personal, :org, :demand, presence: true
+  embeds_many :images
+
+  validates :personal, :org, :demand, :requestId, presence: true
   validate :validate_personal, :validate_org, :validate_demand
 
   def validate_personal

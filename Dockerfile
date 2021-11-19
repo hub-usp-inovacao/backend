@@ -11,7 +11,7 @@ ENV PORT=3000 \
 WORKDIR ${APP_PATH}
 
 RUN apk add --update \
-    build-base git bash && \
+    build-base git bash shared-mime-info && \
     gem install rails
 
 COPY Gemfile Gemfile.lock ./
