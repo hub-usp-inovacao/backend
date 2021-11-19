@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Conexao, type: :model do
   let(:valid_attr) do
     {
+      requestId: 'request-id',
       personal: {
         name: 'Neymar',
         email: 'ney10@hotmail.com',

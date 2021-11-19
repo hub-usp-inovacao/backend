@@ -23,4 +23,7 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
+# Ignore images created
+public/system
+
 .env
