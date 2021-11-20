@@ -15,7 +15,7 @@ class ResearchGroup
   validates :site, url: true
 
   def self.get_categories(raw)
-    return nil unless raw.responds_to?(:split)
+    return nil unless raw.respond_to?(:split)
 
     raw.split(';')
   end
@@ -37,7 +37,7 @@ class ResearchGroup
       }
     )
 
-    raise StandardError unless group.is_valid?
+    raise StandardError unless group.valid?
 
     group
   end
