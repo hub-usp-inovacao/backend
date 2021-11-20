@@ -10,7 +10,10 @@ RSpec.describe Skill, type: :model do
       unities: ['Faculdade de Saúde Pública - FSP'],
       keywords: %w[foo bar baz],
       lattes: 'http://lattes.cnpq.br/3689433102442300',
-      photo: 'https://drive.google.com/uc?export=view&id=1cmsUahKZ6fMsat4P9QFWyOM9T9CWA-cw'
+      photo: 'https://drive.google.com/uc?export=view&id=1cmsUahKZ6fMsat4P9QFWyOM9T9CWA-cw',
+      skills: ['matlab'],
+      services: ['programação linear'],
+      equipments: ['computador']
     }
   end
 

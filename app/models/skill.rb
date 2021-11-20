@@ -9,6 +9,9 @@ class Skill
   field :keywords, type: Array
   field :lattes, type: String
   field :photo, type: String
+  field :skills, type: Array
+  field :services, type: Array
+  field :equipments, type: Array
 
   embeds_many :research_groups
 
@@ -40,7 +43,10 @@ class Skill
         unities: unities(row[5]),
         keywords: kws(row[28]),
         lattes: row[29],
-        photo: photo_url(row[30])
+        photo: photo_url(row[30]),
+        skills: get_skills(row[23]),
+        services: get_services(row[24]),
+        equipments: get_equipments(row[25])
       }
     )
 
@@ -58,13 +64,31 @@ class Skill
     skill
   end
 
-  def photo_url(id)
+  def self.get_skills(raw)
+    return [] if raw.eql? 'N/D'
+
+    raw.split(';')
+  end
+
+  def self.get_services(raw)
+    return [] if raw.eql? 'N/D'
+
+    raw.split(';')
+  end
+
+  def self.get_equipments(raw)
+    return [] if raw.eql? 'N/D'
+
+    raw.split(';')
+  end
+
+  def self.photo_url(id)
     return nil if id.elq?('N/D')
 
     "https://drive.google.com/uc?export=view&id=#{id}"
   end
 
-  def kws(raw)
+  def self.kws(raw)
     raw.split(';')
   end
 
