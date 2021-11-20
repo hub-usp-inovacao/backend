@@ -83,7 +83,7 @@ class Skill
   end
 
   def self.photo_url(id)
-    return nil if id.elq?('N/D')
+    return nil if id.eql?('N/D')
 
     "https://drive.google.com/uc?export=view&id=#{id}"
   end
