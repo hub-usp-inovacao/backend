@@ -94,7 +94,7 @@ RSpec.describe Company, type: :model do
       expect(company).to be_valid
     end
 
-    %i[cnpj name year emails description incubated ecosystems services address
+    %i[cnpj name year description incubated ecosystems services address
        corporate_name].each do |required|
       it "is invalid without #{required}" do
         attrs = valid_attr.except required

@@ -35,7 +35,6 @@ class Company
   validates :cnpj,
             :name,
             :year,
-            :emails,
             :description,
             :incubated,
             :ecosystems,
