@@ -103,6 +103,16 @@ RSpec.describe Company, type: :model do
       end
     end
 
+    it 'is invalid with a malformed cnpj' do
+      valid_attr[:cnpj] = '123.123'
+      expect(described_class.new(valid_attr)).to be_invalid
+    end
+
+    it 'is valid with a foreign indicator cnpj' do
+      valid_attr[:cnpj] = 'Exterior9'
+      expect(described_class.new(valid_attr)).to be_valid
+    end
+
     ['', 'a', 'a' * 101].each do |wrong_sized_name|
       it 'is invalid with wrong sized name' do
         attrs = valid_attr
