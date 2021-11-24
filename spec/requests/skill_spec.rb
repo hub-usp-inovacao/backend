@@ -6,7 +6,7 @@ RSpec.describe 'Skills', type: :request do
   let(:skill) do
     [
       '',
-      '',
+      'Docente',
       'Fulano Professor',
       'fulano@mail.com',
       '',
@@ -41,13 +41,14 @@ RSpec.describe 'Skills', type: :request do
       '',
       '',
       '',
-      '',
+      'N/D',
       ''
     ]
   end
 
   def skill_keys
-    %w[_id name email unities keywords lattes photo skills services equipments research_groups]
+    %w[_id name email unities keywords lattes photo skills services equipments research_groups
+       phones limit_date bond]
   end
 
   before do

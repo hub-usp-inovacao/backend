@@ -12,12 +12,35 @@ class Skill
   field :skills, type: Array
   field :services, type: Array
   field :equipments, type: Array
+  field :phones, type: Array
+  field :limit_date, type: DateTime
+  field :bond, type: String
 
   embeds_many :research_groups
 
   validates :name, :email, :lattes, presence: true
+  validates :name, uniqueness: true
   validates :lattes, :photo, url: true
-  validate :valid_unities?, :valid_keywords?
+  validates :phones, phones: true
+  validate :valid_unities?, :valid_keywords?, :valid_bond?
+
+  def valid_bond?
+    valids = [
+      'Aluno de Doutorado',
+      'Docente',
+      'Docente Sênior',
+      'Funcionário',
+      'PART (Programa de Atração e Retenção de Talentos)',
+      'Pesquisador (Pós-doutorando)',
+      'Professor Contratado'
+    ]
+
+    is_valid = !bond.nil? &&
+               bond.is_a?(String) &&
+               valids.include?(bond)
+
+    errors.add(:bond, :invalid) unless is_valid
+  end
 
   def valid_unities?
     is_valid = !unities.nil? &&
@@ -44,9 +67,12 @@ class Skill
         keywords: kws(row[28]),
         lattes: row[29],
         photo: photo_url(row[30]),
-        skills: get_skills(row[23]),
-        services: get_services(row[24]),
-        equipments: get_equipments(row[25])
+        skills: split_unless_nd(row[23]),
+        services: split_unless_nd(row[24]),
+        equipments: split_unless_nd(row[25]),
+        phones: split_unless_nd(row[31]),
+        limit_date: limit_date(row[36]),
+        bond: row[1]
       }
     )
 
@@ -64,19 +90,14 @@ class Skill
     skill
   end
 
-  def self.get_skills(raw)
-    return [] if raw.eql? 'N/D'
+  def self.limit_date(raw)
+    return nil if raw.eql? 'N/D'
 
-    raw.split(';')
+    dd, mm, yyyy = raw.split('/')
+    Date.new yyyy, mm, dd
   end
 
-  def self.get_services(raw)
-    return [] if raw.eql? 'N/D'
-
-    raw.split(';')
-  end
-
-  def self.get_equipments(raw)
+  def self.split_unless_nd(raw)
     return [] if raw.eql? 'N/D'
 
     raw.split(';')

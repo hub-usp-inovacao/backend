@@ -13,7 +13,10 @@ RSpec.describe Skill, type: :model do
       photo: 'https://drive.google.com/uc?export=view&id=1cmsUahKZ6fMsat4P9QFWyOM9T9CWA-cw',
       skills: ['matlab'],
       services: ['programação linear'],
-      equipments: ['computador']
+      equipments: ['computador'],
+      phones: ['(11) 3167-8977'],
+      limit_date: Date.tomorrow,
+      bond: 'Docente'
     }
   end
 
@@ -48,5 +51,24 @@ RSpec.describe Skill, type: :model do
     attr[:photo] = nil
     skill = described_class.new attr
     expect(skill).to be_valid
+  end
+
+  it 'is valid with empty array' do
+    valid_attr[:phones] = []
+    skill = described_class.new valid_attr
+    expect(skill).to be_valid
+  end
+
+  it 'is invalid with unknown bond' do
+    valid_attr[:bond] = 'whatever'
+    skill = described_class.new valid_attr
+    expect(skill).to be_invalid
+  end
+
+  it 'blocks duplicated names' do
+    described_class.create valid_attr
+    skill = described_class.new valid_attr
+    expect(skill).to be_invalid
+    described_class.delete_all
   end
 end
