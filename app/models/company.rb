@@ -54,7 +54,7 @@ class Company
   validates :url, :logo, url: true
   validates :phones, phones: true
 
-  validate :valid_partners?, :valid_cnpj?, :valid_year?, :valid_classification?, :valid_address?
+  validate :valid_cnpj?, :valid_year?, :valid_classification?, :valid_address?
 
   def valid_partner?(partner)
     bond_valid = partner[:bond].size.zero? ||

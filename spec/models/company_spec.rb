@@ -164,25 +164,25 @@ RSpec.describe Company, type: :model do
         attrs
       end
 
-      it 'fails when the list is empty' do
+      it 'does not fail when the list is empty' do
         attrs = valid_attr.clone
         attrs[:partners] = []
         company = described_class.new attrs
-        expect(company).to be_invalid
+        expect(company).to be_valid
       end
 
-      it 'fails when the only partner has wrong unity' do
+      it 'does not fail when the only partner has wrong unity' do
         attrs = partners_overwrite_attrs.clone
         attrs[:partners][0][:unity] = 'IME'
         company = described_class.new attrs
-        expect(company).to be_invalid
+        expect(company).to be_valid
       end
 
-      it 'fails when the only partner has wrong bond' do
+      it 'does not fail when the only partner has wrong bond' do
         attrs = partners_overwrite_attrs.clone
         attrs[:partners][0][:bond] = 'james'
         company = described_class.new attrs
-        expect(company).to be_invalid
+        expect(company).to be_valid
       end
     end
   end
