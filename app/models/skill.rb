@@ -76,13 +76,13 @@ class Skill
       }
     )
 
-    gr1 = ResearchGroup.create_first_from row
+    gr1 = ResearchGroup.new_first_from row
     skill.research_groups << gr1 unless gr1.nil?
 
-    gr2 = ResearchGroup.create_second_from row
+    gr2 = ResearchGroup.new_second_from row
     skill.research_groups << gr2 unless gr2.nil?
 
-    gr3 = ResearchGroup.create_third_from row
+    gr3 = ResearchGroup.new_third_from row
     skill.research_groups << gr3 unless gr3.nil?
 
     raise StandardError, skill.errors.full_messages unless skill.save

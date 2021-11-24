@@ -24,7 +24,7 @@ class ResearchGroup
     raw.eql?('N/D') ? nil : raw
   end
 
-  def self.create_from(row)
+  def self.new_from(row)
     return nil if row.eql?(['N/D'] * 5)
 
     group = ResearchGroup.new(
@@ -42,15 +42,15 @@ class ResearchGroup
     group
   end
 
-  def self.create_first_from(row)
-    create_from row[8..12]
+  def self.new_first_from(row)
+    new_from row[8..12]
   end
 
-  def self.create_second_from(row)
-    create_from row[13..17]
+  def self.new_second_from(row)
+    new_from row[13..17]
   end
 
-  def self.create_third_from(row)
-    create_from row[18..22]
+  def self.new_third_from(row)
+    new_from row[18..22]
   end
 end

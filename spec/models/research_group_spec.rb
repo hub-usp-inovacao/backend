@@ -39,15 +39,15 @@ RSpec.describe ResearchGroup, type: :model do
     expect(group).to be_valid
   end
 
-  describe 'create_from' do
+  describe 'new_from' do
     it 'throws when arguments are invalid' do
       args = [nil, nil, nil, nil, nil]
-      expect { described_class.create_from args }.to raise_error(StandardError)
+      expect { described_class.new_from args }.to raise_error(StandardError)
     end
 
     it 'does not throw when arguments are N/D' do
       args = ['N/D'] * 5
-      expect { described_class.create_from args }.not_to raise_error
+      expect { described_class.new_from args }.not_to raise_error
     end
   end
 end
