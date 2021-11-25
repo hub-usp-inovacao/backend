@@ -47,6 +47,9 @@ prod:
 stop_prod:
 	$(DC) -f $(PRODFILE) $(STOP_SUBCMD)
 
+attach_prod:
+	$(DC) -f $(PRODFILE) $(ATTACH_SUBCMD)
+
 fetch_prod:
 	docker-compose -f prod-compose.yaml run --rm web rake fetch:no_report
 
