@@ -113,6 +113,11 @@ RSpec.describe Company, type: :model do
       expect(described_class.new(valid_attr)).to be_valid
     end
 
+    it 'is valid with an empty phone list' do
+      valid_attr[:phones] = []
+      expect(described_class.new(valid_attr)).to be_valid
+    end
+
     ['', 'a', 'a' * 101].each do |wrong_sized_name|
       it 'is invalid with wrong sized name' do
         attrs = valid_attr
