@@ -94,13 +94,23 @@ RSpec.describe Company, type: :model do
       expect(company).to be_valid
     end
 
-    %i[cnpj name year emails description incubated ecosystems services address
+    %i[cnpj name year description incubated ecosystems services address
        corporate_name].each do |required|
       it "is invalid without #{required}" do
         attrs = valid_attr.except required
         company = described_class.new attrs
         expect(company).to be_invalid
       end
+    end
+
+    it 'is invalid with a malformed cnpj' do
+      valid_attr[:cnpj] = '123.123'
+      expect(described_class.new(valid_attr)).to be_invalid
+    end
+
+    it 'is valid with a foreign indicator cnpj' do
+      valid_attr[:cnpj] = 'Exterior9'
+      expect(described_class.new(valid_attr)).to be_valid
     end
 
     ['', 'a', 'a' * 101].each do |wrong_sized_name|
@@ -164,25 +174,25 @@ RSpec.describe Company, type: :model do
         attrs
       end
 
-      it 'fails when the list is empty' do
+      it 'does not fail when the list is empty' do
         attrs = valid_attr.clone
         attrs[:partners] = []
         company = described_class.new attrs
-        expect(company).to be_invalid
+        expect(company).to be_valid
       end
 
-      it 'fails when the only partner has wrong unity' do
+      it 'does not fail when the only partner has wrong unity' do
         attrs = partners_overwrite_attrs.clone
         attrs[:partners][0][:unity] = 'IME'
         company = described_class.new attrs
-        expect(company).to be_invalid
+        expect(company).to be_valid
       end
 
-      it 'fails when the only partner has wrong bond' do
+      it 'does not fail when the only partner has wrong bond' do
         attrs = partners_overwrite_attrs.clone
         attrs[:partners][0][:bond] = 'james'
         company = described_class.new attrs
-        expect(company).to be_invalid
+        expect(company).to be_valid
       end
     end
   end
