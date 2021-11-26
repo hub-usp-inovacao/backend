@@ -86,20 +86,6 @@ relevantes à empresa"
     expect(company_updated).to be_invalid
   end
 
-  it "is invalid when the elements in partners_values aren't Hash type" do
-    invalid_attr = valid_attr.clone
-    invalid_attr[:partners_values] = [123]
-    company_updated = described_class.new(invalid_attr)
-    expect(company_updated).to be_invalid
-  end
-
-  it 'is invalid if a partner has a invalid bond' do
-    invalid_attr = valid_attr.clone
-    invalid_attr[:partners_values][0][:bond] = 'Foo'
-    company_updated = described_class.new(invalid_attr)
-    expect(company_updated).to be_invalid
-  end
-
   it 'is invalid with inconsistent dna_values' do
     invalid_attr = valid_attr.clone
     invalid_attr[:dna_values] = { wants_dna: true }
@@ -110,5 +96,27 @@ relevantes à empresa"
     company_updated = described_class.new(valid_attr)
     allow(described_class).to receive(:all).and_return([company_updated])
     expect(described_class.to_csv).to eql(valid_csv)
+  end
+
+  context 'with different partner_values' do
+    it "is invalid when the elements aren't Hash type" do
+      valid_attr[:partners_values] = [123]
+      expect(described_class.new(valid_attr)).to be_invalid
+    end
+
+    it 'is invalid when hash contains unexpected attributes' do
+      valid_attr[:partners_values][0][:foo] = 'bar'
+      expect(described_class.new(valid_attr)).to be_invalid
+    end
+
+    it 'is valid if a partner has unknown bond' do
+      valid_attr[:partners_values][0][:bond] = 'Foo'
+      expect(described_class.new(valid_attr)).to be_valid
+    end
+
+    it 'is valid if a partner has an unknown unity' do
+      valid_attr[:partners_values][0][:unity] = 'Foo'
+      expect(described_class.new(valid_attr)).to be_valid
+    end
   end
 end
