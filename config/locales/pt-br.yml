@@ -3,6 +3,7 @@ pt-br:
     models:
       discipline: Disciplina
       company: Empresa
+      patent: Patente
     attributes:
       discipline:
         name: Nome
@@ -27,6 +28,14 @@ pt-br:
         description: Descrição
         classification: Classificação
         address: Endereço
+      patent:
+        name: Nome
+        owners: Depositantes
+        inventors: Inventores
+        classification: Classificação
+        countries_with_protection: Países com Proteção
+        summary: Resumo
+        photo: Foto
   errors:
     messages:
       model_invalid: "A validação falhou: %{errors}"
