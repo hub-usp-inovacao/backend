@@ -65,7 +65,7 @@ para unidades da USP"
 
     errors.add(:dna_values, ': Dados em formato inválido') unless is_valid
 
-    consistent(dna_values)
+    consistent(dna_values) unless dna_values.nil?
   end
 
   def validate_partner(partner)

@@ -4,10 +4,13 @@ class CompanyUpdatesController < ApplicationController
   def create
     ActionController::Parameters.permit_all_parameters = true
     data = create_params
-    @comp_update = CompanyUpdate.create!(data)
-    render json: { company_update: @comp_update }
-  rescue StandardError => e
-    render json: { error: e }, status: :bad_request
+    @comp_update = CompanyUpdate.new(data)
+    if @comp_update.valid?
+      @comp_update.save
+      render json: { company_update: @comp_update }
+    else
+      render json: { error: @comp_update.errors.full_messages }, status: :bad_request
+    end
   end
 
   private
