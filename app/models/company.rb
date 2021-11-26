@@ -122,7 +122,7 @@ class Company
   end
 
   def self.timestamp(raw)
-    return 'N/D' unless raw.size.positive?
+    return 'N/D' if raw.nil? || raw.size.eql?(0)
 
     d, m, y = raw.split('/').map(&:to_i)
     DateTime.new y, m, d
