@@ -37,6 +37,7 @@ class ApplicationMailer < ActionMailer::Base
       end
     end
 
-    mail(to: ENV['email_conexao_username'], subject: subject('Novas demandas foram solicitadas no Conexão USP'))
+    mail(to: ENV['email_conexao_username'],
+         subject: subject('Novas demandas foram solicitadas no Conexão USP'))
   end
 end
