@@ -190,6 +190,8 @@ class Company
   end
 
   def self.format_phone(raw)
+    return [] if raw.eql? 'N/D'
+
     raw.split(';').map do |phone|
       numbers = phone.gsub(/\D/, '')
       case numbers.size
