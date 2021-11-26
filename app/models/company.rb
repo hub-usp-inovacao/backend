@@ -59,7 +59,7 @@ class Company
     is_valid = !cnpj.nil? &&
                cnpj =~ %r{\A(\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}|Exterior\d*)\Z}
 
-    errors.add(:cnpj, 'mal formatado. Exemplo: dd.ddd.ddd/dddd-dd') unless is_valid
+    errors.add(:cnpj, 'mal formatado. Exemplo: dd.ddd.ddd/dddd-dd ou Exterior12') unless is_valid
   end
 
   def valid_address?
