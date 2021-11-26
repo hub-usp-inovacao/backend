@@ -110,9 +110,9 @@ class Company
         companySize: size(row[21], row[20], classification),
         partners: partners(row),
         corporate_name: row[3],
-        collaborators_last_updated_at: last_collaborators,
-        investments_last_updated_at: last_investments,
-        revenues_last_updated_at: last_revenues
+        collaborators_last_updated_at: timestamp(row[85]),
+        investments_last_updated_at: timestamp(row[87]),
+        revenues_last_updated_at: timestamp(row[86])
       }
     )
 
@@ -121,16 +121,11 @@ class Company
     new_company
   end
 
-  def self.last_collaborators
-    DateTime.now
-  end
+  def self.timestamp(raw)
+    return 'N/D' unless raw.size.positive?
 
-  def self.last_investments
-    DateTime.now
-  end
-
-  def self.last_revenues
-    DateTime.now
+    d, m, y = raw.split('/').map(&:to_i)
+    DateTime.new y, m, d
   end
 
   def self.partner(subrow)
