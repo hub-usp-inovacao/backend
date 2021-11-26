@@ -21,38 +21,45 @@ class Patent
   def valid_status?
     is_valid = ['Concedida', 'Em análise', 'Domínio Público'].include?(status)
 
-    errors.add(:status, 'inválido. Possíveis status: Concedida, Em análise, Domínio Público') unless is_valid
+    error_message = 'inválido. Possíveis status: Concedida, Em análise, Domínio Público'
+    errors.add(:status, error_message) unless is_valid
   end
 
   def cip_well_formatted(cip)
-    return true if cip =~ /^[A-H] - .+$/
+    return true if /^[A-H] - .+$/.match?(cip)
+
     errors.add(:classification, 'possui CIP mal formatado. Exemplo: G - Física')
     false
   end
 
   def subarea_well_formatted(subarea)
-    return true if subarea =~ /^[A-H][0-9]{2} - .+$/
+    return true if /^[A-H][0-9]{2} - .+$/.match?(subarea)
+
     errors.add(:classification, 'possui sub-áreas mal formatadas. Exemplo: G01 - Medição')
     false
   end
 
   def valid_cip_and_subarea?(hash)
-    hash.keys.sort.eql?(%i[cip subarea]) &&
-      cip_well_formatted(hash[:cip]) &&
-      subarea_well_formatted(hash[:subarea])
+    is_valid = hash.keys.sort.eql?(%i[cip subarea])
+    errors.add(:classification, 'está mal formatada') unless is_valid
+
+    return unless is_valid
+
+    cip_well_formatted(hash[:cip])
+    subarea_well_formatted(hash[:subarea])
   end
 
   def valid_classification?
     clsf = classification
     is_valid = !clsf.nil? &&
                clsf.is_a?(Hash) &&
-               clsf.key?(:primary) &&
-               valid_cip_and_subarea?(clsf[:primary])
+               clsf.key?(:primary)
 
-    if is_valid && clsf.key?(:secondary)
-      secondary_reqs = valid_cip_and_subarea?(clsf[:secondary])
-      is_valid &&= secondary_reqs
-    end
+    errors.add(:classification, 'está mal formatada') unless is_valid
+
+    valid_cip_and_subarea?(clsf[:primary]) if is_valid
+
+    valid_cip_and_subarea?(clsf[:secondary]) if is_valid && clsf.key?(:secondary)
   end
 
   def valid_ipcs?
@@ -93,6 +100,7 @@ class Patent
 
   def self.create_url(raw)
     return nil if raw == 'N/D'
+
     raw
   end
 
