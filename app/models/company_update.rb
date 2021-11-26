@@ -38,18 +38,18 @@ para unidades da USP"
 
   def valid_name(name)
     return true if !name.nil? &&
-      name.is_a?(String) &&
-      name.size.positive?
+                   name.is_a?(String) &&
+                   name.size.positive?
 
-      errors.add(:dna_values, ': nome inválido')
-      false
+    errors.add(:dna_values, ': nome inválido')
+    false
   end
 
   def valid_email(email)
     rgx = /\A[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?\Z/
 
     return true if !email.nil? &&
-      rgx.match?(email)
+                   rgx.match?(email)
 
     errors.add(:dna_values, ': email inválido')
     false
@@ -62,7 +62,6 @@ para unidades da USP"
   def validate_dna
     is_valid = !dna_values.nil? &&
                dna_values.is_a?(Hash)
-               
 
     errors.add(:dna_values, ': Dados em formato inválido') unless is_valid
 
@@ -87,7 +86,10 @@ para unidades da USP"
                  validate_partner(partner)
                end
 
-    errors.add(:partners_values, ': Cada sócio pode possuir somente os seguintes atributos: nome, NUSP, vínculo, email, telefone e unidade') unless is_valid
+    error_message = <<~MULTILINE
+      : Cada sócio pode possuir somente os seguintes atributos: nome, NUSP, vínculo, email, telefone e unidade
+    MULTILINE
+    errors.add(:partners_values, error_message) unless is_valid
   end
 
   def validate_values_presence
