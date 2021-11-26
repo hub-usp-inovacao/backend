@@ -31,8 +31,8 @@ module Backend
       address: 'smtp.gmail.com',
       port: 587,
       domain: 'hubusp.inovacao.usp.br',
-      user_name: ENV['mail_username'],
-      password: ENV['mail_password'],
+      user_name: ENV['email_username'],
+      password: ENV['email_password'],
       authentication: 'plain',
       enable_starttls_auto: true
     }

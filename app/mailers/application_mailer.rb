@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class ApplicationMailer < ActionMailer::Base
-  default from: ENV['mail_username'],
-          to: ENV['mail_username'],
-          cc: ENV['mail_dev_username']
+  default from: ENV['email_username'],
+          to: ENV['email_username'],
+          cc: ENV['email_dev_username']
 
   def subject(text)
     "Hub USP Inovação - #{text}"
@@ -37,6 +37,7 @@ class ApplicationMailer < ActionMailer::Base
       end
     end
 
-    mail(subject: subject('Novas demandas foram solicitadas no Conexão USP'))
+    mail(to: ENV['email_conexao_username'],
+         subject: subject('Novas demandas foram solicitadas no Conexão USP'))
   end
 end
