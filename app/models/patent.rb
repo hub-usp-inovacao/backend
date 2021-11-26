@@ -10,7 +10,7 @@ class Patent
   field :countries_with_protection, type: Array
   field :name, type: String
   field :status, type: String
-  field :sumary, type: String
+  field :summary, type: String
   field :url, type: String
   field :photo, type: String
 
@@ -80,7 +80,7 @@ class Patent
     new_patent = Patent.new(
       {
         name: row[5],
-        sumary: row[10],
+        summary: row[10],
         classification: classify(row),
         ipcs: row[6].split(' | '),
         owners: row[8].split(' | '),

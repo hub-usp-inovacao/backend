@@ -6,7 +6,7 @@ RSpec.describe Patent, type: :model do
   let :valid_attr do
     {
       name: 'Modificação operacional de condutivimetro para medida analógica direta',
-      sumary: 'foo bar baz baz bar baz',
+      summary: 'foo bar baz baz bar baz',
       classification: {
         primary: {
           cip: 'G - Física',
