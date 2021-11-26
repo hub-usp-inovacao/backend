@@ -64,22 +64,22 @@ para unidades da USP"
   def validate_partner(partner)
     return false unless partner.is_a? Hash
 
-    bond_valid = partner[:bond].size.zero? ||
-                 company_partner_bonds.include?(partner[:bond])
+    expected_syms = %i[name nusp bond email phone unity]
+    expected_strs = %w[name nusp bond email phone unity]
 
-    unity_valid = partner[:unity].size.zero? ||
-                  unities.include?(partner[:unity])
-
-    bond_valid && unity_valid
+    partner.keys.sort.eql?(expected_syms.sort) ||
+      partner.keys.sort.eql?(expected_strs.sort)
   end
 
   def validate_partners_values
-    return unless partners_values
-    return if partners_values.is_a?(Array) && partners_values.all? do |partner|
-                validate_partner(partner)
-              end
+    return if partners_values.nil?
 
-    errors.add(:partners_values, :invalid)
+    is_valid = partners_values.is_a?(Array) &&
+               partners_values.all? do |partner|
+                 validate_partner(partner)
+               end
+
+    errors.add(:partners_values, :invalid) unless is_valid
   end
 
   def validate_values_presence
