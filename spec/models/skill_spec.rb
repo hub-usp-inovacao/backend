@@ -17,7 +17,11 @@ RSpec.describe Skill, type: :model do
       phones: ['(11) 3167-8977'],
       limit_date: Date.tomorrow,
       bond: 'Docente',
-      campus: 'São Carlos'
+      campus: 'São Carlos',
+      area: {
+        major: 'Ciências Biológicas',
+        minor: 'Bioquímica'
+      }
     }
   end
 

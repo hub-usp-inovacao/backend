@@ -48,7 +48,7 @@ RSpec.describe 'Skills', type: :request do
 
   def skill_keys
     %w[_id name email unities keywords lattes photo skills services equipments research_groups
-       phones limit_date bond campus]
+       phones limit_date bond campus area]
   end
 
   before do

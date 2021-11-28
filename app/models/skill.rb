@@ -16,6 +16,7 @@ class Skill
   field :limit_date, type: DateTime
   field :bond, type: String
   field :campus, type: String
+  field :area, type: Hash
 
   embeds_many :research_groups
 
@@ -59,6 +60,7 @@ class Skill
     errors.add(:keywords, :invalid) unless is_valid
   end
 
+  # rubocop:disable Metrics/AbcSize
   def self.create_from(row)
     unis = get_unities(row[5])
     skill = new(
@@ -75,7 +77,8 @@ class Skill
         phones: split_unless_nd(row[31]),
         limit_date: limit_date(row[36]),
         bond: row[1],
-        campus: get_campus(row[6], unis)
+        campus: get_campus(row[6], unis),
+        area: get_area(row[26], row[27])
       }
     )
 
@@ -91,6 +94,24 @@ class Skill
     raise StandardError, skill.errors.full_messages unless skill.save
 
     skill
+  end
+  # rubocop:enable Metrics/AbcSize
+
+  def self.get_area(raw_major, raw_minor)
+    raw_majors = raw_major.split(';')
+    minors = raw_minor.split(';')
+
+    if raw_majors.empty?
+      {
+        minor: minors,
+        major: minors.map { |minor| infer_major(minor) }
+      }
+    else
+      {
+        minor: minors,
+        major: raw_majors
+      }
+    end
   end
 
   def self.infer_major(minor)
