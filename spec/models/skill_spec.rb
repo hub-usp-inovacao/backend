@@ -71,4 +71,17 @@ RSpec.describe Skill, type: :model do
     expect(skill).to be_invalid
     described_class.delete_all
   end
+
+  context 'with campus infering' do
+    it 'infers campus from unity' do
+      unity = 'Instituto de Química de São Carlos - IQSC'
+      campus = 'São Carlos'
+      expect(described_class.infer_campus(unity)).to eql(campus)
+    end
+
+    it 'returns nil if no campus is found' do
+      unity = 'foo'
+      expect(described_class.infer_campus(unity)).to be_nil
+    end
+  end
 end

@@ -90,6 +90,14 @@ class Skill
     skill
   end
 
+  def self.infer_campus(unity)
+    campus_entry = campi.detect do |entry|
+      entry[:unities].include? unity
+    end
+
+    campus_entry.nil? ? nil : campus_entry[:name]
+  end
+
   def self.limit_date(raw)
     return nil if raw.eql? 'N/D'
 
