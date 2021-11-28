@@ -15,6 +15,7 @@ class Skill
   field :phones, type: Array
   field :limit_date, type: DateTime
   field :bond, type: String
+  field :campus, type: String
 
   embeds_many :research_groups
 
@@ -59,11 +60,12 @@ class Skill
   end
 
   def self.create_from(row)
+    unis = get_unities(row[5])
     skill = new(
       {
         name: row[2],
         email: row[3],
-        unities: unities(row[5]),
+        unities: unis,
         keywords: kws(row[28]),
         lattes: row[29],
         photo: photo_url(row[30]),
@@ -72,7 +74,8 @@ class Skill
         equipments: split_unless_nd(row[25]),
         phones: split_unless_nd(row[31]),
         limit_date: limit_date(row[36]),
-        bond: row[1]
+        bond: row[1],
+        campus: get_campus(row[6], unis)
       }
     )
 
@@ -88,6 +91,14 @@ class Skill
     raise StandardError, skill.errors.full_messages unless skill.save
 
     skill
+  end
+
+  def self.get_campus(raw, unis)
+    if raw.nil? || raw.eql?('')
+      infer_campus(unis[0])
+    else
+      raw
+    end
   end
 
   def self.infer_campus(unity)
@@ -121,7 +132,7 @@ class Skill
     raw.split(';')
   end
 
-  def self.unities(raw)
-    raw.split(';').select { |unity| unity.size.positive? }
+  def self.get_unities(raw)
+    raw.split(';')
   end
 end

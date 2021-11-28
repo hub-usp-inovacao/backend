@@ -16,7 +16,8 @@ RSpec.describe Skill, type: :model do
       equipments: ['computador'],
       phones: ['(11) 3167-8977'],
       limit_date: Date.tomorrow,
-      bond: 'Docente'
+      bond: 'Docente',
+      campus: 'São Carlos'
     }
   end
 
