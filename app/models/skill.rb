@@ -93,6 +93,14 @@ class Skill
     skill
   end
 
+  def self.infer_major(minor)
+    area = knowledge_areas.detect do |ka|
+      ka[:subareas].include? minor
+    end
+
+    area.nil? ? nil : area[:name]
+  end
+
   def self.get_campus(raw, unis)
     if raw.nil? || raw.eql?('')
       infer_campus(unis[0])

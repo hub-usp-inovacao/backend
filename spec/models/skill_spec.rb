@@ -85,4 +85,17 @@ RSpec.describe Skill, type: :model do
       expect(described_class.infer_campus(unity)).to be_nil
     end
   end
+
+  context 'with area infering' do
+    it 'infers major from minor' do
+      minor = 'Parasitologia'
+      major = 'Ciências Biológicas'
+      expect(described_class.infer_major(minor)).to eql(major)
+    end
+
+    it 'returns nil if no major is found' do
+      minor = 'foo'
+      expect(described_class.infer_major(minor)).to be_nil
+    end
+  end
 end
