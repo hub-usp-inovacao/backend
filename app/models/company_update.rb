@@ -63,9 +63,11 @@ para unidades da USP"
     is_valid = !dna_values.nil? &&
                dna_values.is_a?(Hash)
 
-    errors.add(:dna_values, ': Dados em formato inválido') unless is_valid
-
-    consistent(dna_values) unless dna_values.nil?
+    if is_valid
+      consistent(dna_values)
+    else
+      errors.add(:dna_values, ': Dados em formato inválido')
+    end
   end
 
   def validate_partner(partner)
