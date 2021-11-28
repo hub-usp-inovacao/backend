@@ -93,9 +93,4 @@ RSpec.describe Conexao, type: :model do
       expect(conexao).to be_invalid
     end
   end
-
-  it 'converts to a readable string' do
-    conexao = described_class.new(valid_attr)
-    expect(conexao.to_s).to eql(valid_attr_to_s)
-  end
 end

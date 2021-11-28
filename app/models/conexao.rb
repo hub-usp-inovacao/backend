@@ -6,6 +6,7 @@ class Conexao
   field :personal, type: Hash
   field :org, type: Hash
   field :demand, type: Hash
+  field :delivered, type: Boolean, default: false
 
   embeds_many :images
 
@@ -46,30 +47,5 @@ class Conexao
 
     errors.add(:model, :invalid) unless is_valid
     is_valid
-  end
-
-  def to_s
-    header = ['Dados Pessoais:']
-    labels = ['Nome', 'Email', 'Representa uma']
-    %i[name email represent].each_with_index do |attr, i|
-      header.push("\t#{labels[i]}: #{personal[attr]}")
-    end
-
-    header.push('Dados da organização:')
-    labels = ['Nome', 'Email', 'CNPJ', 'Os dados são sigilosos?', 'Tamanho da empresa',
-              'Telefone', 'Endereço', 'Cidade']
-    %i[name email cnpj sensitiveData size phone address city].each_with_index do |attr, i|
-      header.push("\t#{labels[i]}: #{org[attr]}")
-    end
-
-    header.push('Demanda:')
-    labels = ['Descrição', 'Expectativa', 'Perfil de pesquisador desejado',
-              'Qual é a sua necessidade em relação a esses pesquisadores?']
-    header.push("\tÁrea Primária: #{demand[:cnae][:major]}")
-    header.push("\tÁrea Secundária: #{demand[:cnae][:minor]}")
-    %i[description expectation wantedProfile necessity].each_with_index do |attr, i|
-      header.push("\t#{labels[i]}: #{demand[attr]}")
-    end
-    "#{header.join("\n")}\n\n"
   end
 end

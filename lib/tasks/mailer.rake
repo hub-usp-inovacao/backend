@@ -18,7 +18,7 @@ end
 
 desc 'Reports all updated companies'
 task mail_updates: :environment do
-  log('report_updates', 'mailing updated companies!')
+  log('mail_updates', 'mailing updated companies!')
   new_updates = CompanyUpdate.where(delivered: false)
 
   if new_updates.length.positive?
@@ -29,5 +29,21 @@ task mail_updates: :environment do
       company.save
     end
   end
-  log('report_updates', 'updated companies mailed!')
+  log('mail_updates', 'updated companies mailed!')
+end
+
+desc 'Reports all new entries in the Conexão usp forms'
+task mail_conexao: :environment do
+  log('mail_conexao', 'mailing new Conexão USP entries!')
+  new_entries = Conexao.where(delivered: false)
+
+  if new_entries.length.positive?
+    ApplicationMailer.with(entities: new_entries).conexao.deliver_now
+
+    new_entries.each do |entry|
+      entry.delivered = true
+      entry.save
+    end
+  end
+  log('mail_conexao', 'new Conexão USP entries mailed!')
 end

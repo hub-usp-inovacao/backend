@@ -35,7 +35,6 @@ class Company
   validates :cnpj,
             :name,
             :year,
-            :emails,
             :description,
             :incubated,
             :ecosystems,
@@ -54,31 +53,13 @@ class Company
   validates :url, :logo, url: true
   validates :phones, phones: true
 
-  validate :valid_partners?, :valid_cnpj?, :valid_year?, :valid_classification?, :valid_address?
-
-  def valid_partner?(partner)
-    bond_valid = partner[:bond].size.zero? ||
-                 company_partner_bonds.include?(partner[:bond])
-
-    unity_valid = partner[:unity].size.zero? ||
-                  all_unities.include?(partner[:unity])
-
-    bond_valid && unity_valid
-  end
-
-  def valid_partners?
-    error_message = 'inválidos. Os sócios possuem um vínculo inválido e/ou unidade inválida'
-
-    is_valid = partners.any? { |partner| valid_partner?(partner) }
-
-    errors.add(:partners, error_message) unless is_valid
-  end
+  validate :valid_cnpj?, :valid_year?, :valid_classification?, :valid_address?
 
   def valid_cnpj?
     is_valid = !cnpj.nil? &&
-               cnpj =~ %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\Z}
+               cnpj =~ %r{\A(\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}|Exterior\d*)\Z}
 
-    errors.add(:cnpj, 'mal formatado. Exemplo: dd.ddd.ddd/dddd-dd') unless is_valid
+    errors.add(:cnpj, 'mal formatado. Exemplo: dd.ddd.ddd/dddd-dd ou Exterior12') unless is_valid
   end
 
   def valid_address?
@@ -129,9 +110,9 @@ class Company
         companySize: size(row[21], row[20], classification),
         partners: partners(row),
         corporate_name: row[3],
-        collaborators_last_updated_at: last_collaborators,
-        investments_last_updated_at: last_investments,
-        revenues_last_updated_at: last_revenues
+        collaborators_last_updated_at: timestamp(row[85]),
+        investments_last_updated_at: timestamp(row[87]),
+        revenues_last_updated_at: timestamp(row[86])
       }
     )
 
@@ -140,16 +121,11 @@ class Company
     new_company
   end
 
-  def self.last_collaborators
-    DateTime.now
-  end
+  def self.timestamp(raw)
+    return 'N/D' if raw.nil? || raw.size.eql?(0)
 
-  def self.last_investments
-    DateTime.now
-  end
-
-  def self.last_revenues
-    DateTime.now
+    d, m, y = raw.split('/').map(&:to_i)
+    DateTime.new y, m, d
   end
 
   def self.partner(subrow)
@@ -209,6 +185,8 @@ class Company
   end
 
   def self.format_phone(raw)
+    return [] if raw.eql? 'N/D'
+
     raw.split(';').map do |phone|
       numbers = phone.gsub(/\D/, '')
       case numbers.size

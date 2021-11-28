@@ -3,6 +3,7 @@ pt-br:
     models:
       discipline: Disciplina
       company: Empresa
+      companyUpdate: Atualização de Empresa
     attributes:
       discipline:
         name: Nome
@@ -27,6 +28,12 @@ pt-br:
         description: Descrição
         classification: Classificação
         address: Endereço
+      companyUpdate:
+        name: Nome
+        permission: Permissão
+        partners_values: Sócios
+        company_values: Empresa
+        dna_values: DNA USP
   errors:
     messages:
       model_invalid: "A validação falhou: %{errors}"
