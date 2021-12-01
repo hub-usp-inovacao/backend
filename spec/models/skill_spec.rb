@@ -58,7 +58,7 @@ RSpec.describe Skill, type: :model do
     expect(skill).to be_valid
   end
 
-  it 'is valid with empty array' do
+  it 'is valid with empty array of phones' do
     valid_attr[:phones] = []
     skill = described_class.new valid_attr
     expect(skill).to be_valid
