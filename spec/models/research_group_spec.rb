@@ -39,6 +39,11 @@ RSpec.describe ResearchGroup, type: :model do
     expect(group).to be_valid
   end
 
+  it 'is valid with nil site' do
+    valid_attr[:site] = nil
+    expect(described_class.new(valid_attr)).to be_valid
+  end
+
   describe 'new_from' do
     it 'throws when arguments are invalid' do
       args = [nil, nil, nil, nil, nil]

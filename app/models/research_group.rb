@@ -21,7 +21,11 @@ class ResearchGroup
   end
 
   def self.get_url(raw)
-    raw.eql?('N/D') ? nil : raw
+    return nil if raw.eql?('N/D')
+
+    return raw if raw[0...4].eql? 'http'
+
+    "http://#{raw}"
   end
 
   def self.new_from(row)
@@ -37,7 +41,12 @@ class ResearchGroup
       }
     )
 
-    raise StandardError, group.errors.full_messages unless group.valid?
+    unless group.valid?
+      errors = group.errors.full_messages.map do |msg|
+        "[Grupo ou Laboratório de Pesquisa] - #{msg}"
+      end
+      raise StandardError, errors.to_a
+    end
 
     group
   end
