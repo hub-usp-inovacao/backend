@@ -37,7 +37,7 @@ class ResearchGroup
       }
     )
 
-    raise StandardError unless group.valid?
+    raise StandardError, group.errors.full_messages unless group.valid?
 
     group
   end

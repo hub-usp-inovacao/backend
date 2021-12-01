@@ -77,6 +77,15 @@ RSpec.describe Skill, type: :model do
     described_class.delete_all
   end
 
+  context 'with date parsing' do
+    ['Março de 2023', 'Não', 'Sim'].each do |arg|
+      it "is valid with limit date '#{arg}' due to mongoid" do
+        valid_attr[:limit_date] = arg
+        expect(described_class.new(valid_attr)).to be_valid
+      end
+    end
+  end
+
   context 'with campus infering' do
     it 'infers campus from unity' do
       unity = 'Instituto de Química de São Carlos - IQSC'

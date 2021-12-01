@@ -24,7 +24,13 @@ class Skill
   validates :name, uniqueness: true
   validates :lattes, :photo, url: true
   validates :phones, phones: true
-  validate :valid_unities?, :valid_keywords?, :valid_bond?
+  validate :valid_unities?, :valid_keywords?, :valid_bond?, :valid_limit_date?
+
+  def valid_limit_date?
+    is_valid = limit_date.nil? || limit_date.is_a?(Date)
+
+    errors.add(:limit_date, :invalid) unless is_valid
+  end
 
   def valid_bond?
     valids = [
@@ -75,7 +81,7 @@ class Skill
         services: split_unless_nd(row[24]),
         equipments: split_unless_nd(row[25]),
         phones: split_unless_nd(row[31]),
-        limit_date: limit_date(row[36]),
+        limit_date: row[36],
         bond: row[1],
         campus: get_campus(row[6], unis),
         area: get_area(row[26], row[27])
@@ -83,13 +89,13 @@ class Skill
     )
 
     gr1 = ResearchGroup.new_first_from row
-    skill.research_groups << gr1 unless gr1.nil?
+    skill.research_groups.push(gr1) unless gr1.nil?
 
     gr2 = ResearchGroup.new_second_from row
-    skill.research_groups << gr2 unless gr2.nil?
+    skill.research_groups.push(gr2) unless gr2.nil?
 
     gr3 = ResearchGroup.new_third_from row
-    skill.research_groups << gr3 unless gr3.nil?
+    skill.research_groups.push(gr3) unless gr3.nil?
 
     raise StandardError, skill.errors.full_messages unless skill.save
 
@@ -136,13 +142,6 @@ class Skill
     end
 
     campus_entry.nil? ? nil : campus_entry[:name]
-  end
-
-  def self.limit_date(raw)
-    return nil if raw.eql? 'N/D'
-
-    dd, mm, yyyy = raw.split('/')
-    Date.new yyyy, mm, dd
   end
 
   def self.split_unless_nd(raw)
