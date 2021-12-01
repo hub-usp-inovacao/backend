@@ -77,6 +77,11 @@ RSpec.describe Skill, type: :model do
     described_class.delete_all
   end
 
+  it 'is valid when bond is aluno de doutorado' do
+    valid_attr[:bond] = 'Aluno de doutorado'
+    expect(described_class.new(valid_attr)).to be_valid
+  end
+
   context 'with date parsing' do
     ['Março de 2023', 'Não', 'Sim'].each do |arg|
       it "is valid with limit date '#{arg}' due to mongoid" do

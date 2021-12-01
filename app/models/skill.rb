@@ -34,7 +34,7 @@ class Skill
 
   def valid_bond?
     valids = [
-      'Aluno de Doutorado',
+      'Aluno de doutorado',
       'Docente',
       'Docente Sênior',
       'Funcionário',
@@ -66,7 +66,6 @@ class Skill
     errors.add(:keywords, :invalid) unless is_valid
   end
 
-  # rubocop:disable Metrics/AbcSize
   def self.create_from(row)
     unis = get_unities(row[5])
     skill = new(
@@ -101,7 +100,6 @@ class Skill
 
     skill
   end
-  # rubocop:enable Metrics/AbcSize
 
   def self.get_area(raw_major, raw_minor)
     raw_majors = raw_major.split(';')
