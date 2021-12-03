@@ -9,7 +9,7 @@ class CompanyUpdatesController < ApplicationController
       @comp_update.save
       render json: { company_update: @comp_update }
     else
-      render json: { error: @comp_update.errors.full_messages }, status: :bad_request
+      render json: { errors: @comp_update.errors.full_messages }, status: :bad_request
     end
   end
 
