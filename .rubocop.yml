@@ -1,15 +1,15 @@
-require: 
+require:
   - rubocop-performance
   - rubocop-rails
   - rubocop-rspec
 
 AllCops:
   Exclude:
-    - 'db/**/*'
-    - 'script/**/*'
-    - 'bin/**/*'
-    - 'log/**/*'
-    - 'vendor/bundle/**/*'
+    - "db/**/*"
+    - "script/**/*"
+    - "bin/**/*"
+    - "log/**/*"
+    - "vendor/bundle/**/*"
 
 Metrics/ClassLength:
   Max: 250
@@ -28,7 +28,7 @@ Metrics/BlockLength:
 
 Metrics/MethodLength:
   Max: 30
-  
+
 Lint/AmbiguousBlockAssociation:
   Exclude:
     - spec/**/*
@@ -49,7 +49,7 @@ Metrics/CyclomaticComplexity:
   Max: 12
 
 Metrics/PerceivedComplexity:
-  Max: 9
+  Max: 10
 
 RSpec/ExampleLength:
   Max: 10
