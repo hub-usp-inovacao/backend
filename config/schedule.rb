@@ -15,4 +15,5 @@ end
 
 every :day, at: '08:30 pm' do
   rake 'mail_conexao'
+  rake 'mail_updates'
 end
