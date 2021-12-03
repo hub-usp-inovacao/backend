@@ -19,7 +19,14 @@ class CompanyUpdate
   validates :cnpj,
             format: { with: %r{\A(\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}|Exterior\d*)\z},
                       message: 'mal formatado. Exemplo: dd.ddd.ddd/dddd-dd ou Exterior12' }
-  validate :validate_partners_values, :validate_values_presence, :validate_dna, :validate_permission
+  validate :validate_partners_values, :validate_values_presence, :validate_dna,
+           :validate_permission, :validate_truthful
+
+  def validate_truthful
+    is_valid = truthful_informations
+
+    errors.add(:truthful_informations, :invalid) unless is_valid
+  end
 
   def validate_permission
     valids = [
