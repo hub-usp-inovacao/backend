@@ -29,24 +29,22 @@ class Patent
     return true if /^[A-H] - .+$/.match?(cip)
 
     errors.add(:classification, 'possui CIP mal formatado. Exemplo: G - Física')
-    false
   end
 
   def subarea_well_formatted(subarea)
     return true if /^[A-H][0-9]{2} - .+$/.match?(subarea)
 
     errors.add(:classification, 'possui sub-áreas mal formatadas. Exemplo: G01 - Medição')
-    false
   end
 
   def valid_cip_and_subarea?(hash)
     is_valid = hash.keys.sort.eql?(%i[cip subarea])
-    errors.add(:classification, 'está mal formatada') unless is_valid
-
-    return unless is_valid
-
-    cip_well_formatted(hash[:cip])
-    subarea_well_formatted(hash[:subarea])
+    if is_valid
+      cip_well_formatted(hash[:cip])
+      subarea_well_formatted(hash[:subarea])
+    else
+      errors.add(:classification, 'está mal formatada')
+    end
   end
 
   def valid_classification?
