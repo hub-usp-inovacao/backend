@@ -116,6 +116,12 @@ def campi
   $campi
 end
 
+def campi_names
+  $campi
+    .map { |entry| entry[:name] }
+    .concat(['Toda a USP'])
+end
+
 def all_unities
   $campi.inject([]) do |unities, campus|
     unities.concat(campus[:unities])
