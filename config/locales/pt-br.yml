@@ -4,6 +4,7 @@ pt-br:
       discipline: Disciplina
       company: Empresa
       companyUpdate: Atualização de Empresa
+      skill: Competência
     attributes:
       discipline:
         name: Nome
@@ -34,6 +35,19 @@ pt-br:
         partners_values: Sócios
         company_values: Empresa
         dna_values: DNA USP
+      skill:
+        name: Nome
+        unities: Unidades
+        keywords: Palavras-chave
+        lattes: Currículo Lattes
+        photo: Foto
+        skills: Competências
+        services: Serviços
+        equipments: Equipamentos
+        phones: Telefones
+        limit_date: Data limite
+        bond: Vínculo
+        area: Área
   errors:
     messages:
       model_invalid: "A validação falhou: %{errors}"
