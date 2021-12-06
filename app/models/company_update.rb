@@ -17,9 +17,16 @@ class CompanyUpdate
 
   validates :name, :cnpj, :permission, :truthful_informations, presence: true
   validates :cnpj,
-            format: { with: %r{\A\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\z},
-                      message: 'must be a valid cnpj' }
-  validate :validate_partners_values, :validate_values_presence, :validate_dna, :validate_permission
+            format: { with: %r{\A(\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}|Exterior\d*)\z},
+                      message: 'mal formatado. Exemplo: dd.ddd.ddd/dddd-dd ou Exterior12' }
+  validate :validate_partners_values, :validate_values_presence, :validate_dna,
+           :validate_permission, :validate_truthful
+
+  def validate_truthful
+    is_valid = truthful_informations
+
+    errors.add(:truthful_informations, :invalid) unless is_valid
+  end
 
   def validate_permission
     valids = [
@@ -33,20 +40,26 @@ para unidades da USP"
     is_valid = !permission.nil? &&
                permission.all? { |p| valids.include? p }
 
-    errors.add(:permission, :invalid) unless is_valid
+    errors.add(:permission, 'inválida. Selecione pelo menos uma opção') unless is_valid
   end
 
   def valid_name(name)
-    !name.nil? &&
-      name.is_a?(String) &&
-      name.size.positive?
+    return true if !name.nil? &&
+                   name.is_a?(String) &&
+                   name.size.positive?
+
+    errors.add(:dna_values, ': nome inválido')
+    false
   end
 
   def valid_email(email)
     rgx = /\A[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?\Z/
 
-    !email.nil? &&
-      rgx.match?(email)
+    return true if !email.nil? &&
+                   rgx.match?(email)
+
+    errors.add(:dna_values, ': email inválido')
+    false
   end
 
   def consistent(dna)
@@ -55,10 +68,13 @@ para unidades da USP"
 
   def validate_dna
     is_valid = !dna_values.nil? &&
-               dna_values.is_a?(Hash) &&
-               consistent(dna_values)
+               dna_values.is_a?(Hash)
 
-    errors.add(:dna_values, 'invalid') unless is_valid
+    if is_valid
+      consistent(dna_values)
+    else
+      errors.add(:dna_values, ': Dados em formato inválido')
+    end
   end
 
   def validate_partner(partner)
@@ -79,14 +95,17 @@ para unidades da USP"
                  validate_partner(partner)
                end
 
-    errors.add(:partners_values, :invalid) unless is_valid
+    error_message = <<~MULTILINE
+      : Cada sócio pode possuir somente os seguintes atributos: nome, NUSP, vínculo, email, telefone e unidade
+    MULTILINE
+    errors.add(:partners_values, error_message) unless is_valid
   end
 
   def validate_values_presence
     return if company_values || partners_values
 
-    errors.add(:company_values, 'Company_values e Partners_values não podem ser ambos nulos')
-    errors.add(:partners_values, 'Company_values e Partners_values não podem ser ambos nulos')
+    errors.add(:company_values, ': Os valores da empresa e dos sócios não podem ser ambos nulos')
+    errors.add(:partners_values, ': Os valores da empresa e dos sócios não podem ser ambos nulos')
   end
 
   def self.csv_columns(max_partners)

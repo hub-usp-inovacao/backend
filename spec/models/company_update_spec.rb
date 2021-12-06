@@ -71,6 +71,11 @@ relevantes à empresa"
     end
   end
 
+  it 'is invalid when truthful_informations is false' do
+    valid_attr[:truthful_informations] = false
+    expect(described_class.new(valid_attr)).to be_invalid
+  end
+
   it 'is invalid if both company_values and partners_values do not exist' do
     attr_copy = valid_attr.clone
     attr_copy.delete(:company_values)
