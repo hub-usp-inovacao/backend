@@ -4,6 +4,7 @@ pt-br:
       discipline: Disciplina
       company: Empresa
       companyUpdate: Atualização de Empresa
+      patent: Patente
       skill: Competência
     attributes:
       discipline:
@@ -35,6 +36,14 @@ pt-br:
         partners_values: Sócios
         company_values: Empresa
         dna_values: DNA USP
+      patent:
+        name: Nome
+        owners: Depositantes
+        inventors: Inventores
+        classification: Classificação
+        countries_with_protection: Países com Proteção
+        summary: Resumo
+        photo: Foto
       skill:
         name: Nome
         unities: Unidades

@@ -15,56 +15,49 @@ class Patent
   field :photo, type: String
 
   validates :name, :classification, :ipcs, :owners, :status, presence: true
-  validates :url, url: true
-  validate :valid_classification?, :valid_status?, :valid_ipcs?, :valid_photo?
-
-  def valid_photo?
-    return if photo.nil?
-
-    url = URI.parse(photo)
-
-    is_valid = url.is_a?(URI::HTTP)
-
-    errors.add(:photo, 'invalid photo, must be N/D or a proper URL') unless is_valid
-  end
+  validates :url, :photo, url: true
+  validate :valid_classification?, :valid_status?, :valid_ipcs?
 
   def valid_status?
     is_valid = ['Concedida', 'Em análise', 'Domínio Público'].include?(status)
 
-    errors.add(:status, 'invalid status') unless is_valid
+    error_message = 'inválido. Possíveis status: Concedida, Em análise, Domínio Público'
+    errors.add(:status, error_message) unless is_valid
   end
 
-  def _cip_and_subarea?(hash)
-    hash.keys.sort.eql?(%i[cip subarea])
+  def cip_well_formatted(cip)
+    return true if /^[A-H] - .+$/.match?(cip)
+
+    errors.add(:classification, 'possui CIP mal formatado. Exemplo: G - Física')
   end
 
-  def _cip_well_formatted(cip)
-    cip =~ /^[A-H] - .+$/
+  def subarea_well_formatted(subarea)
+    return true if /^[A-H][0-9]{2} - .+$/.match?(subarea)
+
+    errors.add(:classification, 'possui sub-áreas mal formatadas. Exemplo: G01 - Medição')
   end
 
-  def _subarea_well_formatted(subarea)
-    subarea =~ /^[A-H][0-9]{2} - .+$/
-  end
-
-  def cip_and_subarea?(hash)
-    _cip_and_subarea?(hash) &&
-      _cip_well_formatted(hash[:cip]) &&
-      _subarea_well_formatted(hash[:subarea])
+  def valid_cip_and_subarea?(hash)
+    is_valid = hash.keys.sort.eql?(%i[cip subarea])
+    if is_valid
+      cip_well_formatted(hash[:cip])
+      subarea_well_formatted(hash[:subarea])
+    else
+      errors.add(:classification, 'está mal formatada')
+    end
   end
 
   def valid_classification?
     clsf = classification
     is_valid = !clsf.nil? &&
                clsf.is_a?(Hash) &&
-               clsf.key?(:primary) &&
-               cip_and_subarea?(clsf[:primary])
+               clsf.key?(:primary)
 
-    if is_valid && clsf.key?(:secondary)
-      secondary_reqs = cip_and_subarea?(clsf[:secondary])
-      is_valid &&= secondary_reqs
-    end
+    errors.add(:classification, 'está mal formatada') unless is_valid
 
-    errors.add(:classification, 'invalid classification') unless is_valid
+    valid_cip_and_subarea?(clsf[:primary]) if is_valid
+
+    valid_cip_and_subarea?(clsf[:secondary]) if is_valid && clsf.key?(:secondary)
   end
 
   def valid_ipcs?
@@ -73,7 +66,7 @@ class Patent
                  ipc =~ /^[A-H][0-9]{2}[A-Z][0-9]{6}$/
                end
 
-    errors.add(:ipcs, 'invalid IPCs') unless is_valid
+    errors.add(:ipcs, 'inválido. Exemplo: G01N002706') unless is_valid
   end
 
   def self.create_from(row)
@@ -85,10 +78,10 @@ class Patent
         ipcs: row[6].split(' | '),
         owners: row[8].split(' | '),
         status: row[12],
-        url: row[14],
+        url: create_url(row[14]),
         inventors: row[9].split(' | '),
         countries_with_protection: row[11].split(' | '),
-        photo: url_from_id(row)
+        photo: create_image_url(row[15])
       }
     )
 
@@ -97,14 +90,16 @@ class Patent
     new_patent
   end
 
-  def self.url_from_id(row)
-    id = row[15]
+  def self.create_image_url(raw)
+    return nil if raw == 'N/D'
 
-    if id.eql? 'N/D'
-      nil
-    else
-      "https://drive.google.com/uc?export=view&id=#{id}"
-    end
+    "https://drive.google.com/uc?export=view&id=#{id}"
+  end
+
+  def self.create_url(raw)
+    return nil if raw == 'N/D'
+
+    raw
   end
 
   def self.classify(row)
