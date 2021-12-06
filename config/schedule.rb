@@ -13,7 +13,10 @@ every :monday, at: '09:30 am' do
   rake 'clean_reports'
 end
 
+every :monday, at: '11:00 am' do
+  rake 'mail_updates'
+end
+
 every :day, at: '08:30 pm' do
   rake 'mail_conexao'
-  rake 'mail_updates'
 end
