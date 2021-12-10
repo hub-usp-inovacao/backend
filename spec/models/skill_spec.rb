@@ -20,7 +20,7 @@ RSpec.describe Skill, type: :model do
       campus: 'São Carlos',
       area: {
         major: ['Ciências Biológicas'],
-        minor: ['Bioquímica']
+        minors: ['Bioquímica']
       }
     }
   end
