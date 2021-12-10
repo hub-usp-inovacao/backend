@@ -102,7 +102,7 @@ class Skill
       end
       errors.add(:area, 'inválida. Pelo menos uma das grandes áreas não é válida') unless is_valid
 
-      is_valid &&= area[:major].length.positive? && area[:minor].all? do |entry|
+      is_valid &&= area[:major].length.positive? && area[:minors].all? do |entry|
         valid_minor_area?(area[:major], entry)
       end
       unless is_valid
@@ -155,12 +155,12 @@ class Skill
 
     if majors.empty?
       {
-        minor: minors,
+        minors: minors,
         major: minors.map { |minor| infer_major(minor) }
       }
     else
       {
-        minor: minors,
+        minors: minors,
         major: majors
       }
     end
