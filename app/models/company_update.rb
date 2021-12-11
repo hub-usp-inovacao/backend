@@ -109,8 +109,7 @@ para unidades da USP"
         : Cada sócio pode possuir somente os seguintes atributos: nome, NUSP, vínculo, email,\
         telefone, unidade e cargo
       MULTILINE
-      errors.add(:partners_values, error_message) unless is_valid
-
+      errors.add(:partners_values, error_message)
     end
   end
 
