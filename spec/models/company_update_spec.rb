@@ -23,7 +23,7 @@ RSpec.describe CompanyUpdate, type: :model do
         'Razão social da empresa': 'Fulano inc.',
         'Ano de fundação': 1990,
         'cnae': '85.29-4-15',
-        'Telefone comercial': '',
+        'Telefone comercial': '11 999999999',
         'Emails': ['Foo@foo.com', 'Bar@bar.com'],
         'Endereço': 'Rua do matão, 69',
         'Bairro': 'Butantã',
@@ -33,7 +33,7 @@ RSpec.describe CompanyUpdate, type: :model do
         'Breve descrição': 'faço teste de corno',
         'Produtos e serviços': 'N/D',
         'Tecnologias': 'N/D',
-        'Site': 'fulao.com.br',
+        'Site': 'fulano.com.br',
         'A empresa está ou esteve em alguma incubadora ou Parque tecnológico': 'Não',
         'Em qual incubadora?': '',
         'Redes sociais': 'fb.com/fulano',
@@ -50,9 +50,9 @@ RSpec.describe CompanyUpdate, type: :model do
         'Valor de outros investimentos (R$)': 'R$ 0,00',
         'Faturamento': 'R$ 6.666,66',
         'Objetivos de Desenvolvimento Sustentável': 'Sim',
-        'Data da última atualização de Colaboradores': DateTime.new(2019),
-        'Data da última atualização de Faturamento': DateTime.new(2019),
-        'Data da última atualização de Investimento': DateTime.new(2019)
+        'Data da última atualização de Colaboradores': '2019',
+        'Data da última atualização de Faturamento': '2019',
+        'Data da última atualização de Investimento': '2019'
       },
       dna_values: {
         wants_dna: true,
@@ -83,16 +83,17 @@ RSpec.describe CompanyUpdate, type: :model do
       Data da última atualização de Faturamento,Data da última atualização de Investimento
       #{valid_attr[:timestamp]},#{valid_attr[:cnpj]},#{valid_attr[:name]},\
       #{valid_attr[:company_values]['Razão social da empresa'.to_sym]},\
+      #{valid_attr[:company_values]['Ano de fundação'.to_sym]},\
       #{valid_attr[:company_values][:cnae]},#{valid_attr[:company_values]['Telefone comercial'.to_sym]},\
-      #{valid_attr[:company_values][:Emails].join(';')},#{valid_attr[:company_values][:Endereço]},\
+      #{valid_attr[:company_values][:Emails].join(';')},"#{valid_attr[:company_values][:Endereço]}",\
       #{valid_attr[:company_values][:Bairro]},#{valid_attr[:company_values]['Cidade sede'.to_sym].join(';')},\
-      #{valid_attr[:company_values][:Estado]},#{valid_attr[:company_values][:cep]},\
-      #{valid_attr[:company_values]['Breve descrição'.to_sym]}, #{valid_attr[:company_values]['Produtos e serviços'.to_sym]},\
+      #{valid_attr[:company_values][:Estado]},#{valid_attr[:company_values][:CEP]},\
+      #{valid_attr[:company_values]['Breve descrição'.to_sym]},#{valid_attr[:company_values]['Produtos e serviços'.to_sym]},\
       #{valid_attr[:company_values][:Tecnologias]},"",#{valid_attr[:company_values][:Site]},\
       #{valid_attr[:company_values]['A empresa está ou esteve em alguma incubadora ou Parque tecnológico'.to_sym]},\
-      #{valid_attr[:company_values]['Em qual incubadora?'.to_sym]},"","",#{valid_attr[:company_values]['Redes sociais'.to_sym]},\
-      "Sim",#{valid_attr[:dna_values][:email]},#{valid_attr[:dna_values][:name]},"",\
-      #{valid_attr[:truthful_informations]},#{valid_attr[:permission].join(';')},\
+      "","","",#{valid_attr[:company_values]['Redes sociais'.to_sym]},\
+      Sim,#{valid_attr[:dna_values][:email]},#{valid_attr[:dna_values][:name]},"",\
+      Sim,#{valid_attr[:permission].join(';')},\
       #{valid_attr[:partners_values][0][:name]},#{valid_attr[:partners_values][0][:nusp]},\
       #{valid_attr[:partners_values][0][:bond]},#{valid_attr[:partners_values][0][:unity]},\
       #{valid_attr[:partners_values][0][:role]},#{valid_attr[:partners_values][0][:email]},\
@@ -101,14 +102,14 @@ RSpec.describe CompanyUpdate, type: :model do
       #{valid_attr[:company_values]['Número de funcionários contratados como CLT'.to_sym]},\
       #{valid_attr[:company_values]['Número de colaboradores contratados como Pessoa Jurídica (PJ)'.to_sym]},\
       #{valid_attr[:company_values]['Número de estagiários/bolsistas contratados'.to_sym]},\
-      #{valid_attr[:company_values]['A empresa recebeu investimento?'.to_sym]},#{valid_attr[:company_values][:Investimentos]},\
-      #{valid_attr[:company_values]['Valor do investimento próprio (R$)'.to_sym]},\
-      #{valid_attr[:company_values]['Valor do investimento-anjo (R$)'.to_sym]},\
-      #{valid_attr[:company_values]['Valor do Venture Capital (R$)'.to_sym]},\
-      #{valid_attr[:company_values]['Valor do Private Equity (R$)'.to_sym]},\
-      #{valid_attr[:company_values]['Valor do PIPE-FAPESP (R$)'.to_sym]},\
-      #{valid_attr[:company_values]['Valor de outros investimentos (R$)'.to_sym]},\
-      #{valid_attr[:company_values][:Faturamento]},"","","","","","","","","","","","","","","",\
+      #{valid_attr[:company_values]['A empresa recebeu investimento?'.to_sym]},"",\
+      "#{valid_attr[:company_values]['Valor do investimento próprio (R$)'.to_sym]}",\
+      "#{valid_attr[:company_values]['Valor do investimento-anjo (R$)'.to_sym]}",\
+      "#{valid_attr[:company_values]['Valor do Venture Capital (R$)'.to_sym]}",\
+      "#{valid_attr[:company_values]['Valor do Private Equity (R$)'.to_sym]}",\
+      "#{valid_attr[:company_values]['Valor do PIPE-FAPESP (R$)'.to_sym]}",\
+      "#{valid_attr[:company_values]['Valor de outros investimentos (R$)'.to_sym]}",\
+      "#{valid_attr[:company_values][:Faturamento]}","","","","","","","","","","","","","","","",\
       #{valid_attr[:company_values]['Objetivos de Desenvolvimento Sustentável'.to_sym]},\
       #{valid_attr[:company_values]['Data da última atualização de Colaboradores'.to_sym]},\
       #{valid_attr[:company_values]['Data da última atualização de Faturamento'.to_sym]},\
