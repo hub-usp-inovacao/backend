@@ -151,6 +151,13 @@ RSpec.describe CompanyUpdate, type: :model do
     expect(company_updated).to be_invalid
   end
 
+  it 'is invalid with invalid partner email' do
+    invalid_attr = valid_attr.clone
+    invalid_attr[:partners_values][0][:email] = 'Foo'
+    company_updated = described_class.new(invalid_attr)
+    expect(company_updated).to be_invalid
+  end
+
   it 'is invalid with inconsistent dna_values' do
     invalid_attr = valid_attr.clone
     invalid_attr[:dna_values] = { wants_dna: true }

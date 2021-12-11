@@ -88,6 +88,11 @@ para unidades da USP"
       partner.keys.sort.eql?(expected_strs.sort)
   end
 
+  def validate_email(email, index)
+    is_valid = email.match?(URI::MailTo::EMAIL_REGEXP)
+
+    errors.add(:partner_values, ": #{index+1}º sócio possui um email inválido.") unless is_valid
+  end
   def validate_partners_values
     return if partners_values.nil?
 
@@ -96,11 +101,16 @@ para unidades da USP"
                  validate_partner(partner)
                end
 
-    error_message = <<~MULTILINE
-      : Cada sócio pode possuir somente os seguintes atributos: nome, NUSP, vínculo, email,\
-      telefone, unidade e cargo
-    MULTILINE
-    errors.add(:partners_values, error_message) unless is_valid
+    if (is_valid)
+      partners_values.each_with_index {|partner, i| validate_email(partner[:email], i)}
+    else
+          error_message = <<~MULTILINE
+            : Cada sócio pode possuir somente os seguintes atributos: nome, NUSP, vínculo, email,\
+            telefone, unidade e cargo
+          MULTILINE
+          errors.add(:partners_values, error_message) unless is_valid
+    
+    end
   end
 
   def validate_values_presence
