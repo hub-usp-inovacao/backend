@@ -91,8 +91,9 @@ para unidades da USP"
   def validate_email(email, index)
     is_valid = email.match?(URI::MailTo::EMAIL_REGEXP)
 
-    errors.add(:partner_values, ": #{index+1}º sócio possui um email inválido.") unless is_valid
+    errors.add(:partner_values, ": #{index + 1}º sócio possui um email inválido.") unless is_valid
   end
+
   def validate_partners_values
     return if partners_values.nil?
 
@@ -101,15 +102,15 @@ para unidades da USP"
                  validate_partner(partner)
                end
 
-    if (is_valid)
-      partners_values.each_with_index {|partner, i| validate_email(partner[:email], i)}
+    if is_valid
+      partners_values.each_with_index { |partner, i| validate_email(partner[:email], i) }
     else
-          error_message = <<~MULTILINE
-            : Cada sócio pode possuir somente os seguintes atributos: nome, NUSP, vínculo, email,\
-            telefone, unidade e cargo
-          MULTILINE
-          errors.add(:partners_values, error_message) unless is_valid
-    
+      error_message = <<~MULTILINE
+        : Cada sócio pode possuir somente os seguintes atributos: nome, NUSP, vínculo, email,\
+        telefone, unidade e cargo
+      MULTILINE
+      errors.add(:partners_values, error_message) unless is_valid
+
     end
   end
 
@@ -230,24 +231,24 @@ para unidades da USP"
 
   def self.finantial_values_to_csv(company)
     attributes = ['Número de funcionários contratados como CLT',
-      'Número de colaboradores contratados como Pessoa Jurídica (PJ)',
-      'Número de estagiários/bolsistas contratados',
-      'A empresa recebeu investimento?', 'Investimentos',
-      'Valor do investimento próprio (R$)', 'Valor do investimento-anjo (R$)',
-      'Valor do Venture Capital (R$)', 'Valor do Private Equity (R$)',
-      'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
-      'Faturamento',
-      '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
-      'Objetivos de Desenvolvimento Sustentável',
-      'Data da última atualização de Colaboradores',
-      'Data da última atualização de Faturamento',
-      'Data da última atualização de Investimento']
-    
-      attributes.map do |attr|
-        next '' if attr.eql?('_')
+                  'Número de colaboradores contratados como Pessoa Jurídica (PJ)',
+                  'Número de estagiários/bolsistas contratados',
+                  'A empresa recebeu investimento?', 'Investimentos',
+                  'Valor do investimento próprio (R$)', 'Valor do investimento-anjo (R$)',
+                  'Valor do Venture Capital (R$)', 'Valor do Private Equity (R$)',
+                  'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
+                  'Faturamento',
+                  '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
+                  'Objetivos de Desenvolvimento Sustentável',
+                  'Data da última atualização de Colaboradores',
+                  'Data da última atualização de Faturamento',
+                  'Data da última atualização de Investimento']
 
-        sanitize_value(company[:company_values][attr.to_sym])
-      end
+    attributes.map do |attr|
+      next '' if attr.eql?('_')
+
+      sanitize_value(company[:company_values][attr.to_sym])
+    end
   end
 
   def self.to_csv
