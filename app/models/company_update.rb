@@ -6,6 +6,7 @@ class CompanyUpdate
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
+  field :timestamp, type: DateTime, default: DateTime.now
   field :name, type: String
   field :cnpj, type: String
   field :partners_values, type: Array
@@ -80,8 +81,8 @@ para unidades da USP"
   def validate_partner(partner)
     return false unless partner.is_a? Hash
 
-    expected_syms = %i[name nusp bond email phone unity]
-    expected_strs = %w[name nusp bond email phone unity]
+    expected_syms = %i[name nusp bond email phone unity role]
+    expected_strs = %w[name nusp bond email phone unity role]
 
     partner.keys.sort.eql?(expected_syms.sort) ||
       partner.keys.sort.eql?(expected_strs.sort)
@@ -96,7 +97,8 @@ para unidades da USP"
                end
 
     error_message = <<~MULTILINE
-      : Cada sócio pode possuir somente os seguintes atributos: nome, NUSP, vínculo, email, telefone e unidade
+      : Cada sócio pode possuir somente os seguintes atributos: nome, NUSP, vínculo, email,\
+      telefone, unidade e cargo
     MULTILINE
     errors.add(:partners_values, error_message) unless is_valid
   end
@@ -108,52 +110,134 @@ para unidades da USP"
     errors.add(:partners_values, ': Os valores da empresa e dos sócios não podem ser ambos nulos')
   end
 
-  def self.csv_columns(max_partners)
-    attributes = ['CNPJ', 'Nome', 'Razão social da empresa',
-                  'Ano de fundação', 'CNAE', 'Emails', 'Endereço', 'Bairro',
-                  'Cidade sede', 'Estado', 'CEP', 'Breve descrição', 'Site', 'Tecnologias',
-                  'Produtos e serviços', 'Objetivos de Desenvolvimento Sustentável',
-                  'Redes sociais', 'Número de funcionários contratados como CLT',
-                  'Número de colaboradores contratados como Pessoa Jurídica (PJ)',
-                  'Número de estagiários/bolsistas contratados',
-                  'A empresa está ou esteve em alguma incubadora ou Parque tecnológico',
-                  'A empresa recebeu investimento?', 'Investimentos',
-                  'Valor do investimento próprio (R$)', 'Valor do investimento-anjo (R$)',
-                  'Valor do Venture Capital (R$)', 'Valor do Private Equity (R$)',
-                  'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
-                  'Faturamento', 'Deseja a marca DNAUSP?', 'Nome', 'Email']
-
-    attributes.concat(['Nome do sócio', 'Email', 'Vínculo', 'Unidade', 'NUSP'] * max_partners)
-    attributes.concat(%w[Permissão Confirmação])
-  end
-
   def self.sanitize_value(value)
-    value.nil? ? '' : value
-  end
+    return '' if value.nil?
 
-  def self.get_data_from(attributes, from)
-    attributes.map do |attr|
-      value = if from.is_a?(Hash)
-                from[attr.to_sym]
-              else
-                from.send(attr)
-              end
-      sanitize_value(value)
+    case value
+    when Array
+      value.join(';')
+    when TrueClass
+      'Sim'
+    when FalseClass
+      'Não'
+    else
+      value
     end
   end
 
-  def self.get_partners_data_from(max_partners, attributes, from)
+  def self.csv_columns(max_partners)
+    attributes = ['Carimbo de data/hora', 'CNPJ', 'Nome', 'Razão social da empresa',
+                  'Ano de fundação', 'CNAE', 'Telefone comercial', 'Emails',
+                  'Endereço', 'Bairro', 'Cidade sede', 'Estado', 'CEP', 'Breve descrição',
+                  'Produtos e serviços', 'Tecnologias', '_', 'Site',
+                  'A empresa está ou esteve em alguma incubadora ou Parque tecnológico',
+                  'Em qual incubadora?', '_', '_', 'Redes sociais',
+                  'Deseja a marca DNAUSP?', 'Email', 'Nome', '_', 'Confirmação', 'Permissão']
+
+    attributes.concat(['Nome do sócio', 'NUSP', 'Vínculo', 'Unidade', 'Cargo', 'Email', 'Telefone',
+                       'Quantos sócios a empresa possui?', '_'])
+    attributes.concat(['_', 'Nome do sócio', 'NUSP', 'Vínculo', 'Unidade',
+                       'Email'] * (max_partners - 1))
+
+    attributes.concat(['Número de funcionários contratados como CLT',
+                       'Número de colaboradores contratados como Pessoa Jurídica (PJ)',
+                       'Número de estagiários/bolsistas contratados',
+                       'A empresa recebeu investimento?', 'Investimentos',
+                       'Valor do investimento próprio (R$)', 'Valor do investimento-anjo (R$)',
+                       'Valor do Venture Capital (R$)', 'Valor do Private Equity (R$)',
+                       'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
+                       'Faturamento',
+                       '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
+                       'Objetivos de Desenvolvimento Sustentável',
+                       'Data da última atualização de Colaboradores',
+                       'Data da última atualização de Faturamento',
+                       'Data da última atualização de Investimento'])
+  end
+
+  def self.basic_values_to_csv(company)
     result = []
-    partners = sanitize_value(from)
-    (0...max_partners).each do |i|
+    result.concat(%i[timestamp cnpj name].map do |attr|
+      sanitize_value(company[attr])
+    end)
+
+    attributes = ['Razão social da empresa',
+                  'Ano de fundação', 'cnae', 'Telefone comercial', 'Emails',
+                  'Endereço', 'Bairro', 'Cidade sede', 'Estado', 'CEP', 'Breve descrição',
+                  'Produtos e serviços', 'Tecnologias', '_', 'Site',
+                  'A empresa está ou esteve em alguma incubadora ou Parque tecnológico',
+                  'Em qual incubadora?', '_', '_', 'Redes sociais']
+
+    result.concat(attributes.map do |attr|
+      next '' if attr.eql?('_')
+
+      sanitize_value(company[:company_values][attr.to_sym])
+    end)
+  end
+
+  def self.dna_values_to_csv(company)
+    attributes = %w[wants_dna email name _]
+
+    attributes.map do |attr|
+      next '' if attr.eql?('_')
+
+      sanitize_value(company[:dna_values][attr.to_sym])
+    end
+  end
+
+  def self.verification_values_to_csv(company)
+    %i[truthful_informations permission].map do |attr|
+      sanitize_value(company[attr])
+    end
+  end
+
+  def self.partners_values_to_csv(max_partners, company)
+    partners = company[:partners_values]
+    return ([''] * 6 * max_partners).concat([''] * 3) if partners.nil? || !partners.length.positive?
+
+    result = []
+    first_partner_attributes = %i[name nusp bond unity role email phone]
+    partner_attributes = %i[name nusp bond unity email]
+
+    result.concat(first_partner_attributes.map do |attr|
+      sanitize_value(partners[0][attr])
+    end)
+
+    result.concat([partners.length, ''])
+
+    (1...max_partners).each do |i|
       if i < partners.length
         partner = partners[i]
-        result.concat(get_data_from(attributes, partner))
+        result << ''
+        result.concat(partner_attributes.map do |attr|
+          sanitize_value(partner[attr])
+        end)
       else
-        result.concat([''] * 5)
+        result.concat([''] * 6)
       end
     end
     result
+  end
+
+  def self.finantial_values_to_csv(company)
+    attributes = ['Número de funcionários contratados como CLT',
+      'Número de colaboradores contratados como Pessoa Jurídica (PJ)',
+      'Número de estagiários/bolsistas contratados',
+      'A empresa recebeu investimento?', 'Investimentos',
+      'Valor do investimento próprio (R$)', 'Valor do investimento-anjo (R$)',
+      'Valor do Venture Capital (R$)', 'Valor do Private Equity (R$)',
+      'Valor do PIPE-FAPESP (R$)', 'Valor de outros investimentos (R$)',
+      'Faturamento',
+      '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
+      'Objetivos de Desenvolvimento Sustentável',
+      'Data da última atualização de Colaboradores',
+      'Data da última atualização de Faturamento',
+      'Data da última atualização de Investimento']
+    
+      attributes.map do |attr|
+        next '' if attr.eql?('_')
+
+        sanitize_value(company[:company_values][attr.to_sym])
+      end
   end
 
   def self.to_csv
@@ -165,14 +249,11 @@ para unidades da USP"
       all.each do |company|
         row = []
 
-        row.concat(get_data_from(%w[cnpj name], company))
-        company_attrs = attributes[2..29]
-        row.concat(get_data_from(company_attrs, company.send('company_values')))
-        row.concat(get_data_from(%w[wants_dna name email], company.send('dna_values')))
-        row.concat(get_partners_data_from(max_partners, %w[name email bond unity nusp],
-                                          company.send('partners_values')))
-        row << company.permission.join(';')
-        row << company.truthful_informations
+        row.concat(basic_values_to_csv(company))
+        row.concat(dna_values_to_csv(company))
+        row.concat(verification_values_to_csv(company))
+        row.concat(partners_values_to_csv(max_partners, company))
+        row.concat(finantial_values_to_csv(company))
 
         csv << row
       end
