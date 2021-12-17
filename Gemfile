@@ -33,6 +33,7 @@ gem 'whenever'
 gem 'dotenv-rails'
 
 group :development, :test do
+  gem 'overcommit'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   %w[rspec-core rspec-expectations rspec-mocks rspec-rails rspec-support].each do |lib|
