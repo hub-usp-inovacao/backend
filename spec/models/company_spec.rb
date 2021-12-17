@@ -118,15 +118,6 @@ RSpec.describe Company, type: :model do
       expect(described_class.new(valid_attr)).to be_valid
     end
 
-    ['', 'a', 'a' * 101].each do |wrong_sized_name|
-      it 'is invalid with wrong sized name' do
-        attrs = valid_attr
-        attrs[:name] = wrong_sized_name
-        company = described_class.new attrs
-        expect(company).to be_invalid
-      end
-    end
-
     ['dois mil', '124', '2022'].each do |invalid_year|
       it 'is invalid with invalid years' do
         attrs = valid_attr
