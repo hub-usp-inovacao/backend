@@ -14,7 +14,8 @@ RSpec.describe 'CompanyUpdates', type: :request do
           email: 'Foo@bar.com',
           bond: 'Aluno ou ex-aluno (graduação)',
           nusp: '11111111',
-          unity: 'Escola de Artes, Ciências e Humanidades - EACH'
+          unity: 'Escola de Artes, Ciências e Humanidades - EACH',
+          role: 'CEO'
         },
         {
           name: 'Paulo Outro',
@@ -22,7 +23,8 @@ RSpec.describe 'CompanyUpdates', type: :request do
           email: 'Foo@bar.com',
           bond: '',
           nusp: '',
-          unity: ''
+          unity: '',
+          role: ''
         }
       ],
       company_values: {
