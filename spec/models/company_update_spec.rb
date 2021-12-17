@@ -23,7 +23,7 @@ RSpec.describe CompanyUpdate, type: :model do
         'Razão social da empresa': 'Fulano inc.',
         'Ano de fundação': 1990,
         'cnae': '85.29-4-15',
-        'Telefone comercial': '11 999999999',
+        'Telefone comercial': ['11 999999999'],
         'Emails': ['Foo@foo.com', 'Bar@bar.com'],
         'Endereço': 'Rua do matão, 69',
         'Bairro': 'Butantã',
@@ -35,7 +35,7 @@ RSpec.describe CompanyUpdate, type: :model do
         'Tecnologias': 'N/D',
         'Site': 'fulano.com.br',
         'A empresa está ou esteve em alguma incubadora ou Parque tecnológico': 'Não',
-        'Em qual incubadora?': '',
+        'Em qual incubadora?': [],
         'Redes sociais': 'fb.com/fulano',
         'Número de funcionários contratados como CLT': 2,
         'Número de colaboradores contratados como Pessoa Jurídica (PJ)': 3,
@@ -84,7 +84,7 @@ RSpec.describe CompanyUpdate, type: :model do
       #{valid_attr[:created_at]},#{valid_attr[:cnpj]},#{valid_attr[:name]},\
       #{valid_attr[:company_values]['Razão social da empresa'.to_sym]},\
       #{valid_attr[:company_values]['Ano de fundação'.to_sym]},\
-      #{valid_attr[:company_values][:cnae]},#{valid_attr[:company_values]['Telefone comercial'.to_sym]},\
+      #{valid_attr[:company_values][:cnae]},#{valid_attr[:company_values]['Telefone comercial'.to_sym].join(';')},\
       #{valid_attr[:company_values][:Emails].join(';')},"#{valid_attr[:company_values][:Endereço]}",\
       #{valid_attr[:company_values][:Bairro]},#{valid_attr[:company_values]['Cidade sede'.to_sym].join(';')},\
       #{valid_attr[:company_values][:Estado]},#{valid_attr[:company_values][:CEP]},\
