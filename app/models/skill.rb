@@ -82,13 +82,13 @@ class Skill
   end
 
   def valid_major_area?(major)
-    knowledge_areas.any? { |ka| ka[:name].eql? major }
+    knowledge_areas.any? { |ka| ka[:name].eql? major.strip() }
   end
 
   def valid_minor_area?(majors, minor)
     majors.any? do |major|
-      area = knowledge_areas.detect { |ka| ka[:name].eql? major }
-      area[:subareas].include? minor
+      area = knowledge_areas.find { |ka| ka[:name].eql? major.strip() }
+      area[:subareas].include? minor.strip()
     end
   end
 
@@ -102,12 +102,13 @@ class Skill
       end
       errors.add(:area, 'inválida. Pelo menos uma das grandes áreas não é válida') unless is_valid
 
-      is_valid &&= area[:major].length.positive? && area[:minors].all? do |entry|
-        valid_minor_area?(area[:major], entry)
-      end
-      unless is_valid
-        errors.add(:area,
-                   'inválida. Pelo menos uma das áreas de conhecimento não é válida')
+      if is_valid 
+        is_valid = area[:minors].length.positive? && area[:minors].all? do |entry|
+          valid_minor_area?(area[:major], entry)
+        end
+  
+        error_message = 'inválida. Pelo menos uma das áreas de conhecimento não é válida'
+        errors.add(:area, error_message) unless is_valid
       end
     end
   end
