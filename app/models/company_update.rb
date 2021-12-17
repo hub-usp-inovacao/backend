@@ -6,7 +6,6 @@ class CompanyUpdate
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
-  field :timestamp, type: DateTime, default: DateTime.now
   field :name, type: String
   field :cnpj, type: String
   field :partners_values, type: Array
@@ -166,7 +165,7 @@ para unidades da USP"
 
   def self.basic_values_to_csv(company)
     result = []
-    result.concat(%i[timestamp cnpj name].map do |attr|
+    result.concat(%i[created_at cnpj name].map do |attr|
       sanitize_value(company[attr])
     end)
 

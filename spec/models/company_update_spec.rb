@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe CompanyUpdate, type: :model do
   let(:valid_attr) do
     {
-      timestamp: DateTime.new(2020, 1, 1),
+      created_at: DateTime.new(2020, 1, 1).getutc,
       cnpj: '14.380.200/0001-21',
       name: 'Fulano',
       partners_values: [
@@ -81,7 +81,7 @@ RSpec.describe CompanyUpdate, type: :model do
       Valor do Private Equity (R$),Valor do PIPE-FAPESP (R$),Valor de outros investimentos (R$),Faturamento,\
       _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,Objetivos de Desenvolvimento Sustentável,Data da última atualização de Colaboradores,\
       Data da última atualização de Faturamento,Data da última atualização de Investimento
-      #{valid_attr[:timestamp]},#{valid_attr[:cnpj]},#{valid_attr[:name]},\
+      #{valid_attr[:created_at]},#{valid_attr[:cnpj]},#{valid_attr[:name]},\
       #{valid_attr[:company_values]['Razão social da empresa'.to_sym]},\
       #{valid_attr[:company_values]['Ano de fundação'.to_sym]},\
       #{valid_attr[:company_values][:cnae]},#{valid_attr[:company_values]['Telefone comercial'.to_sym]},\
