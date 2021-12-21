@@ -34,7 +34,8 @@ $campi = [
       'Instituto de Psicologia - IP',
       'Instituto de Química - IQ',
       'Instituto de Relações Internacionais - IRI',
-      'Instituto Oceanográfico - IO'
+      'Instituto Oceanográfico - IO',
+      'Instituto de Pesquisas Energéticas e Nucleares - IPEN'
     ]
   },
   {
@@ -104,6 +105,10 @@ $campi = [
   {
     name: 'USP Leste',
     unities: ['Escola de Artes, Ciências e Humanidades - EACH']
+  },
+  {
+    name: 'On-line',
+    unities: ['Pró-Reitoria de Graduação']
   }
 ]
 

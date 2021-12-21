@@ -44,12 +44,8 @@ class Company
             :corporate_name,
             presence: true
 
-  validates :name,
-            length: { in: 2..100,
-                      message: 'possui um número errado de caracteres (Mínimo: 2, Máximo: 100)' },
+  validates :corporate_name,
             uniqueness: { message: 'já cadastrado (Duplicado)' }
-  validates :corporate_name, length: { in: 2..100 },
-                             uniqueness: { message: 'já cadastrado (Duplicado)' }
   validates :url, :logo, url: true
   validates :phones, phones: true
 

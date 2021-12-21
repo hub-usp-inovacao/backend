@@ -63,7 +63,7 @@ class Patent
   def valid_ipcs?
     is_valid = !ipcs.nil? &&
                ipcs.all? do |ipc|
-                 ipc =~ /^[A-H][0-9]{2}[A-Z][0-9]{6}$/
+                 ipc =~ /^[A-H][0-9]{2}[A-Z][0-9]{6,}$/
                end
 
     errors.add(:ipcs, 'inválido. Exemplo: G01N002706') unless is_valid
