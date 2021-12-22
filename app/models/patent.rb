@@ -90,8 +90,8 @@ class Patent
     new_patent
   end
 
-  def self.create_image_url(raw)
-    return nil if raw == 'N/D'
+  def self.create_image_url(id)
+    return nil if id == 'N/D'
 
     "https://drive.google.com/uc?export=view&id=#{id}"
   end
