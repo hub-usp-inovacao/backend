@@ -68,9 +68,7 @@ class Iniciative
                        contact: possible_nd(row[12])
                      })
 
-    raise StandardError, iniciative.errors.full_messages unless iniciative.valid?
-
-    iniciative.save
+    raise StandardError, iniciative.errors.full_messages unless iniciative.save
 
     iniciative
   end

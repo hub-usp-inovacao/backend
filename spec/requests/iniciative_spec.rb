@@ -10,7 +10,7 @@ RSpec.describe 'Iniciatives', type: :request do
           name: 'AUSPIN',
           classification: 'Agente Institucional',
           localization: 'Toda a USP',
-          unity: nil,
+          unity: 'N/D',
           tags: %w[foo bar baz],
           url: 'http://google.com',
           description: {
