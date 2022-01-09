@@ -57,14 +57,18 @@ class Iniciative
 
   def self.create_from(row)
     iniciative = new({
-                       name: row[1],
                        classification: row[0],
+                       name: row[1],
+                       # row[2]
                        localization: row[3],
                        unity: row[4],
                        tags: get_tags(row[5]),
                        url: row[6],
                        description: get_description(row[7]),
                        email: possible_nd(row[8]),
+                       # row[9]
+                       # row[10]
+                       # row[11]
                        contact: possible_nd(row[12])
                      })
 

@@ -97,7 +97,7 @@ RSpec.describe Iniciative, type: :model do
 
     it 'parses correctly' do
       # rubocop:disable RSpec/AnyInstance
-      allow_any_instance_of(described_class).to receive(:save)
+      allow_any_instance_of(described_class).to receive(:save).and_call_original
       # rubocop:enable RSpec/AnyInstance
       expect { described_class.create_from(valid_sheets) }.not_to raise_error
     end

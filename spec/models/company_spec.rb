@@ -118,7 +118,7 @@ RSpec.describe Company, type: :model do
       expect(described_class.new(valid_attr)).to be_valid
     end
 
-    ['dois mil', '124', '2022'].each do |invalid_year|
+    ['dois mil', '124', '3022'].each do |invalid_year|
       it 'is invalid with invalid years' do
         attrs = valid_attr
         attrs[:year] = invalid_year
