@@ -14,7 +14,6 @@ class Iniciative
   field :contact, type: String
 
   validates :name, :classification, :localization, presence: true
-  validates :name, length: { within: 2..100 }
   validates :url, url: true
 
   validate :valid_classification?, :valid_localization?, :valid_unity?, :valid_description?
@@ -28,7 +27,7 @@ class Iniciative
   end
 
   def valid_unity?
-    is_valid = unity.nil? || all_unities.include?(unity)
+    is_valid = unity.eql?('N/D') || all_unities.include?(unity)
 
     errors.add(:unity) unless is_valid
   end
@@ -61,7 +60,7 @@ class Iniciative
                        name: row[1],
                        classification: row[0],
                        localization: row[3],
-                       unity: possible_nd(row[4]),
+                       unity: row[4],
                        tags: get_tags(row[5]),
                        url: row[6],
                        description: get_description(row[7]),

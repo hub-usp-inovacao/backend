@@ -9,7 +9,7 @@ RSpec.describe Iniciative, type: :model do
         name: 'AUSPIN',
         classification: 'Agente Institucional',
         localization: 'Toda a USP',
-        unity: nil,
+        unity: 'N/D',
         tags: %w[foo bar baz],
         url: 'http://google.com',
         description: {
@@ -31,14 +31,14 @@ RSpec.describe Iniciative, type: :model do
       end
     end
 
-    it 'is invalid with name too short' do
+    it 'is valid with name too short' do
       valid_attr[:name] = 'a'
-      expect(described_class.new(valid_attr)).to be_invalid
+      expect(described_class.new(valid_attr)).to be_valid
     end
 
-    it 'is invalid with name too long' do
+    it 'is valid with name too long' do
       valid_attr[:name] = 'a' * 101
-      expect(described_class.new(valid_attr)).to be_invalid
+      expect(described_class.new(valid_attr)).to be_valid
     end
 
     it 'is invalid with wrong classification' do
@@ -68,7 +68,7 @@ RSpec.describe Iniciative, type: :model do
       end
     end
 
-    %i[email unity contact].each do |attr|
+    %i[email contact].each do |attr|
       it "is is valid with #{attr} nil" do
         valid_attr[attr] = nil
         expect(described_class.new(valid_attr)).to be_valid
@@ -81,7 +81,7 @@ RSpec.describe Iniciative, type: :model do
       [
         'Agente Institucional',
         'AUSPIN',
-        nil,
+        'N/D',
         'Toda a USP',
         'N/D',
         'Patentes;Marcas;Software;Empreendedorismo;Licenciamento',
