@@ -83,8 +83,8 @@ para unidades da USP"
     expected_syms = %i[name nusp bond email phone unity role]
     expected_strs = %w[name nusp bond email phone unity role]
 
-    partner.keys.sort.eql?(expected_syms.sort) ||
-      partner.keys.sort.eql?(expected_strs.sort)
+    partner.keys.all? {|key| expected_syms.include?(key) } ||
+    partner.keys.all? {|key| expected_strs.include?(key) }
   end
 
   def validate_email(email, index)
