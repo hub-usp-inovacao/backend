@@ -17,7 +17,10 @@ RSpec.describe 'Iniciatives', type: :request do
             long: 'foo bar baz bar baz long text whatever'
           },
           email: 'auspin@usp.br',
-          contact: '(11) 3091-4165'
+          contact: {
+            person: 'fulano',
+            info: '5544-3221'
+          }
         }
       ]
     end

@@ -12,11 +12,12 @@ RSpec.describe Iniciative, type: :model do
         unity: 'N/D',
         tags: %w[foo bar baz],
         url: 'http://google.com',
-        description: {
-          long: 'foo bar baz bar baz long text whatever'
-        },
+        description: 'foo bar baz bar baz long text whatever',
         email: 'auspin@usp.br',
-        contact: '(11) 3091-4165'
+        contact: {
+          person: 'fulano',
+          info: '99999-9999'
+        }
       }
     end
 
@@ -61,11 +62,14 @@ RSpec.describe Iniciative, type: :model do
       expect(described_class.new(valid_attr)).to be_invalid
     end
 
-    [{}, { foo: 'ahsdu asdb' }].each do |value|
-      it 'is invalid with malformed description hash' do
-        valid_attr[:description] = value
-        expect(described_class.new(valid_attr)).to be_invalid
-      end
+    it 'is valid with string description' do
+      valid_attr[:description] = 'description'
+      expect(described_class.new(valid_attr)).to be_valid
+    end
+
+    it 'is valid with empty array' do
+      valid_attr[:tags] = []
+      expect(described_class.new(valid_attr)).to be_valid
     end
 
     %i[email contact].each do |attr|
@@ -84,14 +88,14 @@ RSpec.describe Iniciative, type: :model do
         'N/D',
         'Toda a USP',
         'N/D',
-        'Patentes;Marcas;Software;Empreendedorismo;Licenciamento',
+        nil,
         'https://google.com',
         'foo bar baz',
         nil,
         '',
         '',
-        '',
-        'N/D'
+        'fulano',
+        '(11) 99999-9999'
       ]
     end
 
