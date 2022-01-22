@@ -44,26 +44,21 @@ para unidades da USP"
   end
 
   def valid_name(name)
-    return true if !name.nil? &&
-                   name.is_a?(String) &&
-                   name.size.positive?
-
-    errors.add(:dna_values, ': nome inválido')
-    false
+    !name.nil? && name.is_a?(String) && name.size.positive?
   end
 
   def valid_email(email)
-    rgx = /\A[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?\Z/
-
-    return true if !email.nil? &&
-                   rgx.match?(email)
-
-    errors.add(:dna_values, ': email inválido')
-    false
+    email.nil? || email.match?(URI::MailTo::EMAIL_REGEXP)
   end
 
   def consistent(dna)
-    !dna[:wants_dna] || (valid_name(dna[:name]) && valid_email(dna[:email]))
+    return true if dna[:wants_dna].nil?
+
+    if !valid_name(dna[:name])
+      errors.add(:dna_values, ': nome inválido')
+    elsif !valid_email(dna[:email])
+      errors.add(:dna_values, ': email inválido')
+    end
   end
 
   def validate_dna
@@ -87,12 +82,6 @@ para unidades da USP"
       partner.keys.all? { |key| expected_strs.include?(key) }
   end
 
-  def validate_email(email, index)
-    is_valid = email.match?(URI::MailTo::EMAIL_REGEXP)
-
-    errors.add(:partner_values, ": #{index + 1}º sócio possui um email inválido.") unless is_valid
-  end
-
   def validate_partners_values
     return if partners_values.nil?
 
@@ -102,7 +91,10 @@ para unidades da USP"
                end
 
     if is_valid
-      partners_values.each_with_index { |partner, i| validate_email(partner[:email], i) }
+      partners_values.each_with_index do |partner, i|
+        is_valid = valid_email(partner[:email])
+        errors.add(:partner_values, ": #{i + 1}º sócio possui um email inválido.") unless is_valid
+      end
     else
       error_message = <<~MULTILINE
         : Cada sócio pode possuir somente os seguintes atributos: nome, NUSP, vínculo, email,\
