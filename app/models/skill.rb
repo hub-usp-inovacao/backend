@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'set'
+
 class Skill
   include Mongoid::Document
 
@@ -93,9 +95,8 @@ class Skill
   end
 
   def valid_area?
-    if area[:major].nil?
-      errors.add(:area,
-                 ': Não foi possível inferir as grandes áreas a paritr das áreas de conhecimento')
+    if area[:major].nil? && area[:minors].nil?
+      errors.add(:area, 'não existe')
     else
       is_valid = area[:major].length.positive? && area[:major].all? do |entry|
         valid_major_area?(entry)
@@ -131,7 +132,7 @@ class Skill
         limit_date: get_limit_date(row[36]),
         bond: row[1],
         campus: get_campus(row[6], unis),
-        area: get_area(row[26], row[27])
+        area: get_area(row[26], row[27], row[2])
       }
     )
 
@@ -150,21 +151,27 @@ class Skill
   end
   # rubocop:enable Metrics/AbcSize
 
-  def self.get_area(raw_major, raw_minor)
-    majors = raw_major.split(';')
-    minors = raw_minor.split(';')
+  def self.get_area(raw_major, raw_minor, _name)
+    default = {
+      major: [],
+      minors: []
+    }
 
-    if majors.empty?
-      {
-        minors: minors,
-        major: minors.map { |minor| infer_major(minor) }
-      }
-    else
-      {
-        minors: minors,
-        major: majors
-      }
-    end
+    return default if raw_minor.nil?
+
+    majors = raw_major&.split(';') || []
+    majors = majors.map(&:strip)
+
+    minors = raw_minor.split(';')
+    minors = minors.map(&:strip)
+
+    inferred_majors = minors.map { |minor| infer_major(minor) }
+                            .filter { |minor| !minor.nil? }
+
+    {
+      major: Set.new(majors).merge(inferred_majors).to_a,
+      minors: minors
+    }
   end
 
   def self.infer_major(minor)

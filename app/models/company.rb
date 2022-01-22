@@ -91,15 +91,15 @@ class Company
         cnpj: row[1],
         name: row[2],
         year: row[4],
-        emails: row[7].split(';'),
+        emails: row[7]&.split(';'),
         description: { long: row[13] },
         incubated: incubated?(row[18]),
-        ecosystems: row[19].split(';'),
-        services: row[14].split(';'),
+        ecosystems: row[19]&.split(';'),
+        services: row[14]&.split(';'),
         address: define_address(row),
         phones: format_phone(row[6]),
         url: format_url(row[17]),
-        technologies: row[15].split(';'),
+        technologies: row[15]&.split(';'),
         logo: create_image_url(row[16]),
         classification: classification,
         cnae: row[5],
@@ -140,6 +140,8 @@ class Company
 
     subrows_indices = [29..35, 39..42, 44..47, 49..52, 54..57]
     subrows_indices.each do |subrow_indices|
+      return parsed_partners if row[subrow_indices].nil?
+
       not_empty = row[subrow_indices].any? { |entry| entry.size.positive? }
       parsed_partners << partner(row[subrow_indices]) if not_empty
     end
@@ -181,7 +183,7 @@ class Company
   end
 
   def self.format_phone(raw)
-    return [] if raw.eql? 'N/D'
+    return [] if raw.nil? || raw == 'N/D'
 
     raw.split(';').map do |phone|
       numbers = phone.gsub(/\D/, '')
@@ -212,13 +214,13 @@ class Company
   end
 
   def self.create_image_url(raw)
-    return nil if raw == 'N/D'
+    return nil if raw.nil? || raw == 'N/D'
 
     "https://drive.google.com/uc?export=view&id=#{raw}"
   end
 
   def self.format_url(raw)
-    return nil if raw == 'N/D'
+    return nil if raw.nil? || raw == 'N/D'
 
     return "https://#{raw}" if raw[0..3] != 'http'
 
@@ -235,7 +237,7 @@ class Company
     {
       venue: row[8],
       neighborhood: row[9],
-      city: row[10].split(';'),
+      city: row[10]&.split(';'),
       state: row[11],
       cep: row[12]
     }
@@ -243,6 +245,8 @@ class Company
 
   def self.classify(cnae)
     default = { major: '', minor: '' }
+
+    return default if cnae.nil?
 
     matches = cnae.match(/(\d+)\.+/)
     code = matches && matches.captures[0]
