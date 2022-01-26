@@ -6,6 +6,7 @@ pt-br:
       companyUpdate: Atualização de Empresa
       patent: Patente
       skill: Competência
+      iniciative: Iniciativa
     attributes:
       discipline:
         name: Nome
@@ -57,9 +58,16 @@ pt-br:
         limit_date: Data limite
         bond: Vínculo
         area: Área
+      iniciative:
+          name: Nome
+          classification: Classificação
+          localization: Localização
+          unity: Unidade
+          description: Descrição
+          contact: Contato
   errors:
     messages:
       model_invalid: "A validação falhou: %{errors}"
-      invalid: "é inválido"
+      invalid: "inválido"
       empty: "não pode estar vazio"
       blank: "não pode estar em branco"
