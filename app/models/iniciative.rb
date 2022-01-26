@@ -52,7 +52,7 @@ class Iniciative
   def valid_localization?
     is_valid = campi_names.include? localization
 
-    errors.add(:localization, 'inválida. Campi fornecido não é válido') unless is_valid
+    errors.add(:localization, 'inválida. Campus fornecido não é válido') unless is_valid
   end
 
   def valid_classification?
