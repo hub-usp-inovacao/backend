@@ -19,10 +19,6 @@ class Iniciative
   validate :valid_classification?, :valid_localization?, :valid_unity?, :valid_description?,
            :valid_contact?
 
-  def valid_contact_name(name)
-    name.is_a?(String) && name.size.positive?
-  end
-
   def valid_contact_info(info)
     phone_rgx = /^\d{8,13}|$/
     # rubocop:disable Layout/LineLength
@@ -34,7 +30,6 @@ class Iniciative
 
   def valid_contact?
     is_valid = contact.nil? ||
-               valid_contact_name(contact[:person]) &&
                valid_contact_info(contact[:info])
 
     errors.add(:contact) unless is_valid

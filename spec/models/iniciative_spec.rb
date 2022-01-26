@@ -79,11 +79,14 @@ RSpec.describe Iniciative, type: :model do
       end
     end
 
-    %i[person info].each do |attr|
-      it "is invalid with empty #{attr}" do
-        valid_attr[:contact][attr] = ''
-        expect(described_class.new(valid_attr)).to be_invalid
-      end
+    it 'is invalid with empty info' do
+      valid_attr[:contact][:info] = ''
+      expect(described_class.new(valid_attr)).to be_invalid
+    end
+
+    it 'is valid with empty person' do
+      valid_attr[:contact][:person] = ''
+      expect(described_class.new(valid_attr)).to be_valid
     end
 
     it 'is invalid with empty description' do
