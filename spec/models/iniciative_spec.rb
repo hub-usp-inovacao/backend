@@ -87,6 +87,10 @@ RSpec.describe Iniciative, type: :model do
     it 'is valid with empty person' do
       valid_attr[:contact][:person] = ''
       expect(described_class.new(valid_attr)).to be_valid
+
+    it 'is valid with N/D contact info' do
+      valid_attr[:contact][:info] = 'N/D'
+      expect(described_class.new(valid_attr)).to be_valid
     end
 
     it 'is invalid with empty description' do
@@ -119,6 +123,22 @@ RSpec.describe Iniciative, type: :model do
       allow_any_instance_of(described_class).to receive(:save).and_call_original
       # rubocop:enable RSpec/AnyInstance
       expect { described_class.create_from(valid_sheets) }.not_to raise_error
+    end
+  end
+
+  context 'with creation methods' do
+    it 'creates a correct hash contact when passed correct params' do
+      expected = { person: 'Foo', info: 'Bar' }
+      contact = described_class.get_contact('Foo', 'Bar')
+      expect(contact).to include(expected)
+    end
+
+    %i[person info].each do |_attr|
+      it 'returns nil contact when contact does not exist' do
+        contact = described_class.get_contact('', '')
+
+        expect(contact).to be_nil
+      end
     end
   end
 end

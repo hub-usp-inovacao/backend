@@ -25,14 +25,14 @@ class Iniciative
     email_rgx = /^(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})$/i
     # rubocop:enable Layout/LineLength
 
-    info.size.positive? && (info.gsub(/\D/, '').match?(phone_rgx) || info.match?(email_rgx))
+    info.size.positive? &&
+      (info.gsub(/\D/, '').match?(phone_rgx) || info.match?(email_rgx) || info.match?(%r{^N/D$}))
   end
 
   def valid_contact?
-    is_valid = contact.nil? ||
-               valid_contact_info(contact[:info])
+    is_valid = contact.nil? || valid_contact_info(contact[:info])
 
-    errors.add(:contact) unless is_valid
+    errors.add(:contact, 'inválido. Número de telefone ou email inválidos') unless is_valid
   end
 
   def valid_description?
@@ -40,19 +40,19 @@ class Iniciative
                description.is_a?(String) &&
                description.size.positive?
 
-    errors.add(:description) unless is_valid
+    errors.add(:description, :blank) unless is_valid
   end
 
   def valid_unity?
     is_valid = unity.eql?('N/D') || all_unities.include?(unity)
 
-    errors.add(:unity) unless is_valid
+    errors.add(:unity, 'inválida') unless is_valid
   end
 
   def valid_localization?
     is_valid = campi_names.include? localization
 
-    errors.add(:localization) unless is_valid
+    errors.add(:localization, 'inválida. Campi fornecido não é válido') unless is_valid
   end
 
   def valid_classification?
@@ -69,7 +69,7 @@ class Iniciative
 
     is_valid = classes.include? classification
 
-    errors.add(:classification) unless is_valid
+    errors.add(:classification, 'inválida') unless is_valid
   end
 
   def self.create_from(row)
