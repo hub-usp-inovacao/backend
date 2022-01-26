@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get '/companies', to: 'company#index'
   get '/patents', to: 'patent#index'
   get '/skills', to: 'skill#index'
+  get '/iniciatives', to: 'iniciative#index'
   patch '/companies', to: 'company_updates#create'
   post '/conexao', to: 'conexoes#create'
   post '/conexao/image', to: 'conexoes#create_image'
