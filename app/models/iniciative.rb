@@ -19,19 +19,31 @@ class Iniciative
   validate :valid_classification?, :valid_localization?, :valid_unity?, :valid_description?,
            :valid_contact?
 
+  def valid_contact_name(name)
+    name.is_a?(String) && name.size.positive?
+  end
+
+  def valid_contact_info(info)
+    phone_rgx = /^\d{8,13}|$/
+    # rubocop:disable Layout/LineLength
+    email_rgx = /^(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})$/i
+    # rubocop:enable Layout/LineLength
+
+    info.size.positive? && (info.gsub(/\D/, '').match?(phone_rgx) || info.match?(email_rgx))
+  end
+
   def valid_contact?
     is_valid = contact.nil? ||
-               contact.is_a?(Hash) &&
-               %i[person info].all? do |key|
-                 contact.key? key
-               end
+               valid_contact_name(contact[:person]) &&
+               valid_contact_info(contact[:info])
 
     errors.add(:contact) unless is_valid
   end
 
   def valid_description?
     is_valid = !description.nil? &&
-               description.is_a?(String)
+               description.is_a?(String) &&
+               description.size.positive?
 
     errors.add(:description) unless is_valid
   end
@@ -89,6 +101,9 @@ class Iniciative
   end
 
   def self.get_contact(person, info)
+    is_empty = (person.nil? || person.size.zero?) && (info.nil? || info.size.zero?)
+    return nil if is_empty
+
     { person: person, info: info }
   end
 
