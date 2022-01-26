@@ -87,6 +87,7 @@ RSpec.describe Iniciative, type: :model do
     it 'is valid with empty person' do
       valid_attr[:contact][:person] = ''
       expect(described_class.new(valid_attr)).to be_valid
+    end
 
     it 'is valid with N/D contact info' do
       valid_attr[:contact][:info] = 'N/D'
